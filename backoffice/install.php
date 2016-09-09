@@ -136,8 +136,6 @@ if (isset($_POST['crt'])) {
     $obj_install->createDb();
     //$res = $con->fetch(PDO::FETCH_ASSOC);
     $return = array();// array initiate
-    //$return['data_base'] = $obj_install->createDb();      
-    /* id/nazwa/kategoria/pod kategoria/data dodania/data aktualizacji/data pokazu/miejsce/tagi/autor/widocznosc */
     $obj_install->__setTable('photos');
     $data = date('Y-m-d H:i:s');
     $arr_row = array(
@@ -175,6 +173,21 @@ if (isset($_POST['crt'])) {
         );
     $return['photos'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
     //var_dump($return);
+    $obj_install->__setTable('category');
+    $arr_row = array(
+        'category'                  =>'TEXT',
+        'protected'                 =>'VARCHAR(20)', 
+        'password'                  =>'VARCHAR(20)', 
+        'visibility'                =>'INTEGER(1) UNSIGNED'
+        );
+    //$arr_val = array();
+    $arr_val = array(
+        'category'                  =>'Air Show 09.09.2016',
+        'protected'                 =>'0', 
+        'password'                  =>'', 
+        'visibility'                =>'1'    
+        );
+    $return['category'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
 }
 
 if (isset($_POST['del'])) {
