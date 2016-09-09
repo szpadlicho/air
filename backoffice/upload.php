@@ -30,7 +30,7 @@ class UploadFile
         $next_id = $next_id->fetch(PDO::FETCH_ASSOC);
         return $next_id['Auto_increment'];
     }
-    public function addRec($file_name, $imageFileType, $check)
+    public function addRec($file_name, $file_type, $file_size)
     {
         $con = $this->connectDB();
         $data = date('Y-m-d H:i:s');
@@ -53,8 +53,8 @@ class UploadFile
         `visibility`
         ) VALUES (
         '".$file_name."',
-        '".$imageFileType."',
-        '".$check."',
+        '".$file_type."',
+        '".$file_size."',
         '".$none."',
         '".$none."',
         '".$data."',  
@@ -70,67 +70,42 @@ class UploadFile
 		unset ($con);
         //echo "<div class=\"center\" >zapis udany</div>";
         if ($feedback) {
-            return $imageFileType;
+            return true;
         } else {
             return false;
         }    
     }
-    public function fileUpload()
+    public function checkFile($i)
     {
-        $target_dir = 'data/';
-        if (!file_exists($target_dir)) {
-            mkdir($target_dir, 0777, true);
+        $des = 'data/';
+        if (!file_exists($des)) {
+            mkdir($des, 0777, true);
         }
-        $fileCount = count(@$_FILES['img']['tmp_name']);
-        for ($i=0; $i<$fileCount; $i++) {
-            $target_file = $target_dir . basename(@$_FILES['img']['name'][$i]);
-            $file_name = basename(@$_FILES['img']['name'][$i]);
-            $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
-            $target_file_id = $target_dir . $this->__getNextId().".".$imageFileType;
-            $uploadOk = 1;
-            // Check if image file is a actual image or fake image
-            $check = getimagesize($_FILES['img']['tmp_name'][$i]);
-            if($check !== false) {
-                echo "File is an image - " . $check["mime"] . ".";
-                $uploadOk = 1;
-            } else {
-                echo "File is not an image.";
-                $uploadOk = 0;
+        $file_name      = basename(@$_FILES['img']['name'][$i]);
+        $target_file    = $des . $file_name;
+        $file_type  = pathinfo($target_file, PATHINFO_EXTENSION);
+        $file_id = $des . $this->__getNextId().".".$file_type;
+        
+		$allowed = array ('txt', 'php', 'html', 'htm', 'js', 'css', 'zip');/*pliki które są nie do przyjęcia*/
+		if (! in_array($file_type, $allowed)) {		
+			echo '<span class="catch_span">plik zaladowany: '.$_FILES['img']['name'][$i].'</span><br />';
+			move_uploaded_file($_FILES['img']['tmp_name'][$i], $file_id);
+            $this->addRec($file_name, $file_type, $_FILES["img"]["size"][$i]);
+            return true;
+		} else {
+			echo '<span class="catch_span">Niedozwolony format pliku: '.$_FILES['img']['name'][$i].'</span><br />';
+            return false;
+		}
+	}
+	public function upLoad()
+    {
+        if (@$_FILES['img']['error'][0]!=4 && @$_FILES['img']['error'][0]==0) {
+		$fileCount = count(@$_FILES['img']['tmp_name']);
+            for ($i=0; $i<$fileCount; $i++) {
+                $this->checkFile($i);
             }
-            // Check if file already exists
-            if (file_exists($target_file)) {
-                echo "Sorry, file already exists.";
-                $uploadOk = 0;
-            }
-            // Check file size
-            if ($_FILES["img"]["size"][$i] > 5000000) {
-                echo "Sorry, your file is too large.";
-                $uploadOk = 0;
-            }
-            // Allow certain file formats
-            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-            && $imageFileType != "gif" ) {
-                echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-                $uploadOk = 0;
-            }
-            // Check if $uploadOk is set to 0 by an error
-            if ($uploadOk == 0) {
-                echo "Sorry, your file was not uploaded.";
-            // if everything is ok, try to upload file
-            } else {
-                if (move_uploaded_file($_FILES["img"]["tmp_name"][$i], $target_file_id)) {
-                    echo "  The file ". basename( $_FILES["img"]["name"][$i]). " has been uploaded.";
-                    echo '<br />';
-                    //var_dump ($check);
-                    //echo '<br />';
-                    //var_dump ($imageFileType);
-                    $this->addRec($file_name, $imageFileType, $_FILES["img"]["size"][$i]);
-                } else {
-                    echo "Sorry, there was an error uploading your file.";
-                }
-            }
-        }
-    }
+		}
+	}
 }
 
 $obj_upload = new UploadFile;
@@ -138,11 +113,14 @@ if(isset($_POST['up'])) {
     //$obj_upload->__getNextId();
     //
     $obj_upload->__setTable('photos');
-    $res = $obj_upload->fileUpload();
+    $obj_upload->upLoad();
+    //$res = $obj_upload->fileUpload();
     //$res2 = $obj_upload->addRec();
-    var_dump(@$res);
+    //var_dump(@$res);
     //var_dump(@$res2);
     //var_dump(@$_FILES);
+    
+
 }
 
 ?>
@@ -167,4 +145,4 @@ if(isset($_POST['up'])) {
 </body>
 </html>
 <?php
-var_dump(@$_FILES['img']);
+//var_dump(@$_FILES['img']);
