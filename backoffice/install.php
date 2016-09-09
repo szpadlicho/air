@@ -164,6 +164,8 @@ if (isset($_POST['crt'])) {
         'category'                  =>'Kategoria',
         'sub_category'              =>'Podkategoria',
         'create_data'               =>date('Y-m-d H:i:s'),
+        'update_data'               =>date('Y-m-d H:i:s'),
+        'show_data'                 =>date('Y-m-d H:i:s'),
         'show_place'                =>'Miejsce pokazu',
         'tag'                       =>'Tagi (opis)',
         'author'                    =>'Autor', 
@@ -197,18 +199,8 @@ if (isset($_POST['del'])) {
                     <input class="input_cls" type="submit" name="del" value="Delete DB" />
                     <input class="input_cls" type="submit" name="crt" value="Create" />
             </form>
-            <br />
-            Upload plików
-            <br />
-            <form name="upload" enctype="multipart/form-data" action="" method="POST">
-                    <input class="input_cls" type="file" name="img[]" multiple />
-                    <input class="input_cls" type="submit" name="up" value="Upload" />
-            </form>
         </div>
     </section>
 </body>
 </html>
-<?php
-var_dump(@$_FILES['img']);
-?>
 
