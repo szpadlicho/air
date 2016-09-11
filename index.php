@@ -1,7 +1,10 @@
 <?php
 //date_default_timezone_set('Europe/Warsaw');
 header('Content-Type: text/html; charset=utf-8');
+/*
+categorie zrobic na id zeby przy zmianie sie aktualizowaly e tabelce photo
 
+*/
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -14,10 +17,11 @@ header('Content-Type: text/html; charset=utf-8');
 	<script type="text/javascript"></script>
 </head>
 <body>
-    <a href="?front=">Front</a>
-    <a href="?back=">Back</a>
-    <a href="?uplad=">Upload</a>
-    <a href="?install=">Install</a>
+    <a href="?front">Front</a>
+    <a href="?back">Back</a>
+    <a href="?category">Category</a>
+    <a href="?uplad">Upload</a>
+    <a href="?install">Install</a>
     <a href="?">Clear</a>
     <br />
 <?php
@@ -29,6 +33,10 @@ if ( isset($_GET['back']) ){
 }
 if ( isset($_GET['uplad']) ){
     include 'backoffice/upload.php';
+}
+if ( isset($_GET['category']) ){
+    include 'backoffice/back_category_add.php';
+    include 'backoffice/back_category_show.php';
 }
 if ( isset($_GET['front']) ){
     include 'frontoffice/front_show.php';
