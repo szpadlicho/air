@@ -1,5 +1,7 @@
 <?php
-class ShowImages
+header('Content-Type: text/html; charset=utf-8');
+session_start();
+class Connect_Search
 {
 	private $host='sql.bdl.pl';
 	private $port='';
@@ -16,42 +18,30 @@ class ShowImages
     {
 		$this->table=$tab_name;
 	}
-	public function connect()
+	public function connectDB()
     {
-		$con=new PDO("mysql:host=".$this->host."; port=".$this->port."; charset=".$this->charset,$this->user,$this->pass);
+		$con=new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
 		return $con;
 		unset ($con);
-	}    
-    public function checkDb()
-    {
-		$con=$this->connect();
-		$ret = $con->query("SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '".$this->dbname."'");/*sprawdzam czy baza istnieje*/
-		$res = $ret->fetch(PDO::FETCH_ASSOC);
-		return $res ?  true : false;
 	}
-	public function connectDb()
+    public function __getImagesTag($string)
     {
-        if ($this->checkDb()=== true) {
-            $con = new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
-            return $con;
-            unset ($con);
-        }
-	}
-    public function showAll()
-    {
-		/**/
-		$con=$this->connectDB();
+        $con = $this->connectDB();
         $order = 'DESC';
-		$q = $con->query("SELECT * FROM `".$this->table."` ORDER BY `id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
-		unset ($con);
-		return $q;
-	}
+        $res = $con->query("SELECT * FROM `".$this->table."` WHERE `tag` LIKE '%".$string."%' OR `author` LIKE '%".$string."%' OR `category` LIKE '%".$string."%' OR `show_place` LIKE '%".$string."%' OR `show_data` LIKE '%".$string."%' ORDER BY `id` ".$order."");
+        //$res = $res->fetch(PDO::FETCH_ASSOC);
+        return $res;
+    }
     public function showImg($id, $mime)
     {
         //losowy obrazek z katalogu                                           
-        $dir = 'data/';                                        
+        $dir = '../data/';                                        
         if (@opendir($dir)) {//sprawdzam czy sciezka istnieje
             //echo 'ok';
+            // echo $dir;
+            // echo $id;
+            // echo $mime;
+            $dir = 'data/';
             return '<img class="back-all list mini-image" style="width:100px;" src="'.$dir.$id.'.'.$mime.'" alt="image" />';
         } else {
             return 'Brak';
@@ -72,180 +62,75 @@ class ShowImages
 	
 	}
 }
-
-$obj_show = new ShowImages;
-$obj_show->__setTable('photos');
-//$res = $obj_show->showAll();
-//$res = $res->fetch(PDO::FETCH_ASSOC);
-//var_dump($res);
-//$res = $obj_show->checkDb();
-//var_dump($res);
+$obj_search = new Connect_Search();
+$obj_search->__setTable('photos');
+$success = $obj_search->__getImagesTag($_POST['string']);
 ?>
-
-<!--
-<button id="show">Show it</button><button id="hide">Hide it</button>
-<p style="display: none">Hello  2</p>
-<script>
-$( "#show" ).click(function() {
-    $( "p" ).show( 'slow' );
-});
-$( "#hide" ).click(function() {
-    $( "p" ).hide( 'slow' );
-});
+<script type="text/javascript">
+    // $( '[name="id_post_bt"]').click(function(){
+        // //console.log( $( this ).val() );
+        // var id = $( this ).next().val();//hidden input with id
+        // console.log( id );
+        // $.post( 'product_edit.php', { id_post: id}).done(function( data ) {
+            // window.location = 'product_edit.php';
+        // });
+    // });
 </script>
--->
-<script>
-    var update = function(id) {
-        //get the form values
-        var tab_name = 'photos';
-        var id = $("[name='id_rec_"+id+"']").val();
-        var photo_name = $("[name='photo_name_"+id+"']").val();
-        var category = $("[name='category_"+id+"']").val();
-        var show_data_year = $("[name='show_data_year_"+id+"']").val();
-        var show_data_month = $("[name='show_data_month_"+id+"']").val();
-        var show_data_day = $("[name='show_data_day_"+id+"']").val();
-        var show_place = $("[name='show_place_"+id+"']").val();
-        var tag = $("[name='tag_"+id+"']").val();
-        var author = $("[name='author_"+id+"']").val();
-        var protect = $("[name='protect_"+id+"']").val();
-        var password = $("[name='password_"+id+"']").val();
-        var visibility = $("[name='visibility_"+id+"']").val();
-        
-        var myData = ({tab_name:tab_name,id:id,photo_name:photo_name,category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,visibility:visibility});
-        
-        console.log('Submitting');
-        
-        $.ajax({
-            url:  'backoffice/update.php',
-            type: "POST",
-            data:  myData,
-            success: function (data) {
-                $("#status_text").html(data);
-                //location.reload();
-            }
-        }).done(function(data) {
-            console.log(data);
-        }).fail(function(jqXHR,status, errorThrown) {
-            console.log(errorThrown);
-            console.log(jqXHR.responseText);
-            console.log(jqXHR.status);
-            $("#status_text").text('POST fail');
-        });
-    };
-    var del = function(id) {
-        //get the form values
-        var tab_name = 'photos';
-        var id = $("[name='id_rec_"+id+"']").val();
-        var photo_mime = $("[name='photo_mime_"+id+"']").val();
-        
-        var myData = ({tab_name:tab_name, id:id, photo_mime:photo_mime});
-        
-        console.log('Submitting');
-        
-        $.ajax({
-            url:  'backoffice/delete.php',
-            type: "POST",
-            data:  myData,
-            success: function (data) {
-                $("#status_text").html(data);
-                //location.reload();
-            }
-        }).done(function(data) {
-            console.log(data);
-        }).fail(function(jqXHR,status, errorThrown) {
-            console.log(errorThrown);
-            console.log(jqXHR.responseText);
-            console.log(jqXHR.status);
-            $("#status_text").text('POST fail');
-        });
-        $( "[name='rows_"+id+"']" ).hide( 'slow' );
-    }
-</script>
-<section id="place-holder">
-    <script type="text/javascript">
-        $(function(){
-            $(document).on('keyup', '#search, #search2', function() {
-                //console.log( $( this ).val() );
-                var string = $( this ).val();
-                $.ajax({
-                    type: 'POST',
-                    url: 'backoffice/back_search.php',
-                    data: {string : string }, 
-                    cache: false,
-                    dataType: 'text',
-                    success: function(data){
-                        //$('#show').html(data);
-                        // setTimeout(function(){ 
-                            // $('#show').html(data); 
-                        // }, 500)
-                        $('#center').html(data);
-                    }
-                });
-            });
-        });
-    </script>
+    <table id="table-list" class="back-all list table" border="2">
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Photo
+            </th>
+            <th>
+                photo_name
+            </th>
+            <th>
+                photo_mime
+            </th>
+            <th>
+                photo_size
+            </th>
+            <th>
+                category
+            </th>
+            <th>
+                add_data
+            </th>
+            <th>
+                update_data
+            </th>
+            <th>
+                show_data
+            </th>
+            <th>
+                show_place
+            </th>
+            <th>
+                tag
+            </th>
+            <th>
+                author
+            </th>
+            <th>
+                protect
+            </th>
+            <th>
+                password
+            </th>
+            <th>
+                visibility
+            </th>
+            <th>
+                action
+            </th>
+        </tr>
     
-    <div id="search-div">Szukaj: <input id="search" type="text" placeholder="szukaj" /></div><!--<input id="search2" type="search" results="5" autosave="a_unique_value" />-->
-    <!--<div id="search-result"></div>-->
-    <div class="center">
-        <?php
-        if ($obj_show->showAll()) { ?>
-            <br />
-            <table id="table-list" class="back-all list table" border="2">
-                <tr>
-                    <th>
-                        ID
-                    </th>
-                    <th>
-                        Photo
-                    </th>
-                    <th>
-                        photo_name
-                    </th>
-                    <th>
-                        photo_mime
-                    </th>
-                    <th>
-                        photo_size
-                    </th>
-                    <th>
-                        category
-                    </th>
-                    <th>
-                        add_data
-                    </th>
-                    <th>
-                        update_data
-                    </th>
-                    <th>
-                        show_data
-                    </th>
-                    <th>
-                        show_place
-                    </th>
-                    <th>
-                        tag
-                    </th>
-                    <th>
-                        author
-                    </th>
-                    <th>
-                        protect
-                    </th>
-                    <th>
-                        password
-                    </th>
-                    <th>
-                        visibility
-                    </th>
-                    <th>
-                        action
-                    </th>
-                </tr>
-
-                <?php 
-                foreach ($obj_show->showAll() as $wyn) { ?>
-                    <?php //var_dump($wyn); ?>
+    <?php
+    while ($wyn = $success->fetch(PDO::FETCH_ASSOC)) { ?>
+    <?php //var_dump($wyn); ?>
                     <script>
                     $( document ).ready(function() {
                         var idd = '<?php echo $wyn['id']; ?>';
@@ -269,7 +154,7 @@ $( "#hide" ).click(function() {
                             <?php echo $wyn['id']; ?>
                         </td>
                         <td>                                          
-                            <?php echo $obj_show->showImg($wyn['id'], $wyn['photo_mime']);?>
+                            <?php echo $obj_search->showImg($wyn['id'], $wyn['photo_mime']);?>
                         </td>
                         <td>   
                             <input name="photo_name_<?php echo $wyn['id']; ?>" type="text" value="<?php echo $wyn['photo_name']; ?>" />
@@ -285,9 +170,9 @@ $( "#hide" ).click(function() {
                                 <?php
                                 //zamieniam spacje na podkresliniki dla porownania string
                                 $cat_in_photos = str_replace(' ', '_', $wyn['category']);
-                                $obj_show->__setTable('category');
-                                if ($obj_show->showCategory()) {
-                                    foreach ($obj_show->showCategory() as $cat) {
+                                $obj_search->__setTable('category');
+                                if ($obj_search->showCategory()) {
+                                    foreach ($obj_search->showCategory() as $cat) {
                                         //zamieniam spacje na podkresliniki dla porownania string
                                         $can_in_category = str_replace(' ', '_', $cat['category']); ?>
                                         <option value="<?php echo $cat['category']; ?>"
@@ -384,18 +269,9 @@ $( "#hide" ).click(function() {
                     </tr>
                 <?php } ?>
             </table>
-        <?php } ?>	
-    </div>
-</section>
-<script>
-// $(document).ready(function () {
-    // //var id1 = $("[name='id']").val();
-    // //$("#status_text")[0].val(protect);
-// });
-</script>
-<div id="status_text"></div>
-
 <?php
-//var_dump(@$_FILES['img']);
+// foreach ($success as $row) {
+    // echo $row['product_name'].'<br />';
+    //var_dump($wyn);
+// }
 ?>
-

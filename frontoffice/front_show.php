@@ -79,6 +79,31 @@ $obj_show->__setTable('photos');
 </head>
 <body>
     <section id="place-holder">
+        <script type="text/javascript">
+            $(function(){
+                $(document).on('keyup', '#search, #search2', function() {
+                    //console.log( $( this ).val() );
+                    var string = $( this ).val();
+                    $.ajax({
+                        type: 'POST',
+                        url: 'frontoffice/front_search.php',
+                        data: {string : string }, 
+                        cache: false,
+                        dataType: 'text',
+                        success: function(data){
+                            //$('#show').html(data);
+                            // setTimeout(function(){ 
+                                // $('#show').html(data); 
+                            // }, 500)
+                            $('.center').html(data);
+                        }
+                    });
+                });
+            });
+        </script>
+        
+        <div id="search-div">Szukaj: <input id="search" type="text" placeholder="szukaj" /></div><!--<input id="search2" type="search" results="5" autosave="a_unique_value" />-->
+        <!--<div id="search-result"></div>-->
         <div class="center">
             <?php
             if ($obj_show->showAll()) { ?>
@@ -112,7 +137,7 @@ $obj_show->__setTable('photos');
                         </th>
                     <?php 
                     foreach ($obj_show->showAll() as $wyn) { ?>
-                        <form enctype="multipart/form-data" action="product_edit.php" method="POST" >
+
                             <tr>
                                 <td>
                                     <?php echo $wyn['id']; ?>
@@ -139,7 +164,7 @@ $obj_show->__setTable('photos');
                                     <?php echo $wyn['author']; ?>
                                 </td>
                             </tr>
-                        </form>
+
                     <?php } ?>
                 </table>
             <?php } ?>	
