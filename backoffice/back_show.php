@@ -51,9 +51,9 @@ class ShowImages
         $dir = 'data/';                                        
         if (@opendir($dir)) {//sprawdzam czy sciezka istnieje
             //echo 'ok';
-            echo '<img class="back-all list mini-image" style="width:100px;" src="'.$dir.$id.'.'.$mime.'" alt="image" />';
+            return '<img class="back-all list mini-image" style="width:100px;" src="'.$dir.$id.'.'.$mime.'" alt="image" />';
         } else {
-            echo 'Brak';
+            return 'Brak';
         }
     }
     public function showCategory()
@@ -75,11 +75,10 @@ $obj_show->__setTable('photos');
 ?>
 
 
-
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
-	<title>Show</title>
+	<title>Index</title>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<style type="text/css"></style>
 	<script type="text/javascript"></script>
@@ -97,291 +96,240 @@ $( "#hide" ).click(function() {
 });
 </script>
 -->
-    <script>
-    //on the click of the submit button
-    //$(function() {
-        // $("#bid").click(function(){
-            // //get the form values
-            // var table = 'photos';
-            // var id = $("[name='id']").val();
-            // var photo_name = $("[name='photo_name']").val();
-            // var category = $("[name='category']").val();
-            // var show_data_year = $("[name='show_data_year']").val();
-            // var show_data_month = $("[name='show_data_month']").val();
-            // var show_data_day = $("[name='show_data_day']").val();
-            // var show_place = $("[name='show_place']").val();
-            // var tag = $("[name='tag']").val();
-            // var author = $("[name='author']").val();
-            // var protect = $("[name='protect']").val();
-            // var password = $("[name='password']").val();
-            // var visibility = $("[name='visibility']").val();
-            // //var id = $("[name='']").val();
-
-            // var myData = ({table:table,id:id,photo_name:photo_name,category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,visibility:visibility});
-
-            // $.ajax({
-                // url : "backoffice/update.php",
-                // type: "POST",
-                // data : myData,
-                // success: function(data,status,xhr)
-                // {
-                    // //if success then just output the text to the status div then clear the form inputs to prepare for new data
-                    // //$("#status_text").html(data);
-                    // $("#status_text").val(data);
-                // }
-            // }); 
-        // }); 
-    //});
-        $(document).ready(function() { 
-            $('#bid').click(function(e) {
-                //get the form values
-                var table = 'photos';
-                var id = $("[name='id_rec']").val();
-                var photo_name = $("[name='photo_name']").val();
-                var category = $("[name='category']").val();
-                var show_data_year = $("[name='show_data_year']").val();
-                var show_data_month = $("[name='show_data_month']").val();
-                var show_data_day = $("[name='show_data_day']").val();
-                var show_place = $("[name='show_place']").val();
-                var tag = $("[name='tag']").val();
-                var author = $("[name='author']").val();
-                var protect = $("[name='protect']").val();
-                var password = $("[name='password']").val();
-                var visibility = $("[name='visibility']").val();
-                
-                e.preventDefault();
-                
-                var myData = ({table:table,id:id,photo_name:photo_name,category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,visibility:visibility});
-                
-                console.log('Submitting');
-                
-                $.ajax({
-                    url:  'backoffice/update.php',
-                    type: "POST",
-                    data:  myData,
-                    success: function (data) {
-                        $("#status_text").html(data);
-                        //location.reload();
-                    }
-                }).done(function(data) {
-                    console.log(data);
-                }).fail(function(jqXHR,status, errorThrown) {
-                    console.log(errorThrown);
-                    console.log(jqXHR.responseText);
-                    console.log(jqXHR.status);
-                    $("#status_text").text('POST fail');
-                });
-                $("#status_text2").text(myData);
-            });
-            // var table = 'photos';
-            // var id = $("#id").val();
-            // var tag = $("#tag").val();
-            // $("#status_text1").text(table+' '+id+' '+tag);
+<script>
+    var update = function(id) {
+        //get the form values
+        var table = 'photos';
+        var id = $("[name='id_rec_"+id+"']").val();
+        var photo_name = $("[name='photo_name_"+id+"']").val();
+        var category = $("[name='category_"+id+"']").val();
+        var show_data_year = $("[name='show_data_year_"+id+"']").val();
+        var show_data_month = $("[name='show_data_month_"+id+"']").val();
+        var show_data_day = $("[name='show_data_day_"+id+"']").val();
+        var show_place = $("[name='show_place_"+id+"']").val();
+        var tag = $("[name='tag_"+id+"']").val();
+        var author = $("[name='author_"+id+"']").val();
+        var protect = $("[name='protect_"+id+"']").val();
+        var password = $("[name='password_"+id+"']").val();
+        var visibility = $("[name='visibility_"+id+"']").val();
+        
+        var myData = ({table:table,id:id,photo_name:photo_name,category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,visibility:visibility});
+        
+        console.log('Submitting');
+        
+        $.ajax({
+            url:  'backoffice/update.php',
+            type: "POST",
+            data:  myData,
+            success: function (data) {
+                $("#status_text").html(data);
+                //location.reload();
+            }
+        }).done(function(data) {
+            console.log(data);
+        }).fail(function(jqXHR,status, errorThrown) {
+            console.log(errorThrown);
+            console.log(jqXHR.responseText);
+            console.log(jqXHR.status);
+            $("#status_text").text('POST fail');
         });
-        // $(document).ready(function() {    
-            // $("#pff").click(function(){
-                // // //get the form values
-                // // var table = 'photos';
-                // // var id = $("[name='id']").val();
-                // // var tag = $("[name='tag']").val();
-                // $.ajax({
-                    // url: 'backoffice/update.php', //This is the current doc
-                    // type: "POST",
-                    // data: ({table: "photos", id: $("[name='id']").val(), tag: $("[name='tag']").val()}),
-                    // success: function(data){
-                        // console.log(data);
-                        // $('#status_text').text(data);
-                                   // }
-                // });  
+    };
+</script>
+<section id="place-holder">
+    <div class="center">
+        <?php
+        if ($obj_show->showAll()) { ?>
+            <br />
+            <table id="table-list" class="back-all list table" border="2">
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Photo
+                    </th>
+                    <th>
+                        photo_name
+                    </th>
+                    <th>
+                        photo_mime
+                    </th>
+                    <th>
+                        photo_size
+                    </th>
+                    <th>
+                        category
+                    </th>
+                    <th>
+                        add_data
+                    </th>
+                    <th>
+                        update_data
+                    </th>
+                    <th>
+                        show_data
+                    </th>
+                    <th>
+                        show_place
+                    </th>
+                    <th>
+                        tag
+                    </th>
+                    <th>
+                        author
+                    </th>
+                    <th>
+                        protect
+                    </th>
+                    <th>
+                        password
+                    </th>
+                    <th>
+                        visibility
+                    </th>
+                </tr>
 
-            // });
-        // });
-    </script>
-    <section id="place-holder">
-        <div class="center">
-            <?php
-            if ($obj_show->showAll()) { ?>
-                Wyświetlanie
-                <br />
-                <table id="table-list" class="back-all list table" border="2">
+                <?php 
+                foreach ($obj_show->showAll() as $wyn) { ?>
+                    <script>
+                    $( document ).ready(function() {
+                        var idd = '<?php echo $wyn['id']; ?>';
+                        $('#b_save_'+idd).click(function(e) {
+                            e.preventDefault();
+                            update(idd);
+                            //alert(idd);
+                        });
+                    });
+                    
+                    </script>
                     <tr>
-                        <th>
-                            ID
-                        </th>
-                        <th>
-                            Photo
-                        </th>
-                        <th>
-                            photo_name
-                        </th>
-                        <th>
-                            photo_mime
-                        </th>
-                        <th>
-                            photo_size
-                        </th>
-                        <th>
-                            category
-                        </th>
-                        <th>
-                            add_data
-                        </th>
-                        <th>
-                            update_data
-                        </th>
-                        <th>
-                            show_data
-                        </th>
-                        <th>
-                            show_place
-                        </th>
-                        <th>
-                            tag
-                        </th>
-                        <th>
-                            author
-                        </th>
-                        <th>
-                            protect
-                        </th>
-                        <th>
-                            password
-                        </th>
-                        <th>
-                            visibility
-                        </th>
-                    </tr>
-
-                    <?php 
-                    foreach ($obj_show->showAll() as $wyn) { ?>
-                            <tr>
-                                <td>
-                                    <?php echo $wyn['id']; ?>
-                                </td>
-                                <td>                                          
-                                    <?php $obj_show->showImg($wyn['id'], $wyn['photo_mime']);?>
-                                </td>
-                                <td>   
-                                    <input name="photo_name" type="text" value="<?php echo $wyn['photo_name']; ?>" />
-                                </td>
-                                <td>
-                                    <?php echo $wyn['photo_mime']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['photo_size']; ?>
-                                </td>
-                                <td>
-                                    <select class="" name="category">
-                                        <?php
+                        <td>
+                            <?php echo $wyn['id']; ?>
+                        </td>
+                        <td>                                          
+                            <?php echo $obj_show->showImg($wyn['id'], $wyn['photo_mime']);?>
+                        </td>
+                        <td>   
+                            <input name="photo_name_<?php echo $wyn['id']; ?>" type="text" value="<?php echo $wyn['photo_name']; ?>" />
+                        </td>
+                        <td>
+                            <?php echo $wyn['photo_mime']; ?>
+                        </td>
+                        <td>
+                            <?php echo $wyn['photo_size']; ?>
+                        </td>
+                        <td>
+                            <select class="" name="category_<?php echo $wyn['id']; ?>">
+                                <?php
+                                //zamieniam spacje na podkresliniki dla porownania string
+                                $cat_in_photos = str_replace(' ', '_', $wyn['category']);
+                                $obj_show->__setTable('category');
+                                if ($obj_show->showCategory()) {
+                                    foreach ($obj_show->showCategory() as $cat) {
                                         //zamieniam spacje na podkresliniki dla porownania string
-                                        $cat_in_photos = str_replace(' ', '_', $wyn['category']);
-                                        $obj_show->__setTable('category');
-                                        if ($obj_show->showCategory()) {
-                                            foreach ($obj_show->showCategory() as $cat) {
-                                                //zamieniam spacje na podkresliniki dla porownania string
-                                                $can_in_category = str_replace(' ', '_', $cat['category']); ?>
-                                                <option value="<?php echo $cat['category']; ?>"
-                                                    <?php if( $cat_in_photos == $can_in_category ){
-                                                        echo $selected = 'selected="selected"'; 
-                                                    } ?> > <?php echo $cat['category']; ?>
-                                                </option>
-                                            <?php
-                                            }
-                                        }
-                                        ?>
-                                        </select>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['add_data']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['update_data']; ?>
-                                </td>
-                                <td>
-                                    <?php 
-                                    //var_dump ($wyn['show_data']); 
-                                    // $dat = explode (' ', $wyn['show_data']);
-                                    // $data = $dat[0];
-                                    // $time = $dat[1];
-                                    $n = explode ('-', $wyn['show_data']);
-                                    $year = $n[0];//rok
-                                    $month = $n[1];//miesian
-                                    $day = $n[2];//dzien
-                                    ?>
-                                    <select name="show_data_year">
-                                        <?php for ($y = 2010; $y <= 2020; $y++) { ?>
-                                            <option <?php if ( $n[0] == $y ) { ?>
-                                                    selected="selected"
-                                                <?php } ?>
-                                            ><?php echo $y; ?></option>
-                                        <?php } ?>                                       
-                                    </select>
-                                    <select name="show_data_month">
-                                        <?php for ($m = 1; $m <= 12; $m++) { ?>
-                                            <option <?php if ( $n[1] == $m ) { ?>
-                                                    selected="selected"
-                                                <?php } ?>
-                                            ><?php echo $m; ?></option>
-                                        <?php } ?> 
-                                    </select>
-                                    <select name="show_data_day">
-                                        <?php for ($d = 1; $d <= 31; $d++) { ?>
-                                            <option <?php if ( $n[2] == $d ) { ?>
-                                                    selected="selected"
-                                                <?php } ?>
-                                            ><?php echo $d; ?></option>
-                                        <?php } ?> 
-                                    </select>
-                                </td>
-                                <td>
-                                    <textarea name="show_place" rows="4" cols="10"><?php echo $wyn['show_place']; ?></textarea> 
-                                </td>
-                                <td>
-                                    <textarea name="tag" rows="4" cols="10"><?php echo $wyn['tag']; ?></textarea>                                     
-                                </td>
-                                <td>
-                                    <input name="author" type="text" value="<?php echo $wyn['author']; ?>" />
-                                </td>
-                                <td>
-                                    <select name="protect">
-                                        <option <?php if( $wyn['protect'] === 1 ){ ?>
-                                                selected="selected"
-                                            <?php } ?> value="1">On</option>
-                                        <option <?php if( $wyn['protect'] === 0 ){ ?>
-                                                selected="selected"
-                                            <?php } ?> value="0">Off</option>
-                                    </select> 
-                                </td>
-                                <td>
-                                    <input name="password" type="text" value="<?php echo $wyn['password']; ?>" />
-                                </td>
-                                <td>
-                                    <select name="visibility">
-                                        <option <?php if( $wyn['visibility'] == "1" ){ ?>
-                                                selected="selected"
-                                            <?php } ?> value="1">On</option>
-                                        <option <?php if( $wyn['visibility'] == "0" ){ ?>
-                                                selected="selected"
-                                            <?php } ?> value="0">Off</option>
-                                    </select> 
-                                </td>
-                                <td>
-                                    <button id="bid">AK</button>
-                                    <input id="id" type="hidden" name="id_rec" value="<?php echo $wyn['id']; ?>" />
-                                </td>
-                            </tr>
-                    <?php } ?>
-                </table>
-            <?php } ?>	
-        </div>
-    </section>
-    <script>
-    $(document).ready(function () {
-        //var id1 = $("[name='id']").val();
-        //$("#status_text")[0].val(protect);
-    });
-    </script>
-    <div id="status_text"></div>
+                                        $can_in_category = str_replace(' ', '_', $cat['category']); ?>
+                                        <option value="<?php echo $cat['category']; ?>"
+                                            <?php if( $cat_in_photos == $can_in_category ){
+                                                echo $selected = 'selected="selected"'; 
+                                            } ?> > <?php echo $cat['category']; ?>
+                                        </option>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                                </select>
+                        </td>
+                        <td>
+                            <?php echo $wyn['add_data']; ?>
+                        </td>
+                        <td>
+                            <?php echo $wyn['update_data']; ?>
+                        </td>
+                        <td>
+                            <?php 
+                            //var_dump ($wyn['show_data']); 
+                            // $dat = explode (' ', $wyn['show_data']);
+                            // $data = $dat[0];
+                            // $time = $dat[1];
+                            $n = explode ('-', $wyn['show_data']);
+                            $year = $n[0];//rok
+                            $month = $n[1];//miesian
+                            $day = $n[2];//dzien
+                            ?>
+                            <select name="show_data_year_<?php echo $wyn['id']; ?>">
+                                <?php for ($y = 2010; $y <= 2020; $y++) { ?>
+                                    <option <?php if ( $n[0] == $y ) { ?>
+                                            selected="selected"
+                                        <?php } ?>
+                                    ><?php echo $y; ?></option>
+                                <?php } ?>                                       
+                            </select>
+                            <select name="show_data_month_<?php echo $wyn['id']; ?>">
+                                <?php for ($m = 1; $m <= 12; $m++) { ?>
+                                    <option <?php if ( $n[1] == $m ) { ?>
+                                            selected="selected"
+                                        <?php } ?>
+                                    ><?php echo $m; ?></option>
+                                <?php } ?> 
+                            </select>
+                            <select name="show_data_day_<?php echo $wyn['id']; ?>">
+                                <?php for ($d = 1; $d <= 31; $d++) { ?>
+                                    <option <?php if ( $n[2] == $d ) { ?>
+                                            selected="selected"
+                                        <?php } ?>
+                                    ><?php echo $d; ?></option>
+                                <?php } ?> 
+                            </select>
+                        </td>
+                        <td>
+                            <textarea name="show_place_<?php echo $wyn['id']; ?>" rows="4" cols="10"><?php echo $wyn['show_place']; ?></textarea> 
+                        </td>
+                        <td>
+                            <textarea name="tag_<?php echo $wyn['id']; ?>" rows="4" cols="10"><?php echo $wyn['tag']; ?></textarea>                                     
+                        </td>
+                        <td>
+                            <input name="author_<?php echo $wyn['id']; ?>" type="text" value="<?php echo $wyn['author']; ?>" />
+                        </td>
+                        <td>
+                            <select name="protect_<?php echo $wyn['id']; ?>">
+                                <option <?php if( $wyn['protect'] == "1" ){ ?>
+                                        selected="selected"
+                                    <?php } ?> value="1">On</option>
+                                <option <?php if( $wyn['protect'] == "0" ){ ?>
+                                        selected="selected"
+                                    <?php } ?> value="0">Off</option>
+                            </select> 
+                        </td>
+                        <td>
+                            <input name="password_<?php echo $wyn['id']; ?>" type="text" value="<?php echo $wyn['password']; ?>" />
+                        </td>
+                        <td>
+                            <select name="visibility_<?php echo $wyn['id']; ?>">
+                                <option <?php if( $wyn['visibility'] == "1" ){ ?>
+                                        selected="selected"
+                                    <?php } ?> value="1">On</option>
+                                <option <?php if( $wyn['visibility'] == "0" ){ ?>
+                                        selected="selected"
+                                    <?php } ?> value="0">Off</option>
+                            </select> 
+                        </td>
+                        <td>
+                            <button id="b_save_<?php echo $wyn['id']; ?>">Zapisz</button>
+                            <input id="id_hidden" type="hidden" name="id_rec_<?php echo $wyn['id']; ?>" value="<?php echo $wyn['id']; ?>" />
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+        <?php } ?>	
+    </div>
+</section>
+<script>
+// $(document).ready(function () {
+    // //var id1 = $("[name='id']").val();
+    // //$("#status_text")[0].val(protect);
+// });
+</script>
+<div id="status_text"></div>
 </body>
 </html>
 <?php

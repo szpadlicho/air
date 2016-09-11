@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
+//date_default_timezone_set('Europe/Warsaw');
 class UploadFile
 {
 	private $host='sql.bdl.pl';
@@ -129,25 +129,19 @@ if(isset($_POST['up'])) {
 }
 
 ?>
-<!DOCTYPE HTML>
-<html lang="pl">
-<head>
-	<title>Index</title>
-	<style type="text/css"></style>
-	<script type="text/javascript"></script>
-</head>
-<body>
-    <section id="place-holder">
-        <div class="center">
-            Upload plików
-            <br />
-            <form name="upload" enctype="multipart/form-data" action="" method="POST">
-                    <input class="input_cls" type="file" name="img[]" multiple />
-                    <input class="input_cls" type="submit" name="up" value="Upload" />
-            </form>
-        </div>
-    </section>
-</body>
-</html>
+
+
+<section id="place-holder">
+    <div class="center">
+        Upload plików
+        <br />
+        <form name="upload" enctype="multipart/form-data" action="" method="POST">
+                <input class="input_cls" type="file" name="img[]" multiple />
+                <input class="input_cls" type="submit" name="up" value="Upload" />
+        </form>
+    </div>
+</section>
+
+
 <?php
 //var_dump(@$_FILES['img']);

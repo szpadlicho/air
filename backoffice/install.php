@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
 class DataBaseInstall
 {
 	private $host='sql.bdl.pl';
@@ -247,23 +248,15 @@ if (isset($_POST['del'])) {
 
 
 
-<!DOCTYPE HTML>
-<html lang="pl">
-<head>
-	<title>Index</title>
-	<style type="text/css"></style>
-	<script type="text/javascript"></script>
-</head>
-<body>
-    <section id="place-holder">
-        <div class="center">
-            Zarządzanie Bazą Danych
-            <form name="install" enctype="multipart/form-data" action="" method="POST">
-                    <input class="input_cls" type="submit" name="del" value="Delete DB" />
-                    <input class="input_cls" type="submit" name="crt" value="Create" />
-            </form>
-        </div>
-    </section>
-</body>
-</html>
+
+<section id="place-holder">
+    <div class="center">
+        Zarządzanie Bazą Danych
+        <form name="install" enctype="multipart/form-data" action="" method="POST">
+                <input class="input_cls" type="submit" name="del" value="Delete DB" />
+                <input class="input_cls" type="submit" name="crt" value="Create" />
+        </form>
+    </div>
+</section>
+
 

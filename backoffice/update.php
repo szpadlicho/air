@@ -1,4 +1,5 @@
 <?php
+//date_default_timezone_set('Europe/Warsaw');
 class UpdateImages
 {
 	private $host='sql.bdl.pl';
@@ -60,6 +61,7 @@ class UpdateImages
         } else {
             //return false;
             //echo 'no';
+            var_dump($_POST);
         }
     }
 }
