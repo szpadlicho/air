@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
 class UploadFile
 {
 	private $host='sql.bdl.pl';
@@ -34,22 +35,26 @@ class UploadFile
     {
         $con = $this->connectDB();
         $data = date('Y-m-d H:i:s');
+        $data_short = date('Y-m-d');
         $visibility = 1;
         $none = NULL;
+        //$tag = TRIM(REPLACE('aaaaaaaaaaaa', '\xc2\xa0', ' '));
+        //$tag = TRIM(preg_replace('/\xc2\xa0/',' ','aaaaaaaaaaaaaaaa'));
+        $tag='asdadafas';
         $feedback = $con->exec("INSERT INTO `".$this->table."`(
         `photo_name`,
         `photo_mime`,
         `photo_size`,
         `category`,
         `sub_category`,
-        `create_data`,
+        `add_data`,
         `update_data`,
         `show_data`,
         `show_place`,
         `tag`,
         `author`,
-        `protected`,
-        `password`,        
+        `protect`,
+        `password`,      
         `visibility`
         ) VALUES (
         '".$file_name."',
@@ -57,14 +62,14 @@ class UploadFile
         '".$file_size."',
         '".$none."',
         '".$none."',
-        '".$data."',  
         '".$data."',
         '".$data."',
+        '".$data_short."',
         '".$none."',
-        '".$none."',
+        '".$tag."',
         '".$none."',
         '0',
-        '.".$none."',
+        '".$none."',
         '".(int)$visibility."'
         )");
 		unset ($con);

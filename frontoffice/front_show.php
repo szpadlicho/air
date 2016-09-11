@@ -107,7 +107,7 @@ $obj_show->__setTable('photos');
                             sub_category
                         </th>
                         <th>
-                            create_data
+                            add_data
                         </th>
                         <th>
                             update_data
@@ -164,7 +164,7 @@ $obj_show->__setTable('photos');
                                     <?php echo $wyn['sub_category']; ?>
                                 </td>
                                 <td>
-                                    <?php echo $wyn['create_data']; ?>
+                                    <?php echo $wyn['add_data']; ?>
                                 </td>
                                 <td>
                                     <?php echo $wyn['update_data']; ?>

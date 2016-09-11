@@ -123,6 +123,38 @@ class DataBaseInstall
 			return false;
 		}
     }
+    public function addRec($arr_val){
+        $con = $this->connectDB();
+		$res = $con->query(
+            "SELECT 'id' 
+            FROM ".$this->table
+            );// Zwraca false jesli tablica nie istnieje
+            $res = $res->fetch();
+            //var_dump($res);
+		if (! empty($res) ) {
+            if (! empty($arr_val)) {
+                    $field='';
+                    $value='';
+                    foreach ($arr_val as $name => $val) {
+                        $field .= '`'.$name.'`,';
+                        $value .= "'".$val."',";
+                    }
+                    // Create default record 
+                    $res = $con->query(
+                        "INSERT INTO `".$this->table."`(
+                        ".$field."
+                        `mod`
+                        ) VALUES (
+                        ".$value."
+                        '0'
+                        )"
+                        );
+                    return $res ? true : false;
+                } else {
+                    return $res ? true : false;
+                }
+        }
+    }
     public function deleteTb($table)
     {
         $con = $this->connectDB();
@@ -144,50 +176,68 @@ if (isset($_POST['crt'])) {
         'photo_size'                =>'VARCHAR(20)',
         'category'                  =>'VARCHAR(20)',
         'sub_category'              =>'VARCHAR(20)',
-        'create_data'               =>'DATETIME',
+        'add_data'                  =>'DATETIME',
         'update_data'               =>'DATETIME',
-        'show_data'                 =>'DATETIME',
-        'show_place'                =>'VARCHAR(20)',
-        'tag'                       =>'VARCHAR(200)',
+        'show_data'                 =>'DATE',
+        'show_place'                =>'VARCHAR(50)',
+        'tag'                       =>'TEXT',
         'author'                    =>'VARCHAR(20)', 
-        'protected'                 =>'VARCHAR(20)', 
+        'protect'                   =>'VARCHAR(20)', 
         'password'                  =>'VARCHAR(20)', 
         'visibility'                =>'INTEGER(1) UNSIGNED'
         );
-    //$arr_val = array();
-    $arr_val = array(
+    $arr_val = array();
+    /*$arr_val = array(
         'photo_name'                =>'Oryginalna nazwa',
         'photo_mime'                =>'Rozszerzenie',
         'photo_size'                =>'Rozmiar',
         'category'                  =>'Kategoria',
         'sub_category'              =>'Podkategoria',
-        'create_data'               =>date('Y-m-d H:i:s'),
+        'add_data'                  =>date('Y-m-d H:i:s'),
         'update_data'               =>date('Y-m-d H:i:s'),
         'show_data'                 =>date('Y-m-d H:i:s'),
         'show_place'                =>'Miejsce pokazu',
         'tag'                       =>'Tagi (opis)',
         'author'                    =>'Autor', 
-        'protected'                 =>'Zabezpieczone', 
+        'protect'                   =>'Zabezpieczone', 
         'password'                  =>'Hasło', 
         'visibility'                =>'1'    
         );
+        */
     $return['photos'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
     //var_dump($return);
     $obj_install->__setTable('category');
     $arr_row = array(
         'category'                  =>'TEXT',
-        'protected'                 =>'VARCHAR(20)', 
+        'protect'                   =>'VARCHAR(20)', 
         'password'                  =>'VARCHAR(20)', 
         'visibility'                =>'INTEGER(1) UNSIGNED'
         );
     //$arr_val = array();
     $arr_val = array(
         'category'                  =>'Air Show 09.09.2016',
-        'protected'                 =>'0', 
+        'protect'                   =>'0', 
         'password'                  =>'', 
         'visibility'                =>'1'    
         );
     $return['category'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
+    //var_dump($return);
+    $obj_install->__setTable('category');
+    $arr_val = array(
+        'category'                  =>'Air Show 11.09.2016',
+        'protect'                   =>'0', 
+        'password'                  =>'', 
+        'visibility'                =>'1'    
+        );
+    $return['category'] = $obj_install->addRec($arr_val);
+    $arr_val = array(
+        'category'                  =>'Air',
+        'protect'                   =>'0', 
+        'password'                  =>'', 
+        'visibility'                =>'1'    
+        );
+    $return['category'] = $obj_install->addRec($arr_val);
+    var_dump($return);
 }
 
 if (isset($_POST['del'])) {
