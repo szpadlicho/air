@@ -41,7 +41,8 @@ class ShowImages
     {
 		/**/
 		$con=$this->connectDB();
-		@$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+        $order = 'DESC';
+		$q = $con->query("SELECT * FROM `".$this->table."` ORDER BY `id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}
@@ -63,6 +64,13 @@ class ShowImages
 		unset ($con);
 		return $q;
 	}
+    public function deleteREC()
+    {
+		$con=$this->connectDB();
+		$con->query("DELETE FROM `".$this->table."` WHERE `id` = '".$_SESSION['id_post']."'");	
+		unset ($con);
+	
+	}
 }
 
 $obj_show = new ShowImages;
@@ -74,16 +82,6 @@ $obj_show->__setTable('photos');
 //var_dump($res);
 ?>
 
-
-<!DOCTYPE HTML>
-<html lang="pl">
-<head>
-	<title>Index</title>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-	<style type="text/css"></style>
-	<script type="text/javascript"></script>
-</head>
-<body>
 <!--
 <button id="show">Show it</button><button id="hide">Hide it</button>
 <p style="display: none">Hello  2</p>
@@ -99,7 +97,7 @@ $( "#hide" ).click(function() {
 <script>
     var update = function(id) {
         //get the form values
-        var table = 'photos';
+        var tab_name = 'photos';
         var id = $("[name='id_rec_"+id+"']").val();
         var photo_name = $("[name='photo_name_"+id+"']").val();
         var category = $("[name='category_"+id+"']").val();
@@ -113,7 +111,7 @@ $( "#hide" ).click(function() {
         var password = $("[name='password_"+id+"']").val();
         var visibility = $("[name='visibility_"+id+"']").val();
         
-        var myData = ({table:table,id:id,photo_name:photo_name,category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,visibility:visibility});
+        var myData = ({tab_name:tab_name,id:id,photo_name:photo_name,category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,visibility:visibility});
         
         console.log('Submitting');
         
@@ -134,6 +132,34 @@ $( "#hide" ).click(function() {
             $("#status_text").text('POST fail');
         });
     };
+    var del = function(id) {
+        //get the form values
+        var tab_name = 'photos';
+        var id = $("[name='id_rec_"+id+"']").val();
+        var photo_mime = $("[name='photo_mime_"+id+"']").val();
+        
+        var myData = ({tab_name:tab_name, id:id, photo_mime:photo_mime});
+        
+        console.log('Submitting');
+        
+        $.ajax({
+            url:  'backoffice/delete.php',
+            type: "POST",
+            data:  myData,
+            success: function (data) {
+                $("#status_text").html(data);
+                //location.reload();
+            }
+        }).done(function(data) {
+            console.log(data);
+        }).fail(function(jqXHR,status, errorThrown) {
+            console.log(errorThrown);
+            console.log(jqXHR.responseText);
+            console.log(jqXHR.status);
+            $("#status_text").text('POST fail');
+        });
+        $( "[name='rows_"+id+"']" ).hide( 'slow' );
+    }
 </script>
 <section id="place-holder">
     <div class="center">
@@ -187,10 +213,14 @@ $( "#hide" ).click(function() {
                     <th>
                         visibility
                     </th>
+                    <th>
+                        action
+                    </th>
                 </tr>
 
                 <?php 
                 foreach ($obj_show->showAll() as $wyn) { ?>
+                    <?php //var_dump($wyn); ?>
                     <script>
                     $( document ).ready(function() {
                         var idd = '<?php echo $wyn['id']; ?>';
@@ -200,9 +230,16 @@ $( "#hide" ).click(function() {
                             //alert(idd);
                         });
                     });
-                    
+                    $( document ).ready(function() {
+                        var idd = '<?php echo $wyn['id']; ?>';
+                        $('#b_delete_'+idd).click(function(e) {
+                            e.preventDefault();
+                            del(idd);
+                            //alert(idd);
+                        });
+                    });
                     </script>
-                    <tr>
+                    <tr name="rows_<?php echo $wyn['id']; ?>">
                         <td>
                             <?php echo $wyn['id']; ?>
                         </td>
@@ -315,7 +352,9 @@ $( "#hide" ).click(function() {
                         </td>
                         <td>
                             <button id="b_save_<?php echo $wyn['id']; ?>">Zapisz</button>
+                            <button id="b_delete_<?php echo $wyn['id']; ?>">Usuń</button>
                             <input id="id_hidden" type="hidden" name="id_rec_<?php echo $wyn['id']; ?>" value="<?php echo $wyn['id']; ?>" />
+                            <input id="mime_hidden" type="hidden" name="photo_mime_<?php echo $wyn['id']; ?>" value="<?php echo $wyn['photo_mime']; ?>" />
                         </td>
                     </tr>
                 <?php } ?>
@@ -330,8 +369,7 @@ $( "#hide" ).click(function() {
 // });
 </script>
 <div id="status_text"></div>
-</body>
-</html>
+
 <?php
 //var_dump(@$_FILES['img']);
 ?>

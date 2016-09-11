@@ -12,9 +12,26 @@ header('Content-Type: text/html; charset=utf-8');
 	<script type="text/javascript"></script>
 </head>
 <body>
-<?php include 'backoffice/install.php'; ?>
-<?php include 'backoffice/upload.php'; ?>
-<?php //include 'backoffice/back_show_load.php'; ?>
-<?php include 'backoffice/back_show.php'; ?>
+    <a href="?front=">Front</a>
+    <a href="?back=">Back</a>
+    <a href="?install=">Install</a>
+    <a href="?">Clear</a>
+<?php
+if ( isset($_GET['back']) ){
+    //include 'backoffice/install.php';
+    include 'backoffice/upload.php';
+    //include 'backoffice/back_show_load.php';
+    include 'backoffice/back_show.php';
+}
+if ( isset($_GET['front']) ){
+    include 'frontoffice/front_show.php';
+}
+if ( isset($_GET['install']) ){
+    include 'backoffice/install.php';
+}
+if ( empty($_GET) ) {
+    include 'frontoffice/front_show.php';
+}
+?>
 </body>
 </html>

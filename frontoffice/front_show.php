@@ -41,7 +41,8 @@ class ShowImages
     {
 		/**/
 		$con=$this->connectDB();
-		@$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+        $order = 'DESC';
+		$q = $con->query("SELECT * FROM `".$this->table."` ORDER BY `id` ".$order."");/*zwraca /*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}
@@ -51,7 +52,7 @@ class ShowImages
         $dir = 'data/';                                        
         if (@opendir($dir)) {//sprawdzam czy sciezka istnieje
             //echo 'ok';
-            echo '<img class="back-all list mini-image" style="width:100px;" src="'.$dir.$id.'.'.$mime.'" alt="image" />';
+            echo '<img class="back-all list mini-image" style="width:200px;" src="'.$dir.$id.'.'.$mime.'" alt="image" />';
         } else {
             echo 'Brak';
         }
@@ -92,25 +93,10 @@ $obj_show->__setTable('photos');
                             Photo
                         </th>
                         <th>
-                            photo_name
-                        </th>
-                        <th>
-                            photo_mime
-                        </th>
-                        <th>
-                            photo_size
-                        </th>
-                        <th>
                             category
                         </th>
                         <th>
-                            sub_category
-                        </th>
-                        <th>
                             add_data
-                        </th>
-                        <th>
-                            update_data
                         </th>
                         <th>
                             show_data
@@ -124,20 +110,6 @@ $obj_show->__setTable('photos');
                         <th>
                             author
                         </th>
-                        <th>
-                            protected
-                        </th>
-                        <th>
-                            password
-                        </th>
-                        <th>
-                            visibility
-                        </th>
-                        <th>
-                            mod
-                        </th>
-                    </tr>
-
                     <?php 
                     foreach ($obj_show->showAll() as $wyn) { ?>
                         <form enctype="multipart/form-data" action="product_edit.php" method="POST" >
@@ -149,25 +121,10 @@ $obj_show->__setTable('photos');
                                     <?php $obj_show->showImg($wyn['id'], $wyn['photo_mime']);?>
                                 </td>
                                 <td>
-                                    <?php echo $wyn['photo_name']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['photo_mime']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['photo_size']; ?>
-                                </td>
-                                <td>
                                     <?php echo $wyn['category']; ?>
                                 </td>
                                 <td>
-                                    <?php echo $wyn['sub_category']; ?>
-                                </td>
-                                <td>
                                     <?php echo $wyn['add_data']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['update_data']; ?>
                                 </td>
                                 <td>
                                     <?php echo $wyn['show_data']; ?>
@@ -180,22 +137,6 @@ $obj_show->__setTable('photos');
                                 </td>
                                 <td>
                                     <?php echo $wyn['author']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['protected']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['password']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['visibility']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['mod']; ?>
-                                </td>
-                                <td>
-                                    <input class="back-all list submit edit" type="submit" name="id_post_bt" value="Edytuj" />
-                                    <input type="hidden" name="id_post" value="<?php echo$wyn['id']; ?>" />
                                 </td>
                             </tr>
                         </form>

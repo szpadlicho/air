@@ -65,7 +65,7 @@ class UpdateImages
         }
     }
 }
-$table = $_POST['table'];
+$tab_name = $_POST['tab_name'];
 $id = $_POST['id'];
 $photo_name = $_POST['photo_name'];
 $category = $_POST['category'];
@@ -78,6 +78,6 @@ $password = $_POST['password'];
 $visibility = $_POST['visibility'];
 
 $obj_update = new UpdateImages;
-$obj_update -> __setTable($table);
+$obj_update -> __setTable($tab_name);
 $obj_update -> updateImg($id, $photo_name, $category, $show_data, $show_place, 
                                 $tag, $author, $protect, $password, $visibility);

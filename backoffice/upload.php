@@ -36,11 +36,17 @@ class UploadFile
         $con = $this->connectDB();
         $data = date('Y-m-d H:i:s');
         $data_short = date('Y-m-d');
-        $visibility = 1;
+        $category = $_POST['category'];
+        $show_data = $_POST['show_data_year'].'-'.$_POST['show_data_month'].'-'.$_POST['show_data_day'];
+        $show_place = $_POST['show_place'];
+        $tag = $_POST['tag'];
+        $author = $_POST['author'];
+        $protect = $_POST['protect'];
+        $password = $_POST['password'];
+        $visibility = $_POST['visibility'];
         $none = NULL;
         //$tag = TRIM(REPLACE('aaaaaaaaaaaa', '\xc2\xa0', ' '));
         //$tag = TRIM(preg_replace('/\xc2\xa0/',' ','aaaaaaaaaaaaaaaa'));
-        $tag='asdadafas';
         $feedback = $con->exec("INSERT INTO `".$this->table."`(
         `photo_name`,
         `photo_mime`,
@@ -60,16 +66,16 @@ class UploadFile
         '".$file_name."',
         '".$file_type."',
         '".$file_size."',
-        '".$none."',
+        '".$category."',
         '".$none."',
         '".$data."',
         '".$data."',
-        '".$data_short."',
-        '".$none."',
+        '".$show_data."',
+        '".$show_place."',
         '".$tag."',
-        '".$none."',
-        '0',
-        '".$none."',
+        '".$author."',
+        '".$protect."',
+        '".$password."',
         '".(int)$visibility."'
         )");
 		unset ($con);
@@ -111,6 +117,13 @@ class UploadFile
             }
 		}
 	}
+    public function showCategory()
+    {
+		$con=$this->connectDB();
+		$q = $con->query("SELECT `".$this->table."` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		unset ($con);
+		return $q;
+	}
 }
 
 $obj_upload = new UploadFile;
@@ -136,8 +149,129 @@ if(isset($_POST['up'])) {
         Upload plików
         <br />
         <form name="upload" enctype="multipart/form-data" action="" method="POST">
-                <input class="input_cls" type="file" name="img[]" multiple />
-                <input class="input_cls" type="submit" name="up" value="Upload" />
+            <table id="table-list" class="back-all list table" border="2">
+                <tr>
+                    <th>
+                        File
+                    </th>
+                    <th>
+                        category
+                    </th>
+                    <th>
+                        show_data
+                    </th>
+                    <th>
+                        show_place
+                    </th>
+                    <th>
+                        tag
+                    </th>
+                    <th>
+                        author
+                    </th>
+                    <th>
+                        protect
+                    </th>
+                    <th>
+                        password
+                    </th>
+                    <th>
+                        visibility
+                    </th>
+                    <th>
+                        action
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="input_cls" type="file" name="img[]" multiple />
+                    </td>
+                    <td>
+                        <select class="" name="category">
+                            <?php
+                            //zamieniam spacje na podkresliniki dla porownania string
+                            //$cat_in_photos = str_replace(' ', '_', $wyn['category']);
+                            $obj_upload->__setTable('category');
+                            if ($obj_upload->showCategory()) {
+                                foreach ($obj_upload->showCategory() as $cat) {
+                                    //zamieniam spacje na podkresliniki dla porownania string
+                                    //$can_in_category = str_replace(' ', '_', $cat['category']); ?>
+                                    <option value="<?php echo $cat['category']; ?>"> <?php echo $cat['category']; ?>
+                                    </option>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </select>
+                    </td>
+                    <td>
+                        <?php 
+                        //var_dump ($wyn['show_data']); 
+                        // $dat = explode (' ', $wyn['show_data']);
+                        // $data = $dat[0];
+                        // $time = $dat[1];
+                        $data_short = date('Y-m-d');
+                        $n = explode ('-', $data_short);
+                        $year = $n[0];//rok
+                        $month = $n[1];//miesian
+                        $day = $n[2];//dzien
+                        ?>
+                        <select name="show_data_year">
+                            <?php for ($y = 2010; $y <= 2020; $y++) { ?>
+                                <option <?php if ( $n[0] == $y ) { ?>
+                                        selected="selected"
+                                    <?php } ?>
+                                ><?php echo $y; ?></option>
+                            <?php } ?>                                       
+                        </select>
+                        <select name="show_data_month">
+                            <?php for ($m = 1; $m <= 12; $m++) { ?>
+                                <option <?php if ( $n[1] == $m ) { ?>
+                                        selected="selected"
+                                    <?php } ?>
+                                ><?php echo $m; ?></option>
+                            <?php } ?> 
+                        </select>
+                        <select name="show_data_day">
+                            <?php for ($d = 1; $d <= 31; $d++) { ?>
+                                <option <?php if ( $n[2] == $d ) { ?>
+                                        selected="selected"
+                                    <?php } ?>
+                                ><?php echo $d; ?></option>
+                            <?php } ?> 
+                        </select>
+                    </td>
+                    <td>
+                        <textarea name="show_place" rows="4" cols="10">cz-wa</textarea> 
+                    </td>
+                    <td>
+                        <textarea name="tag" rows="4" cols="10">raz,dwa,trzy</textarea>                                   
+                    </td>
+                    <td>
+                        <input name="author" type="text" value="deoc" />
+                    </td>
+                    <td>
+                        <select name="protect">
+                            <option value="1">On</option>
+                            <option selected="selected" value="0">Off</option>
+                        </select> 
+                    </td>
+                    <td>
+                        <input name="password" type="text" value="haslo" />
+                    </td>
+                    <td>
+                        <select name="visibility">
+                            <option selected="selected" value="1">On</option>
+                            <option value="0">Off</option>
+                        </select> 
+                    </td>
+                    <td>
+                        <!--<button id="b_save">Zapisz</button>-->
+                        <input class="input_cls" type="submit" name="up" value="Upload" />
+                        <input id="id_hidden" type="hidden" name="id_rec" value="" />
+                    </td>
+                </tr>
+            </table>
         </form>
     </div>
 </section>
