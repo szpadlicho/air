@@ -4,7 +4,7 @@ class UploadFile
 {
 	private $host='sql.bdl.pl';
 	private $port='';
-	private $dbname='air_photos';
+	private $dbname='szpadlic_air';
 	//private $dbname_sh='information_schema';
 	private $charset='utf8';
 	private $user='szpadlic_baza';
@@ -245,7 +245,7 @@ if(isset($_POST['up'])) {
                         <textarea name="show_place" rows="4" cols="10">cz-wa</textarea> 
                     </td>
                     <td>
-                        <textarea name="tag" rows="4" cols="10">raz,dwa,trzy</textarea>                                   
+                        <textarea name="tag" rows="4" cols="10">raz dwa trzy</textarea>                                   
                     </td>
                     <td>
                         <input name="author" type="text" value="deoc" />

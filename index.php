@@ -19,6 +19,7 @@ header('Content-Type: text/html; charset=utf-8');
     <a href="?uplad=">Upload</a>
     <a href="?install=">Install</a>
     <a href="?">Clear</a>
+    <br />
 <?php
 if ( isset($_GET['back']) ){
     //include 'backoffice/install.php';

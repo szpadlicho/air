@@ -5,7 +5,7 @@ class Connect_Search
 {
 	private $host='sql.bdl.pl';
 	private $port='';
-	private $dbname='air_photos';
+	private $dbname='szpadlic_air';
 	//private $dbname_sh='information_schema';
 	private $charset='utf8';
 	private $user='szpadlic_baza';
@@ -28,9 +28,22 @@ class Connect_Search
     {
         $con = $this->connectDB();
         $order = 'DESC';
-        $res = $con->query("SELECT * FROM `".$this->table."` WHERE `tag` LIKE '%".$string."%' OR `author` LIKE '%".$string."%' OR `category` LIKE '%".$string."%' OR `show_place` LIKE '%".$string."%' OR `show_data` LIKE '%".$string."%' ORDER BY `id` ".$order."");
+        $string = explode(' ', $string);
+        //$res = array();
+        //$string = rtrim($string);
+        //var_dump($string);
+        if ($string[0] != ''){// warunek zeby pokazal wszysktko jesli pole search puste 
+            $string = array_filter(array_map('trim',$string),'strlen'); //wykluczam spacje z szukania
+        }
+        //var_dump($string);
+        foreach($string as $s){
+            $ress = $con->query("SELECT * FROM `".$this->table."` WHERE `tag` LIKE '%".$s."%' OR `author` LIKE '%".$s."%' OR `category` LIKE '%".$s."%' OR `show_place` LIKE '%".$s."%' OR `show_data` LIKE '%".$s."%' ORDER BY `id` ".$order."");
+            //$res[] = $ress;
+            //var_dump($s);
+        }
+        //$res = $con->query("SELECT * FROM `".$this->table."` WHERE `tag` LIKE '%".$string."%' OR `author` LIKE '%".$string."%' OR `category` LIKE '%".$string."%' OR `show_place` LIKE '%".$string."%' OR `show_data` LIKE '%".$string."%' ORDER BY `id` ".$order."");
         //$res = $res->fetch(PDO::FETCH_ASSOC);
-        return $res;
+        return @$ress;
     }
     public function showImg($id, $mime)
     {

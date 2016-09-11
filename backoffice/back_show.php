@@ -3,7 +3,7 @@ class ShowImages
 {
 	private $host='sql.bdl.pl';
 	private $port='';
-	private $dbname='air_photos';
+	private $dbname='szpadlic_air';
 	//private $dbname_sh='information_schema';
 	private $charset='utf8';
 	private $user='szpadlic_baza';
@@ -42,7 +42,7 @@ class ShowImages
 		/**/
 		$con=$this->connectDB();
         $order = 'DESC';
-		$q = $con->query("SELECT * FROM `".$this->table."` ORDER BY `id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
+		@$q = $con->query("SELECT * FROM `".$this->table."` ORDER BY `id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}

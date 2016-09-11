@@ -1,10 +1,10 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
+//header('Content-Type: text/html; charset=utf-8');
 class DataBaseInstall
 {
 	private $host='sql.bdl.pl';
 	private $port='';
-	private $dbname='air_photos';
+	private $dbname='szpadlic_air';
 	//private $dbname_sh='information_schema';
 	private $charset='utf8';
 	private $user='szpadlic_baza';
