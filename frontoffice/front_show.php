@@ -57,13 +57,13 @@ class ShowImages
             echo 'Brak';
         }
     }
-    // public function showCategoryAll()
-    // {
-		// $con=$this->connectDB();
-		// $q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
-		// unset ($con);
-		// return $q;
-	// }    
+    public function showCategory()
+    {
+		$con=$this->connectDB();
+		$q = $con->query("SELECT `".$this->table."`, `id` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		unset ($con);
+		return $q;
+	}
     public function showCategoryByID($id)
     {
 		$con=$this->connectDB();
@@ -79,120 +79,122 @@ $obj_show->__setTable('photos');
 //$res = $obj_show->showAll();
 //$res = $res->fetch(PDO::FETCH_ASSOC);
 //var_dump($res);
-//$res = $obj_show->checkDb();
-//var_dump($res);
 ?>
 
-
-
-<!DOCTYPE HTML>
-<html lang="pl">
-<head>
-	<title>Show</title>
-	<style type="text/css"></style>
-	<script type="text/javascript"></script>
-</head>
-<body>
-    <section id="place-holder">
-        <script type="text/javascript">
-            $(function(){
-                $(document).on('keyup', '#search, #search2', function() {
-                    //console.log( $( this ).val() );
-                    var string = $( this ).val();
-                    $.ajax({
-                        type: 'POST',
-                        url: 'frontoffice/front_search.php',
-                        data: {string : string }, 
-                        cache: false,
-                        dataType: 'text',
-                        success: function(data){
-                            //$('#show').html(data);
-                            // setTimeout(function(){ 
-                                // $('#show').html(data); 
-                            // }, 500)
-                            $('.center').html(data);
-                        }
-                    });
+<section id="place-holder">
+    <script type="text/javascript">
+        $(function(){
+            $(document).on('keyup', '#search, #search2', function() {
+                //console.log( $( this ).val() );
+                var string = $( this ).val();
+                $.ajax({
+                    type: 'POST',
+                    url: 'frontoffice/front_search.php',
+                    data: {string : string }, 
+                    cache: false,
+                    dataType: 'text',
+                    success: function(data){
+                        //$('#show').html(data);
+                        // setTimeout(function(){ 
+                            // $('#show').html(data); 
+                        // }, 500)
+                        $('.center').html(data);
+                    }
                 });
             });
-        </script>
-        
-        <div id="search-div">Szukaj: <input id="search" type="text" placeholder="szukaj" /></div><!--<input id="search2" type="search" results="5" autosave="a_unique_value" />-->
-        <!--<div id="search-result"></div>-->
-        <div class="center">
-            <?php
-            if ($obj_show->showAll()) { ?>
-                Wyświetlanie
-                <br />
-                <table id="table-list" class="back-all list table" border="2">
+        });
+    </script>
+    <div id="search-div">Szukaj: <input id="search" type="text" placeholder="szukaj" /></div><!--<input id="search2" type="search" results="5" autosave="a_unique_value" />-->
+    <!--<div id="search-result"></div>-->
+    <div class="center">
+        <ul>
+        <?php
+        // echo $_SERVER['REQUEST_URI'];
+        // echo '<br />';
+        // echo $_SERVER['HTTP_HOST'];
+        // echo '<br />';
+        // echo $_SERVER['QUERY_STRING'];
+        // echo '<br />';
+        // echo $_SERVER['PHP_SELF'];
+        // echo '<br />';
+        // var_dump($_SERVER);
+        $obj_show_cat = new ShowImages;
+        $obj_show_cat->__setTable('category');
+        $obj_show_cat->showCategory();
+        $ret = $obj_show_cat->showCategory();
+        $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
+        //var_dump($cat_menu);
+        foreach ($ret as $cat_menu){ ?>
+            <li><a href="?front&cat_id=<?php echo $cat_menu['id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
+        <?php } ?>
+            </ul>
+        <?php if ($obj_show->showAll()) { ?>
+            Wyświetlanie
+            <br />
+            <table id="table-list" class="back-all list table" border="2">
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Photo
+                    </th>
+                    <th>
+                        category
+                    </th>
+                    <th>
+                        add_data
+                    </th>
+                    <th>
+                        show_data
+                    </th>
+                    <th>
+                        show_place
+                    </th>
+                    <th>
+                        tag
+                    </th>
+                    <th>
+                        author
+                    </th>
+                <?php foreach ($obj_show->showAll() as $wyn) { ?>
                     <tr>
-                        <th>
-                            ID
-                        </th>
-                        <th>
-                            Photo
-                        </th>
-                        <th>
-                            category
-                        </th>
-                        <th>
-                            add_data
-                        </th>
-                        <th>
-                            show_data
-                        </th>
-                        <th>
-                            show_place
-                        </th>
-                        <th>
-                            tag
-                        </th>
-                        <th>
-                            author
-                        </th>
-                    <?php 
-                    foreach ($obj_show->showAll() as $wyn) { ?>
-
-                            <tr>
-                                <td>
-                                    <?php echo $wyn['id']; ?>
-                                </td>
-                                <td>                                          
-                                    <?php $obj_show->showImg($wyn['id'], $wyn['photo_mime']);?>
-                                </td>
-                                <td>
-                                    <?php 
-                                        $obj_show->__setTable('category');
-                                        $cat = $obj_show->showCategoryByID($wyn['category']);
-                                        $q = $cat->fetch(PDO::FETCH_ASSOC);
-                                        echo $q['category'];
-                                        //var_dump($q); 
-                                    ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['add_data']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['show_data']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['show_place']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['tag']; ?>
-                                </td>
-                                <td>
-                                    <?php echo $wyn['author']; ?>
-                                </td>
-                            </tr>
-
-                    <?php } ?>
-                </table>
-            <?php } ?>	
-        </div>
-    </section>
-</body>
-</html>
+                        <td>
+                            <?php echo $wyn['id']; ?>
+                        </td>
+                        <td>                                          
+                            <?php $obj_show->showImg($wyn['id'], $wyn['photo_mime']);?>
+                        </td>
+                        <td>
+                            <?php 
+                                $obj_show->__setTable('category');
+                                $cat = $obj_show->showCategoryByID($wyn['category']);
+                                $q = $cat->fetch(PDO::FETCH_ASSOC);
+                                echo $q['category'];
+                                //var_dump($q); 
+                            ?>
+                        </td>
+                        <td>
+                            <?php echo $wyn['add_data']; ?>
+                        </td>
+                        <td>
+                            <?php echo $wyn['show_data']; ?>
+                        </td>
+                        <td>
+                            <?php echo $wyn['show_place']; ?>
+                        </td>
+                        <td>
+                            <?php echo $wyn['tag']; ?>
+                        </td>
+                        <td>
+                            <?php echo $wyn['author']; ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+        <?php } ?>	
+    </div>
+</section>
 <?php
 //var_dump(@$_FILES['img']);
 ?>

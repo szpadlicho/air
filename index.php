@@ -1,10 +1,9 @@
 <?php
 //date_default_timezone_set('Europe/Warsaw');
 header('Content-Type: text/html; charset=utf-8');
-/*
-
-
-*/
+/**
+*
+**/
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
