@@ -1,6 +1,6 @@
 <?php
 //date_default_timezone_set('Europe/Warsaw');
-class UploadFile
+class AddCategory
 {
 	private $host='sql.bdl.pl';
 	private $port='';
@@ -31,7 +31,7 @@ class UploadFile
         $next_id = $next_id->fetch(PDO::FETCH_ASSOC);
         return $next_id['Auto_increment'];
     }
-    public function addRec($file_name, $file_type, $file_size)
+    public function addRec()
     {
         $con = $this->connectDB();
         $category = $_POST['category'];
@@ -57,21 +57,14 @@ class UploadFile
             return false;
         }    
     }
-    public function showCategory()
-    {
-		$con=$this->connectDB();
-		$q = $con->query("SELECT `".$this->table."` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
-		unset ($con);
-		return $q;
-	}
 }
 
-$obj_add = new UploadFile;
-if(isset($_POST['up'])) { 
+$obj_add = new AddCategory;
+if(isset($_POST['i_add'])) { 
     //$obj_upload->__getNextId();
     $obj_add->__setTable('category');
     //$res = $obj_upload->fileUpload();
-    //$res2 = $obj_upload->addRec();
+    $res = $obj_add->addRec();
     //var_dump(@$res);
     //var_dump(@$res2);
     //var_dump(@$_FILES);
@@ -86,12 +79,9 @@ if(isset($_POST['up'])) {
     <div class="center">
         Category add
         <br />
-        <form name="upload" enctype="multipart/form-data" action="" method="POST">
+        <form name="add_cat" enctype="multipart/form-data" action="" method="POST">
             <table id="table-list" class="back-all list table" border="2">
                 <tr>
-                    <th>
-                        id
-                    </th>
                     <th>
                         category
                     </th>
@@ -110,27 +100,8 @@ if(isset($_POST['up'])) {
                 </tr>
                 <tr>
                     <td>
-                    
-                    </id>
-                    <td>
-                        <select class="" name="category">
-                            <?php
-                            //zamieniam spacje na podkresliniki dla porownania string
-                            //$cat_in_photos = str_replace(' ', '_', $wyn['category']);
-                            $obj_add->__setTable('category');
-                            if ($obj_add->showCategory()) {
-                                foreach ($obj_add->showCategory() as $cat) {
-                                    //zamieniam spacje na podkresliniki dla porownania string
-                                    //$can_in_category = str_replace(' ', '_', $cat['category']); ?>
-                                    <option value="<?php echo $cat['category']; ?>"> <?php echo $cat['category']; ?>
-                                    </option>
-                                <?php
-                                }
-                            }
-                            ?>
-                        </select>
+                        <input name="category" type="text" value="new" />
                     </td>
-                    
                     <td>
                         <select name="protect">
                             <option value="1">On</option>
@@ -147,8 +118,8 @@ if(isset($_POST['up'])) {
                         </select> 
                     </td>
                     <td>
-                        <!--<button id="b_save">Zapisz</button>-->
-                        <input class="input_cls" type="submit" name="add" value="Dodaj" />
+                        <!--<button id="b_add">Dodaj</button>-->
+                        <input class="input_cls" type="submit" name="i_add" value="Dodaj" />
                         <!--<input id="id_hidden" type="hidden" name="id_rec" value="" />-->
                     </td>
                 </tr>

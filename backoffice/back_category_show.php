@@ -1,6 +1,6 @@
 <?php
 //date_default_timezone_set('Europe/Warsaw');
-class UploadFile
+class ShowCategory
 {
 	private $host='sql.bdl.pl';
 	private $port='';
@@ -57,19 +57,19 @@ class UploadFile
             return false;
         }    
     }
-    public function showCategory()
+    public function showCategoryAll()
     {
 		$con=$this->connectDB();
-		$q = $con->query("SELECT `".$this->table."` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}
 }
 
-$obj_add = new UploadFile;
+$obj_show = new ShowCategory;
 if(isset($_POST['up'])) { 
     //$obj_upload->__getNextId();
-    $obj_add->__setTable('category');
+    //$obj_show->__setTable('category');
     //$res = $obj_upload->fileUpload();
     //$res2 = $obj_upload->addRec();
     //var_dump(@$res);
@@ -78,10 +78,68 @@ if(isset($_POST['up'])) {
     
 
 }
-
+var_dump($_POST);
 ?>
 
-
+<script>
+    var update_cat = function(id) {
+        //get the form values
+        var tab_name = 'category';
+        var id = $("[name='id_rec_"+id+"']").val();
+        var category = $("[name='category_"+id+"']").val();
+        var protect = $("[name='protect_"+id+"']").val();
+        var password = $("[name='password_"+id+"']").val();
+        var visibility = $("[name='visibility_"+id+"']").val();
+        
+        var myData = ({tab_name:tab_name, id:id, category:category, protect:protect, password:password, visibility:visibility});
+        
+        console.log('Submitting');
+        
+        $.ajax({
+            url:  'backoffice/update_cat.php',
+            type: "POST",
+            data:  myData,
+            success: function (data) {
+                $("#status_text").html(data);
+                //location.reload();
+            }
+        }).done(function(data) {
+            console.log(data);
+        }).fail(function(jqXHR,status, errorThrown) {
+            console.log(errorThrown);
+            console.log(jqXHR.responseText);
+            console.log(jqXHR.status);
+            $("#status_text").text('POST fail');
+        });
+    };
+    var del_cat = function(id) {
+        //get the form values
+        var tab_name = 'category';
+        var id = $("[name='id_rec_"+id+"']").val();
+        
+        var myData = ({tab_name:tab_name, id:id});
+        
+        console.log('Submitting');
+        
+        $.ajax({
+            url:  'backoffice/delete_cat.php',
+            type: "POST",
+            data:  myData,
+            success: function (data) {
+                $("#status_text").html(data);
+                //location.reload();
+            }
+        }).done(function(data) {
+            console.log(data);
+        }).fail(function(jqXHR,status, errorThrown) {
+            console.log(errorThrown);
+            console.log(jqXHR.responseText);
+            console.log(jqXHR.status);
+            $("#status_text").text('POST fail');
+        });
+        $( "[name='rows_"+id+"']" ).hide( 'slow' );
+    }
+</script>
 <section id="place-holder">
     <div class="center">
         Category show
@@ -108,56 +166,75 @@ if(isset($_POST['up'])) {
                         action
                     </th>
                 </tr>
-                
-                <tr>
-                    <td>
-                    
-                    </id>
-                    <td>
-                        <select class="" name="category">
-                            <?php
-                            //zamieniam spacje na podkresliniki dla porownania string
-                            //$cat_in_photos = str_replace(' ', '_', $wyn['category']);
-                            $obj_add->__setTable('category');
-                            if ($obj_add->showCategory()) {
-                                foreach ($obj_add->showCategory() as $cat) {
-                                    //zamieniam spacje na podkresliniki dla porownania string
-                                    //$can_in_category = str_replace(' ', '_', $cat['category']); ?>
-                                    <option value="<?php echo $cat['category']; ?>"> <?php echo $cat['category']; ?>
-                                    </option>
-                                <?php
-                                }
-                            }
-                            ?>
-                        </select>
-                    </td>
-                    
-                    <td>
-                        <select name="protect">
-                            <option value="1">On</option>
-                            <option selected="selected" value="0">Off</option>
-                        </select> 
-                    </td>
-                    <td>
-                        <input name="password" type="text" value="haslo" />
-                    </td>
-                    <td>
-                        <select name="visibility">
-                            <option selected="selected" value="1">On</option>
-                            <option value="0">Off</option>
-                        </select> 
-                    </td>
-                    <td>
-                        <!--<button id="b_save">Zapisz</button>-->
-                        <input class="input_cls" type="submit" name="add" value="Dodaj" />
-                        <!--<input id="id_hidden" type="hidden" name="id_rec" value="" />-->
-                    </td>
-                </tr>
+                <!--<form name="show_category" action="" method="POST">-->
+                <?php
+                //zamieniam spacje na podkresliniki dla porownania string
+                //$cat_in_photos = str_replace(' ', '_', $wyn['category']);
+                $obj_show->__setTable('category');
+                //var_dump($obj_show->showCategory()->fetch()); 
+                if ($obj_show->showCategoryAll()) {
+                    foreach ($obj_show->showCategoryAll() as $cat) { ?>
+                        <script>
+                            $( document ).ready(function() {
+                                var idd = '<?php echo $cat['id']; ?>';
+                                $('#b_save_'+idd).click(function(e) {
+                                    e.preventDefault();
+                                    update_cat(idd);
+                                });
+                            });
+                            $( document ).ready(function() {
+                                var idd = '<?php echo $cat['id']; ?>';
+                                $('#b_delete_'+idd).click(function(e) {
+                                    e.preventDefault();
+                                    del_cat(idd);
+                                });
+                            });
+                        </script>
+                        <tr name="rows_<?php echo $cat['id']; ?>">
+                            <td>
+                                <?php echo $cat['id']; ?>
+                            </td>
+                            <td>
+                                <input name="category_<?php echo $cat['id']; ?>" type="text" value="<?php echo $cat['category']; ?>" />  
+                            </td>
+                            <td>
+                                <select name="protect_<?php echo $cat['id']; ?>">
+                                    <option <?php if( $cat['protect'] == "1" ){ ?>
+                                            selected="selected"
+                                        <?php } ?> value="1">On</option>
+                                    <option <?php if( $cat['protect'] == "0" ){ ?>
+                                            selected="selected"
+                                        <?php } ?> value="0">Off</option>
+                                </select> 
+                            </td>
+                            <td>
+                                <input name="password_<?php echo $cat['id']; ?>" type="text" value="<?php echo $cat['password']; ?>" />
+                            </td>
+                            <td>
+                                <select name="visibility_<?php echo $cat['id']; ?>">
+                                    <option <?php if( $cat['visibility'] == "1" ){ ?>
+                                            selected="selected"
+                                        <?php } ?> value="1">On</option>
+                                    <option <?php if( $cat['visibility'] == "0" ){ ?>
+                                            selected="selected"
+                                        <?php } ?> value="0">Off</option>
+                                </select> 
+                            </td>
+                            <td>
+                                <button id="b_save_<?php echo $cat['id']; ?>">Aktualizuj</button>
+                                <button id="b_delete_<?php echo $cat['id']; ?>">Usuń</button>
+                                <input id="id_hidden" type="hidden" name="id_rec_<?php echo $cat['id']; ?>" value="<?php echo $cat['id']; ?>" />
+                            </td>
+                        </tr>
+                <?php
+                    }
+                }
+                ?>
             </table>
         </form>
     </div>
 </section>
-
+<div id="status_text"></div>
 
 <?php
 //var_dump(@$_FILES['img']);
