@@ -57,6 +57,21 @@ class ShowImages
             echo 'Brak';
         }
     }
+    // public function showCategoryAll()
+    // {
+		// $con=$this->connectDB();
+		// $q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+		// return $q;
+	// }    
+    public function showCategoryByID($id)
+    {
+		$con=$this->connectDB();
+		$q = $con->query("SELECT * FROM `".$this->table."` WHERE id = ".$id."");/*zwraca false jesli tablica nie istnieje*/
+		unset ($con);
+        //$q = $g->fetch(PDO::FETCH_ASSOC);
+		return $q;
+	}
 }
 
 $obj_show = new ShowImages;
@@ -146,7 +161,13 @@ $obj_show->__setTable('photos');
                                     <?php $obj_show->showImg($wyn['id'], $wyn['photo_mime']);?>
                                 </td>
                                 <td>
-                                    <?php echo $wyn['category']; ?>
+                                    <?php 
+                                        $obj_show->__setTable('category');
+                                        $cat = $obj_show->showCategoryByID($wyn['category']);
+                                        $q = $cat->fetch(PDO::FETCH_ASSOC);
+                                        echo $q['category'];
+                                        //var_dump($q); 
+                                    ?>
                                 </td>
                                 <td>
                                     <?php echo $wyn['add_data']; ?>

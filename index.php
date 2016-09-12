@@ -2,7 +2,7 @@
 //date_default_timezone_set('Europe/Warsaw');
 header('Content-Type: text/html; charset=utf-8');
 /*
-categorie zrobic na id zeby przy zmianie sie aktualizowaly e tabelce photo
+
 
 */
 ?>

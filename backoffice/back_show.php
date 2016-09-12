@@ -57,13 +57,27 @@ class ShowImages
             return 'Brak';
         }
     }
-    public function showCategory()
+    // public function showCategory()
+    // {
+		// $con=$this->connectDB();
+		// $q = $con->query("SELECT `".$this->table."` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+		// return $q;
+	// }
+    public function showCategoryAll()
     {
 		$con=$this->connectDB();
-		$q = $con->query("SELECT `".$this->table."` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}
+    // public function showCategoryByID($id)
+    // {
+		// $con=$this->connectDB();
+		// $q = $con->query("SELECT `".$this->table."` FROM `".$this->table."` WHERE `id` = '".$id."'");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+		// return $q;
+	// }
     public function deleteREC()
     {
 		$con=$this->connectDB();
@@ -285,14 +299,14 @@ $( "#hide" ).click(function() {
                             <select class="" name="category_<?php echo $wyn['id']; ?>">
                                 <?php
                                 //zamieniam spacje na podkresliniki dla porownania string
-                                $cat_in_photos = str_replace(' ', '_', $wyn['category']);
+                                //$cat_in_photos = str_replace(' ', '_', $wyn['category']);
                                 $obj_show->__setTable('category');
-                                if ($obj_show->showCategory()) {
-                                    foreach ($obj_show->showCategory() as $cat) {
+                                if ($obj_show->showCategoryAll()) {
+                                    foreach ($obj_show->showCategoryAll() as $cat) {
                                         //zamieniam spacje na podkresliniki dla porownania string
-                                        $can_in_category = str_replace(' ', '_', $cat['category']); ?>
-                                        <option value="<?php echo $cat['category']; ?>"
-                                            <?php if( $cat_in_photos == $can_in_category ){
+                                        //$can_in_category = str_replace(' ', '_', $cat['category']); ?>
+                                        <option value="<?php echo $cat['id']; ?>"
+                                            <?php if( $cat['id'] == $wyn['category'] ){
                                                 echo $selected = 'selected="selected"'; 
                                             } ?> > <?php echo $cat['category']; ?>
                                         </option>

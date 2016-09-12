@@ -37,6 +37,7 @@ class UploadFile
         $data = date('Y-m-d H:i:s');
         $data_short = date('Y-m-d');
         $category = $_POST['category'];
+        
         $show_data = $_POST['show_data_year'].'-'.$_POST['show_data_month'].'-'.$_POST['show_data_day'];
         $show_place = $_POST['show_place'];
         $tag = $_POST['tag'];
@@ -117,13 +118,27 @@ class UploadFile
             }
 		}
 	}
-    public function showCategory()
+    // public function showCategory()
+    // {
+		// $con=$this->connectDB();
+		// $q = $con->query("SELECT `".$this->table."` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+		// return $q;
+	// }
+    public function showCategoryAll()
     {
 		$con=$this->connectDB();
-		$q = $con->query("SELECT `".$this->table."` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}
+    // public function showCategoryByID($id)
+    // {
+		// $con=$this->connectDB();
+		// $q = $con->query("SELECT `".$this->table."` FROM `".$this->table."` WHERE `id` = '".$id."'");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+		// return $q;
+	// }
 }
 
 $obj_upload = new UploadFile;
@@ -192,11 +207,11 @@ if(isset($_POST['up'])) {
                             //zamieniam spacje na podkresliniki dla porownania string
                             //$cat_in_photos = str_replace(' ', '_', $wyn['category']);
                             $obj_upload->__setTable('category');
-                            if ($obj_upload->showCategory()) {
-                                foreach ($obj_upload->showCategory() as $cat) {
+                            if ($obj_upload->showCategoryAll()) {
+                                foreach ($obj_upload->showCategoryAll() as $cat) {
                                     //zamieniam spacje na podkresliniki dla porownania string
                                     //$can_in_category = str_replace(' ', '_', $cat['category']); ?>
-                                    <option value="<?php echo $cat['category']; ?>"> <?php echo $cat['category']; ?>
+                                    <option value="<?php echo $cat['id']; ?>"> <?php echo $cat['category']; ?>
                                     </option>
                                 <?php
                                 }
