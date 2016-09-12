@@ -67,13 +67,21 @@ class Connect_Search
 		unset ($con);
 		return $q;
 	}
-    public function deleteREC()
+    public function showCategoryByID($id)
     {
 		$con=$this->connectDB();
-		$con->query("DELETE FROM `".$this->table."` WHERE `id` = '".$_SESSION['id_post']."'");	
+		$q = $con->query("SELECT * FROM `".$this->table."` WHERE id = ".$id."");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
-	
+        //$q = $g->fetch(PDO::FETCH_ASSOC);
+		return $q;
 	}
+    // public function deleteREC()
+    // {
+		// $con=$this->connectDB();
+		// $con->query("DELETE FROM `".$this->table."` WHERE `id` = '".$_SESSION['id_post']."'");	
+		// unset ($con);
+	
+	// }
 }
 $obj_search = new Connect_Search();
 $obj_search->__setTable('photos');
@@ -127,7 +135,13 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                 <?php echo $obj_search->showImg($wyn['id'], $wyn['photo_mime']);?>
             </td>
             <td>
-                <?php echo $wyn['category']; ?>
+                <?php 
+                    $obj_search->__setTable('category');
+                    $cat = $obj_search->showCategoryByID($wyn['category']);
+                    $q = $cat->fetch(PDO::FETCH_ASSOC);
+                    echo $q['category'];
+                    //var_dump($q); 
+                ?>
             </td>
             <td>
                 <?php echo $wyn['add_data']; ?>

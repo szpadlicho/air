@@ -60,10 +60,17 @@ class Connect_Search
             return 'Brak';
         }
     }
-    public function showCategory()
+    // public function showCategory()
+    // {
+		// $con=$this->connectDB();
+		// $q = $con->query("SELECT `".$this->table."` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+		// return $q;
+	// }
+    public function showCategoryAll()
     {
 		$con=$this->connectDB();
-		$q = $con->query("SELECT `".$this->table."` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}
@@ -183,14 +190,14 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                             <select class="" name="category_<?php echo $wyn['id']; ?>">
                                 <?php
                                 //zamieniam spacje na podkresliniki dla porownania string
-                                $cat_in_photos = str_replace(' ', '_', $wyn['category']);
+                                //$cat_in_photos = str_replace(' ', '_', $wyn['category']);
                                 $obj_search->__setTable('category');
-                                if ($obj_search->showCategory()) {
-                                    foreach ($obj_search->showCategory() as $cat) {
+                                if ($obj_search->showCategoryAll()) {
+                                    foreach ($obj_search->showCategoryAll() as $cat) {
                                         //zamieniam spacje na podkresliniki dla porownania string
-                                        $can_in_category = str_replace(' ', '_', $cat['category']); ?>
-                                        <option value="<?php echo $cat['category']; ?>"
-                                            <?php if( $cat_in_photos == $can_in_category ){
+                                        //$can_in_category = str_replace(' ', '_', $cat['category']); ?>
+                                        <option value="<?php echo $cat['id']; ?>"
+                                            <?php if( $cat['id'] == $wyn['category'] ){
                                                 echo $selected = 'selected="selected"'; 
                                             } ?> > <?php echo $cat['category']; ?>
                                         </option>
