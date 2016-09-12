@@ -26,8 +26,6 @@ header('Content-Type: text/html; charset=utf-8');
     <br />
 <?php
 if ( isset($_GET['back']) ){
-    //include 'backoffice/install.php';
-    //include 'backoffice/upload.php';
     //include 'backoffice/back_show_load.php';
     include 'backoffice/back_show.php';
 }
