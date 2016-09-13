@@ -46,6 +46,15 @@ class ShowImages
 		unset ($con);
 		return $q;
 	}
+    // public function showAll()
+    // {
+		// $con=$this->connectDB();
+        // $order = 'DESC';
+		// $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
+                        // ON category.id = photos.category");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+		// return $q;
+	// } 
     public function showImg($id, $mime)
     {
         //losowy obrazek z katalogu                                           
@@ -57,13 +66,22 @@ class ShowImages
             echo 'Brak';
         }
     }
-    public function showCategory()
+    public function showCategory()// do category menu
     {
 		$con=$this->connectDB();
 		$q = $con->query("SELECT `".$this->table."`, `id` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}
+    public function showCategoryJoin()
+    {
+		$con=$this->connectDB();
+		$q = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
+                        ON category.id = photos.category
+                        WHERE photos.category = category.id");/*zwraca false jesli tablica nie istnieje*/
+		unset ($con);
+		return $q;
+	}    
     public function showCategoryByID($id)
     {
 		$con=$this->connectDB();
@@ -76,9 +94,9 @@ class ShowImages
 
 $obj_show = new ShowImages;
 $obj_show->__setTable('photos');
-//$res = $obj_show->showAll();
-//$res = $res->fetch(PDO::FETCH_ASSOC);
-//var_dump($res);
+// $res = $obj_show->showAll();
+// $res = $res->fetch(PDO::FETCH_ASSOC);
+// var_dump($res);
 ?>
 
 <section id="place-holder">
@@ -127,7 +145,28 @@ $obj_show->__setTable('photos');
         foreach ($ret as $cat_menu){ ?>
             <li><a href="?front&cat_id=<?php echo $cat_menu['id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
         <?php } ?>
-            </ul>
+        </ul>
+ 
+<p>---------------------</p>
+
+        <ul>
+        <?php 
+            $obj_join = new ShowImages;
+            //$obj_join->__setTable('category');
+            $obj_join->showCategoryJoin();
+            $ret2 = $obj_join->showCategoryJoin();
+            $ret2 = $ret2->fetchAll(PDO::FETCH_ASSOC);
+            //var_dump($ret2);
+            
+            foreach ($ret as $cat_menu){ ?>
+                <li><a href="?front&cat_id=<?php echo $cat_menu['id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
+        <?php } ?>
+        </ul>
+    
+<p>---------------------</p>
+ 
+ 
+ 
         <?php if ($obj_show->showAll()) { ?>
             Wyświetlanie
             <br />
@@ -166,11 +205,11 @@ $obj_show->__setTable('photos');
                             <?php $obj_show->showImg($wyn['id'], $wyn['photo_mime']);?>
                         </td>
                         <td>
-                            <?php 
-                                $obj_show->__setTable('category');
-                                $cat = $obj_show->showCategoryByID($wyn['category']);
-                                $q = $cat->fetch(PDO::FETCH_ASSOC);
-                                echo $q['category'];
+                            <?php  echo $wyn['category']; 
+                                // $obj_show->__setTable('category');
+                                // $cat = $obj_show->showCategoryByID($wyn['category']);
+                                // $q = $cat->fetch(PDO::FETCH_ASSOC);
+                                // echo $q['category'];
                                 //var_dump($q); 
                             ?>
                         </td>

@@ -37,14 +37,39 @@ class Connect_Search
         }
         //var_dump($string);
         foreach($string as $s){
-            $ress = $con->query("SELECT * FROM `".$this->table."` WHERE `tag` LIKE '%".$s."%' OR `author` LIKE '%".$s."%' OR `category` LIKE '%".$s."%' OR `show_place` LIKE '%".$s."%' OR `show_data` LIKE '%".$s."%' ORDER BY `id` ".$order."");
+            $ress = $con->query("SELECT * FROM `".$this->table."` WHERE `id` LIKE '%".$s."%' OR `tag` LIKE '%".$s."%' OR `author` LIKE '%".$s."%' OR `category` LIKE '%".$s."%' OR `show_place` LIKE '%".$s."%' OR `show_data` LIKE '%".$s."%' ORDER BY `id` ".$order."");
             //$res[] = $ress;
             //var_dump($s);
         }
-        //$res = $con->query("SELECT * FROM `".$this->table."` WHERE `tag` LIKE '%".$string."%' OR `author` LIKE '%".$string."%' OR `category` LIKE '%".$string."%' OR `show_place` LIKE '%".$string."%' OR `show_data` LIKE '%".$string."%' ORDER BY `id` ".$order."");
+        //$res = $con->query("SELECT * FROM `".$this->table."` WHERE `id` LIKE '%".$s."%' OR `tag` LIKE '%".$string."%' OR `author` LIKE '%".$string."%' OR `category` LIKE '%".$string."%' OR `show_place` LIKE '%".$string."%' OR `show_data` LIKE '%".$string."%' ORDER BY `id` ".$order."");
         //$res = $res->fetch(PDO::FETCH_ASSOC);
         return @$ress;
     }
+    /**/
+    // public function __getImagesTag($string)
+    // {
+        // $con = $this->connectDB();
+        // $order = 'DESC';
+        // $string = explode(' ', $string);
+        // //$res = array();
+        // //$string = rtrim($string);
+        // //var_dump($string);
+        // if ($string[0] != ''){// warunek zeby pokazal wszysktko jesli pole search puste 
+            // $string = array_filter(array_map('trim',$string),'strlen'); //wykluczam spacje z szukania
+        // }
+        // //var_dump($string);
+        // foreach($string as $s){
+            // $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
+                        // ON category.id = photos.category
+                        // WHERE `id` LIKE '%".$s."%' OR `tag` LIKE '%".$s."%' OR `author` LIKE '%".$s."%' OR `category` LIKE '%".$s."%' OR `show_place` LIKE '%".$s."%' OR `show_data` LIKE '%".$s."%' ORDER BY `id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
+            // //$res[] = $ress;
+            // //var_dump($s);
+        // }
+        // //$res = $con->query("SELECT * FROM `".$this->table."` WHERE `tag` LIKE '%".$string."%' OR `author` LIKE '%".$string."%' OR `category` LIKE '%".$string."%' OR `show_place` LIKE '%".$string."%' OR `show_data` LIKE '%".$string."%' ORDER BY `id` ".$order."");
+        // //$res = $res->fetch(PDO::FETCH_ASSOC);
+        // return @$ress;
+    // }
+    /**/
     public function showImg($id, $mime)
     {
         //losowy obrazek z katalogu                                           
@@ -75,6 +100,15 @@ class Connect_Search
         //$q = $g->fetch(PDO::FETCH_ASSOC);
 		return $q;
 	}
+    public function showCategoryJoin()
+    {
+		$con=$this->connectDB();
+		$q = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
+                        ON category.id = photos.category
+                        WHERE photos.category = category.id");/*zwraca false jesli tablica nie istnieje*/
+		unset ($con);
+		return $q;
+	} 
     // public function deleteREC()
     // {
 		// $con=$this->connectDB();
@@ -125,6 +159,7 @@ $success = $obj_search->__getImagesTag($_POST['string']);
             </th>
         </tr>
     <?php
+    //var_dump($success);
     while ($wyn = $success->fetch(PDO::FETCH_ASSOC)) { ?>
     <?php //var_dump($wyn); ?>
         <tr>
