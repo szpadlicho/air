@@ -3,6 +3,12 @@
 header('Content-Type: text/html; charset=utf-8');
 /**
 * wymyslec szukanie po kategorii
+$sql = "SELECT *
+     FROM comments
+     LEFT JOIN articles
+     ON articles.id = comments.user_id
+     WHERE comments.user_id = articles.id
+     https://www.sitepoint.com/community/t/trying-to-join-2-tables-pdo/38788/11
 **/
 ?>
 <!DOCTYPE HTML>
