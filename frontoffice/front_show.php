@@ -77,8 +77,8 @@ class ShowImages
     {
 		$con=$this->connectDB();
 		$q = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
-                        ON category.id = photos.category
-                        WHERE photos.category = category.id");/*zwraca false jesli tablica nie istnieje*/
+                        ON photos.category = category.id
+                        ");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}    
@@ -156,7 +156,7 @@ $obj_show->__setTable('photos');
             $obj_join->showCategoryJoin();
             $ret2 = $obj_join->showCategoryJoin();
             $ret2 = $ret2->fetchAll(PDO::FETCH_ASSOC);
-            //var_dump($ret2);
+            var_dump($ret2);
             
             foreach ($ret as $cat_menu){ ?>
                 <li><a href="?front&cat_id=<?php echo $cat_menu['id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
