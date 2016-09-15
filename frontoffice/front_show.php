@@ -76,11 +76,24 @@ class ShowImages
     public function showCategoryJoin()
     {
 		$con=$this->connectDB();
-		$q = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
-                        ON photos.category = category.id
-                        ");/*zwraca false jesli tablica nie istnieje*/
+        $order = 'DESC';
+		// $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
+                        // ON photos.category = category.id
+                        // ");/*zwraca false jesli tablica nie istnieje*/
+        @$q = @$con->query("SELECT * FROM `photos` AS p, `category` AS c WHERE p.category = c.id ORDER BY 'id' DESC");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
-		return $q;
+		return @$q;
+        // SELECT
+             // t1.id, t2.pole1, t3.pole2
+        // FROM
+             // tabela1 AS t1,
+             // tabela2 AS t2,
+             // tabela3 AS t3
+        // WHERE
+             // t2.id = t1.id
+        // AND  t3.id = t1.id
+
+        // ORDER BY id LIMIT 3
 	}    
     public function showCategoryByID($id)
     {
@@ -140,7 +153,7 @@ $obj_show->__setTable('photos');
         $obj_show_cat->__setTable('category');
         $obj_show_cat->showCategory();
         $ret = $obj_show_cat->showCategory();
-        $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
+        $ret = $ret->fetchALL(PDO::FETCH_ASSOC);
         //var_dump($cat_menu);
         foreach ($ret as $cat_menu){ ?>
             <li><a href="?front&cat_id=<?php echo $cat_menu['id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
