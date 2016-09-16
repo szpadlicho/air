@@ -1,5 +1,4 @@
 <?php
-//date_default_timezone_set('Europe/Warsaw');
 class UpdateCategory
 {
 	private $host='sql.bdl.pl';
@@ -46,15 +45,10 @@ class UpdateCategory
             `".$this->prefix."id`='".$id."'
             ");	
 		unset ($con);	
-        //echo "<div class=\"center\" >zapis udany</div>";
         if ($feedback) {
             return true;
-            //echo 'yes';
-            //var_dump($_POST);
         } else {
             return false;
-            //echo 'no';
-            //var_dump($_POST);
         }
     }
 }
@@ -64,7 +58,6 @@ $category = $_POST['category'];
 $protect = $_POST['protect'];
 $password = $_POST['password'];
 $visibility = $_POST['visibility'];
-//var_dump($_POST);
 $obj_update = new UpdateCategory;
 $obj_update -> __setTable($tab_name);
 $obj_update -> updateCat($id, $category, $protect, $password, $visibility);

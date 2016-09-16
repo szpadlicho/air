@@ -1,5 +1,4 @@
 <?php
-//date_default_timezone_set('Europe/Warsaw');
 class UpdateImages
 {
 	private $host='sql.bdl.pl';
@@ -54,20 +53,16 @@ class UpdateImages
             `".$this->prefix."id`='".$id."'
             ");	
 		unset ($con);	
-        //echo "<div class=\"center\" >zapis udany</div>";
         if ($feedback) {
-            //return true;
-            //echo 'yes';
-            var_dump($_POST);
+            return true;
+            //var_dump($_POST);
         } else {
-            //return false;
-            //echo 'no';
-            var_dump($_POST);
+            return false;
+            //var_dump($_POST);
         }
     }
 }
 $tab_name = $_POST['tab_name'];
-//$prefix = $_POST['prefix'];
 $id = $_POST['id'];
 $photo_name = $_POST['photo_name'];
 $category = $_POST['category'];
@@ -78,7 +73,6 @@ $author = $_POST['author'];
 $protect = $_POST['protect'];
 $password = $_POST['password'];
 $visibility = $_POST['visibility'];
-//var_dump($_POST);
 $obj_update = new UpdateImages;
 $obj_update -> __setTable($tab_name);
 $obj_update -> updateImg($id, $photo_name, $category, $show_data, $show_place, 

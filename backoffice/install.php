@@ -1,5 +1,4 @@
 <?php
-//header('Content-Type: text/html; charset=utf-8');
 class DataBaseInstall
 {
 	private $host='sql.bdl.pl';
@@ -98,7 +97,6 @@ class DataBaseInstall
                 )ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1"
                 );
             ////nie może tu byc return bo sie dalej nie wykona
-            //setcookie("TestCookie", 'asd', time()+3600);
             if (! empty($arr_val)) {
                 
                 $field='';
@@ -125,14 +123,13 @@ class DataBaseInstall
 			return false;
 		}
     }
-    public function addRec($arr_val, $prefix){
+    public function addRec($arr_val){
         $con = $this->connectDB();
 		$res = $con->query(
             "SELECT '".$this->prefix."id' 
             FROM ".$this->table
             );// Zwraca false jesli tablica nie istnieje
             $res = $res->fetch();
-            //var_dump($res);
 		if (! empty($res) ) {
             if (! empty($arr_val)) {
                     $field='';
@@ -168,10 +165,8 @@ class DataBaseInstall
 $obj_install = new DatabaseInstall;
 if (isset($_POST['crt'])) {
     $obj_install->createDb();
-    //$res = $con->fetch(PDO::FETCH_ASSOC);
     $return = array();// array initiate
     $obj_install->__setTable('photos');
-    //$prefix = 'p_';
     $data = date('Y-m-d H:i:s');
     $arr_row = array(
         'photo_name'                =>'TEXT',
@@ -190,27 +185,8 @@ if (isset($_POST['crt'])) {
         'visibility'                =>'INTEGER(1) UNSIGNED'
         );
     $arr_val = array();
-    /*$arr_val = array(
-        'photo_name'                =>'Oryginalna nazwa',
-        'photo_mime'                =>'Rozszerzenie',
-        'photo_size'                =>'Rozmiar',
-        'category'                  =>'Kategoria',
-        'sub_category'              =>'Podkategoria',
-        'add_data'                  =>date('Y-m-d H:i:s'),
-        'update_data'               =>date('Y-m-d H:i:s'),
-        'show_data'                 =>date('Y-m-d H:i:s'),
-        'show_place'                =>'Miejsce pokazu',
-        'tag'                       =>'Tagi (opis)',
-        'author'                    =>'Autor', 
-        'protect'                   =>'Zabezpieczone', 
-        'password'                  =>'Hasło', 
-        'visibility'                =>'1'    
-        );
-        */
     $return['photos'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
-    //var_dump($return);
     $obj_install->__setTable('category');
-    //$prefix = 'c_';
     $arr_row = array(
         'category'                  =>'TEXT',
         'protect'                   =>'VARCHAR(20)', 
@@ -225,7 +201,6 @@ if (isset($_POST['crt'])) {
         'visibility'                =>'1'    
         );
     $return['category'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
-    //var_dump($return);
     $obj_install->__setTable('category');
     $arr_val = array(
         'category'                  =>'Air Show Radom',
@@ -248,18 +223,12 @@ if (isset($_POST['del'])) {
 	$obj_install->deleteDb();
 }
 ?>
-
-
-
-
-<section id="place-holder">
-    <div class="center">
-        Zarządzanie Bazą Danych
-        <form name="install" enctype="multipart/form-data" action="" method="POST">
-                <input class="input_cls" type="submit" name="del" value="Delete DB" />
-                <input class="input_cls" type="submit" name="crt" value="Create" />
-        </form>
-    </div>
-</section>
+<div class="center">
+    Zarządzanie Bazą Danych
+    <form name="install" enctype="multipart/form-data" action="" method="POST">
+            <input class="input_cls" type="submit" name="del" value="Delete DB" />
+            <input class="input_cls" type="submit" name="crt" value="Create" />
+    </form>
+</div>
 
 

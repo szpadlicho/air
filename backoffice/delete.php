@@ -24,25 +24,8 @@ class DeleteImages
         return $con;
         unset ($con);
 	}
-    // public function rrmdir($dir) 
-    // {
-	// // do kasowania folderów plików i pod folderów
-		// if (is_dir($dir)) {
-			// $objects = scandir($dir);
-			// foreach ($objects as $object) {
-				// if ($object != "." && $object != "..") {
-					// if (filetype($dir."/".$object) == "dir") $this->rrmdir($dir."/".$object); else unlink($dir."/".$object);
-				// }
-			// }
-			// reset($objects);
-			// rmdir($dir);
-		// }
-	// }
 	public function deleteImage($id, $mime)
     {
-        //$result = $this->rrmdir('data/'.$id.'.'.$mime);
-        //$result = array_map('unlink', glob("some/dir/*.txt")); /*This will delete all files in a directory matching a pattern in one line of code. */
-        //$result = array_map('unlink', glob('data/'.$id.'.'.$mime));
         $result = unlink('../data/'.$id.'.'.$mime);
 		if($result) {  
 			return true;
@@ -65,7 +48,6 @@ class DeleteImages
 	}
 }
 $id = $_POST['id'];
-//$prefix = $_POST['prefix'];
 $photo_mime = $_POST['photo_mime'];
 $tab_name = $_POST['tab_name'];
 $obj_del = new DeleteImages;

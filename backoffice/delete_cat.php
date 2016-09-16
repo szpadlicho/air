@@ -42,4 +42,3 @@ $tab_name = $_POST['tab_name'];
 $obj_del = new DeleteImages;
 $obj_del->__setTable($tab_name);
 $feedback = $obj_del->deleteREC($id);
-//var_dump($feedback);

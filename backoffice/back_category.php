@@ -1,5 +1,4 @@
 <?php
-//date_default_timezone_set('Europe/Warsaw');
 class UploadFile
 {
 	private $host='sql.bdl.pl';
@@ -16,7 +15,6 @@ class UploadFile
 	public function __setTable($tab_name)
     {
 		$this->table=$tab_name;
-		//echo $this->table."<br />";
 	}
 	public function connectDb()
     {
@@ -50,7 +48,6 @@ class UploadFile
         '".(int)$visibility."'
         )");
 		unset ($con);
-        //echo "<div class=\"center\" >zapis udany</div>";
         if ($feedback) {
             return true;
         } else {
@@ -65,24 +62,8 @@ class UploadFile
 		return $q;
 	}
 }
-
 $obj_add = new UploadFile;
-if(isset($_POST['up'])) { 
-    //$obj_upload->__getNextId();
-    $obj_add->__setTable('category');
-    //$res = $obj_upload->fileUpload();
-    //$res2 = $obj_upload->addRec();
-    //var_dump(@$res);
-    //var_dump(@$res2);
-    //var_dump(@$_FILES);
-    
-
-}
-
 ?>
-
-
-<section id="place-holder">
     <div class="center">
         Category add
         <br />
@@ -114,20 +95,13 @@ if(isset($_POST['up'])) {
                     </id>
                     <td>
                         <select class="" name="category">
-                            <?php
-                            //zamieniam spacje na podkresliniki dla porownania string
-                            //$cat_in_photos = str_replace(' ', '_', $wyn['category']);
-                            $obj_add->__setTable('category');
-                            if ($obj_add->showCategory()) {
-                                foreach ($obj_add->showCategory() as $cat) {
-                                    //zamieniam spacje na podkresliniki dla porownania string
-                                    //$can_in_category = str_replace(' ', '_', $cat['category']); ?>
+                            <?php $obj_add->__setTable('category'); ?>
+                            <?php if ($obj_add->showCategory()) { ?>
+                                <?php foreach ($obj_add->showCategory() as $cat) { ?>
                                     <option value="<?php echo $cat['category']; ?>"> <?php echo $cat['category']; ?>
                                     </option>
-                                <?php
-                                }
-                            }
-                            ?>
+                                <?php } ?>
+                            <?php } ?>
                         </select>
                     </td>
                     
@@ -147,16 +121,10 @@ if(isset($_POST['up'])) {
                         </select> 
                     </td>
                     <td>
-                        <!--<button id="b_save">Zapisz</button>-->
                         <input class="input_cls" type="submit" name="add" value="Dodaj" />
-                        <!--<input id="id_hidden" type="hidden" name="id_rec" value="" />-->
                     </td>
                 </tr>
             </table>
         </form>
     </div>
 </section>
-
-
-<?php
-//var_dump(@$_FILES['img']);

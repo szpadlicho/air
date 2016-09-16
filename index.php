@@ -31,7 +31,6 @@ $sql = "SELECT *
     <br />
 <?php
 if ( isset($_GET['back']) && !isset($_GET['cat_id']) ){
-    //include 'backoffice/back_show_load.php';
     include 'backoffice/back_show.php';
 } else if ( isset($_GET['back']) && isset($_GET['cat_id']) ) {
     include 'backoffice/back_show.php';

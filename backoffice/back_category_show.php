@@ -1,5 +1,4 @@
 <?php
-//date_default_timezone_set('Europe/Warsaw');
 class ShowCategory
 {
 	private $host='sql.bdl.pl';
@@ -16,7 +15,6 @@ class ShowCategory
 	public function __setTable($tab_name)
     {
 		$this->table=$tab_name;
-		//echo $this->table."<br />";
 	}
 	public function connectDb()
     {
@@ -50,7 +48,6 @@ class ShowCategory
         '".(int)$visibility."'
         )");
 		unset ($con);
-        //echo "<div class=\"center\" >zapis udany</div>";
         if ($feedback) {
             return true;
         } else {
@@ -67,20 +64,7 @@ class ShowCategory
 }
 
 $obj_show = new ShowCategory;
-if(isset($_POST['up'])) { 
-    //$obj_upload->__getNextId();
-    //$obj_show->__setTable('category');
-    //$res = $obj_upload->fileUpload();
-    //$res2 = $obj_upload->addRec();
-    //var_dump(@$res);
-    //var_dump(@$res2);
-    //var_dump(@$_FILES);
-    
-
-}
-var_dump($_POST);
 ?>
-
 <script>
     var update_cat = function(id) {
         //get the form values
@@ -140,7 +124,6 @@ var_dump($_POST);
         $( "[name='rows_"+id+"']" ).hide( 'slow' );
     }
 </script>
-<section id="place-holder">
     <div class="center">
         Category show
         <br />
@@ -166,14 +149,9 @@ var_dump($_POST);
                         action
                     </th>
                 </tr>
-                <!--<form name="show_category" action="" method="POST">-->
-                <?php
-                //zamieniam spacje na podkresliniki dla porownania string
-                //$cat_in_photos = str_replace(' ', '_', $wyn['category']);
-                $obj_show->__setTable('category');
-                //var_dump($obj_show->showCategory()->fetch()); 
-                if ($obj_show->showCategoryAll()) {
-                    foreach ($obj_show->showCategoryAll() as $cat) { ?>
+                <?php $obj_show->__setTable('category'); ?>
+                <?php if ($obj_show->showCategoryAll()) { ?>
+                    <?php foreach ($obj_show->showCategoryAll() as $cat) { ?>
                         <script>
                             $( document ).ready(function() {
                                 var idd = '<?php echo $cat['c_id']; ?>';
@@ -226,15 +204,9 @@ var_dump($_POST);
                                 <input id="id_hidden" type="hidden" name="id_rec_<?php echo $cat['c_id']; ?>" value="<?php echo $cat['c_id']; ?>" />
                             </td>
                         </tr>
-                <?php
-                    }
-                }
-                ?>
+                    <?php } ?>
+                <?php } ?>
             </table>
         </form>
     </div>
 </section>
-<div id="status_text"></div>
-
-<?php
-//var_dump(@$_FILES['img']);
