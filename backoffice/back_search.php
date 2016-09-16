@@ -179,7 +179,11 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                             <?php echo $obj_search->showImg($wyn['p_id'], $wyn['photo_mime']);?>
                         </td>
                         <td>   
-                            <input name="photo_name_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['photo_name']; ?>" />
+                            <input name="photo_name_<?php echo $wyn['p_id']; ?>" type="text" 
+                            value="<?php //echo $wyn['photo_name']; 
+                                $n = explode('.', $wyn['photo_name']);
+                                echo $n[0];
+                            ?>" />
                         </td>
                         <td>
                             <?php echo $wyn['photo_mime']; ?>
