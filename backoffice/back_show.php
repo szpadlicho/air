@@ -43,10 +43,12 @@ class ShowImages
     {
 		$con=$this->connectDB();
         $order = 'DESC';
+        $start = isset( $_COOKIE['start'] ) ? (int)$_COOKIE['start'] : (int)'0';//numer id od ktorego ma zaczac
+        $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'100';//ilość elementów na stronie
         if ( isset($_GET['cat_id']) ) {
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` DESC");/*zwraca false jesli tablica nie istnieje*/
+            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` DESC LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
         } else {
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` ORDER BY photos.`p_id` DESC");/*zwraca false jesli tablica nie istnieje*/
+            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` ORDER BY photos.`p_id` DESC LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
         }
 		unset ($con);
 		return $q;
@@ -80,6 +82,15 @@ class ShowImages
     {
 		$con=$this->connectDB();
 		$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		unset ($con);
+		return $q;
+	}
+    public function countRow()// do category menu
+    {
+		$con=$this->connectDB();
+		$q = $con->query("SELECT COUNT(*) FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+        $q = $q->fetch(PDO::FETCH_ASSOC);
+        $q = $q['COUNT(*)'];
 		unset ($con);
 		return $q;
 	}
@@ -232,6 +243,7 @@ html.busy, html.busy * {
         <li><a href="?back&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
     <?php } ?>
 </ul>
+<?php include 'back_pagination.php'; ?>
 <div class="center">
     <?php if ($obj_show->showAll()) { ?>
         <table id="table-list" class="back-all list table" border="2">
@@ -417,4 +429,4 @@ html.busy, html.busy * {
         </table>
     <?php } ?>	
 </div>
-
+<?php include 'back_pagination.php'; ?>
