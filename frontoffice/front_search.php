@@ -43,7 +43,13 @@ class Connect_Search
             //$ress = $con->query("SELECT * FROM photos AS p, category AS c WHERE p.`category` = c.`c_id` OR p.`p_id` LIKE '%".$s."%' OR p.`tag` LIKE '%".$s."%' OR p.`author` LIKE '%".$s."%' OR p.`category` LIKE '%".$s."%' OR p.`show_place` LIKE '%".$s."%' OR p.`show_data` LIKE '%".$s."%' ORDER BY p.`p_id` DESC");/*zwraca false jesli tablica nie istnieje*/
             //$res[] = $ress;
             //var_dump($s);
-            $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
+            //echo $_GET['cat_id'];
+            if ( isset($_GET['cat_id']) ) {
+                $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
+            } else {
+                $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
+            }
+            //$ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
         }
         
         //$res = $con->query("SELECT * FROM `".$this->table."` WHERE `id` LIKE '%".$s."%' OR `tag` LIKE '%".$string."%' OR `author` LIKE '%".$string."%' OR `category` LIKE '%".$string."%' OR `show_place` LIKE '%".$string."%' OR `show_data` LIKE '%".$string."%' ORDER BY `id` ".$order."");
@@ -97,23 +103,23 @@ class Connect_Search
 		unset ($con);
 		return $q;
 	}
-    public function showCategoryByID($id)
-    {
-		$con=$this->connectDB();
-		$q = $con->query("SELECT * FROM `".$this->table."` WHERE c_id = ".$id."");/*zwraca false jesli tablica nie istnieje*/
-		unset ($con);
-        //$q = $g->fetch(PDO::FETCH_ASSOC);
-		return $q;
-	}
-    public function showCategoryJoin()
-    {
-		$con=$this->connectDB();
-		$q = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
-                        ON category.c_id = photos.category
-                        WHERE photos.category = category.c_id");/*zwraca false jesli tablica nie istnieje*/
-		unset ($con);
-		return $q;
-	} 
+    // public function showCategoryByID($id)
+    // {
+		// $con=$this->connectDB();
+		// $q = $con->query("SELECT * FROM `".$this->table."` WHERE c_id = ".$id."");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+        // //$q = $g->fetch(PDO::FETCH_ASSOC);
+		// return $q;
+	// }
+    // public function showCategoryJoin()
+    // {
+		// $con=$this->connectDB();
+		// $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
+                        // ON category.c_id = photos.category
+                        // WHERE photos.category = category.c_id");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+		// return $q;
+	// } 
     // public function deleteREC()
     // {
 		// $con=$this->connectDB();
@@ -124,7 +130,9 @@ class Connect_Search
 }
 $obj_search = new Connect_Search();
 $obj_search->__setTable('photos');
-$success = $obj_search->__getImagesTag($_POST['string']);
+$_GET['cat_id'] = $_POST['cat_id'] = '4';
+$success = $obj_search->__getImagesTag($_POST['string'] = 'deoc');
+
 ?>
 <script type="text/javascript">
     // $( '[name="id_post_bt"]').click(function(){
@@ -139,7 +147,7 @@ $success = $obj_search->__getImagesTag($_POST['string']);
     <table id="table-list" class="back-all list table" border="2">
         <tr>
             <th>
-                ID
+                ID <?php echo $_GET['cat_id']; ?>
             </th>
             <th>
                 Photo
@@ -165,11 +173,12 @@ $success = $obj_search->__getImagesTag($_POST['string']);
         </tr>
     <?php
     //var_dump($success);
-    while ($wyn = $success->fetch(PDO::FETCH_ASSOC)) { ?>
+    while ($wyn = $success->fetch()) { ?>
     <?php //var_dump($wyn); ?>
         <tr>
             <td>
                 <?php echo $wyn['p_id']; ?>
+                <?php echo $wyn['c_id']; ?>
             </td>
             <td>                                          
                 <?php echo $obj_search->showImg($wyn['p_id'], $wyn['photo_mime']);?>

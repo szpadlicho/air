@@ -46,7 +46,22 @@ class ShowImages
         $order = 'DESC';
 		//@$q = $con->query("SELECT * FROM `".$this->table."` ORDER BY `".$prefix."id` ".$order."");/*zwraca /*zwraca false jesli tablica nie istnieje*/
         //$q = $con->query("SELECT * FROM photos AS p, category AS c WHERE p.`category` = c.`c_id` ORDER BY p.`p_id` DESC");/*zwraca false jesli tablica nie istnieje*/
-        $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` ORDER BY photos.`p_id` DESC");/*zwraca false jesli tablica nie istnieje*/
+        if ( isset($_GET['cat_id']) ) {
+            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` DESC");/*zwraca false jesli tablica nie istnieje*/
+        } else {
+            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` ORDER BY photos.`p_id` DESC");/*zwraca false jesli tablica nie istnieje*/
+        }
+		unset ($con);
+		return $q;
+	}
+    public function showAll2()
+    {
+		/**/
+		$con=$this->connectDB();
+        $order = 'DESC';
+		//@$q = $con->query("SELECT * FROM `".$this->table."` ORDER BY `".$prefix."id` ".$order."");/*zwraca /*zwraca false jesli tablica nie istnieje*/
+        //$q = $con->query("SELECT * FROM photos AS p, category AS c WHERE p.`category` = c.`c_id` ORDER BY p.`p_id` DESC");/*zwraca false jesli tablica nie istnieje*/
+        $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` DESC");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}
@@ -77,37 +92,37 @@ class ShowImages
 		unset ($con);
 		return $q;
 	}
-    public function showCategoryJoin()
-    {
-		$con=$this->connectDB();
-        $order = 'DESC';
-		$q = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
-                        ON photos.category = category.c_id
-                        ");/*zwraca false jesli tablica nie istnieje*/
-        //@$q = @$con->query("SELECT * FROM photos AS p, category AS c WHERE p.`category` = c.`id` ORDER BY p.`id` DESC");/*zwraca false jesli tablica nie istnieje*/
-        //
-		unset ($con);
-		return @$q;
-        // SELECT
-             // t1.id, t2.pole1, t3.pole2
-        // FROM
-             // tabela1 AS t1,
-             // tabela2 AS t2,
-             // tabela3 AS t3
-        // WHERE
-             // t2.id = t1.id
-        // AND  t3.id = t1.id
+    // public function showCategoryJoin()
+    // {
+		// $con=$this->connectDB();
+        // $order = 'DESC';
+		// $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
+                        // ON photos.category = category.c_id
+                        // ");/*zwraca false jesli tablica nie istnieje*/
+        // //@$q = @$con->query("SELECT * FROM photos AS p, category AS c WHERE p.`category` = c.`id` ORDER BY p.`id` DESC");/*zwraca false jesli tablica nie istnieje*/
+        // //
+		// unset ($con);
+		// return @$q;
+        // // SELECT
+             // // t1.id, t2.pole1, t3.pole2
+        // // FROM
+             // // tabela1 AS t1,
+             // // tabela2 AS t2,
+             // // tabela3 AS t3
+        // // WHERE
+             // // t2.id = t1.id
+        // // AND  t3.id = t1.id
 
-        // ORDER BY id LIMIT 3
-	}    
-    public function showCategoryByID($id)
-    {
-		$con=$this->connectDB();
-		$q = $con->query("SELECT * FROM `".$this->table."` WHERE ".$this->prefix."id = ".$id."");/*zwraca false jesli tablica nie istnieje*/
-		unset ($con);
-        //$q = $g->fetch(PDO::FETCH_ASSOC);
-		return $q;
-	}
+        // // ORDER BY id LIMIT 3
+	// // }    
+    // public function showCategoryByID($id)
+    // {
+		// $con=$this->connectDB();
+		// $q = $con->query("SELECT * FROM `".$this->table."` WHERE ".$this->prefix."id = ".$id."");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+        // //$q = $g->fetch(PDO::FETCH_ASSOC);
+		// return $q;
+	// }
 }
 
 $obj_show = new ShowImages;
@@ -123,10 +138,11 @@ $obj_show->__setTable('photos');
             $(document).on('keyup', '#search, #search2', function() {
                 //console.log( $( this ).val() );
                 var string = $( this ).val();
+                var cat_id = '<?php echo $_GET['cat_id']; ?>';
                 $.ajax({
                     type: 'POST',
                     url: 'frontoffice/front_search.php',
-                    data: {string : string }, 
+                    data: {string : string, cat_id : cat_id }, 
                     cache: false,
                     dataType: 'text',
                     success: function(data){
@@ -142,8 +158,7 @@ $obj_show->__setTable('photos');
     </script>
     <div id="search-div">Szukaj: <input id="search" type="text" placeholder="szukaj" /></div><!--<input id="search2" type="search" results="5" autosave="a_unique_value" />-->
     <!--<div id="search-result"></div>-->
-    <div class="center">
-        <ul>
+    <ul>
         <?php
         // echo $_SERVER['REQUEST_URI'];
         // echo '<br />';
@@ -163,7 +178,8 @@ $obj_show->__setTable('photos');
         foreach ($ret as $cat_menu){ ?>
             <li><a href="?front&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
         <?php } ?>
-        </ul>
+    </ul>
+    <div class="center">
 <!--
 <p>---------------------</p>
 
@@ -185,7 +201,7 @@ $obj_show->__setTable('photos');
 <p>---------------------</p>
 -->
  
-        <?php $prefix = 'p_'; ?>
+        <?php //$prefix = 'p_'; ?>
         <?php if ($obj_show->showAll()) { ?>
             Wyświetlanie
             <br />

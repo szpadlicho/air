@@ -48,6 +48,15 @@ class ShowImages
 		unset ($con);
 		return $q;
 	}
+    public function showByCategory()
+    {
+		/**/
+		$con=$this->connectDB();
+        $order = 'DESC';
+		@$q = $con->query("SELECT * FROM `".$this->table."` WHERE `category` = ".$_GET['cat_id']." ORDER BY `".$this->prefix."id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
+		unset ($con);
+		return $q;
+	}
     public function showImg($id, $mime)
     {
         //losowy obrazek z katalogu                                           

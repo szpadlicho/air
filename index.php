@@ -30,8 +30,10 @@ $sql = "SELECT *
     <a href="?">Clear</a>
     <br />
 <?php
-if ( isset($_GET['back']) ){
+if ( isset($_GET['back']) && !isset($_GET['cat_id']) ){
     //include 'backoffice/back_show_load.php';
+    include 'backoffice/back_show.php';
+} else if ( isset($_GET['back']) && isset($_GET['cat_id']) ) {
     include 'backoffice/back_show.php';
 }
 if ( isset($_GET['uplad']) ){
@@ -41,7 +43,9 @@ if ( isset($_GET['category']) ){
     include 'backoffice/back_category_add.php';
     include 'backoffice/back_category_show.php';
 }
-if ( isset($_GET['front']) ){
+if ( isset($_GET['front']) && !isset($_GET['cat_id']) ){
+    include 'frontoffice/front_show.php';
+} else if ( isset($_GET['front']) && isset($_GET['cat_id']) ) {
     include 'frontoffice/front_show.php';
 }
 if ( isset($_GET['install']) ){
