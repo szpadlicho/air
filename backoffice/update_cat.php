@@ -27,7 +27,7 @@ class UpdateCategory
     public function deleteREC()
     {
 		$con=$this->connectDB();
-		$con->query("DELETE FROM `".$this->table."` WHERE `id` = '".$id."'");	
+		$con->query("DELETE FROM `".$this->table."` WHERE `c_id` = '".$id."'");	
 		unset ($con);
 	
 	}
@@ -42,7 +42,7 @@ class UpdateCategory
             `password` = '".$password."',      
             `visibility` = '".$visibility."'
             WHERE 
-            `id`='".$id."'
+            `c_id`='".$id."'
             ");	
 		unset ($con);	
         //echo "<div class=\"center\" >zapis udany</div>";

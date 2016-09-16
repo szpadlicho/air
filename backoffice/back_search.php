@@ -287,7 +287,7 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                             </select> 
                         </td>
                         <td>
-                            <button id="b_save_<?php echo $wyn['p_id']; ?>">Zapisz</button>
+                            <button class="save_button" id="b_save_<?php echo $wyn['p_id']; ?>">Zapisz</button>
                             <button id="b_delete_<?php echo $wyn['p_id']; ?>">Usuń</button>
                             <input id="id_hidden" type="hidden" name="id_rec_<?php echo $wyn['p_id']; ?>" value="<?php echo $wyn['p_id']; ?>" />
                             <input id="id_hidden_prefix" type="hidden" name="prefix_<?php echo $wyn['p_id']; ?>" value="p_" />

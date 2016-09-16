@@ -215,7 +215,7 @@ $obj_show->__setTable('photos');
                         author
                     </th>
                 <?php foreach ($obj_show->showAll($prefix) as $wyn) { ?>
-                <?php var_dump($wyn); ?>
+                <?php //var_dump($wyn); ?>
                     <tr>
                         <td>
                             <?php echo $wyn['p_id']; ?>

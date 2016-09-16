@@ -108,6 +108,7 @@ $( "#hide" ).click(function() {
 });
 </script>
 -->
+
 <script>
     var update = function(id) {
         //get the form values
@@ -139,7 +140,7 @@ $( "#hide" ).click(function() {
                 //location.reload();
             }
         }).done(function(data) {
-            console.log(data);
+            //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
             console.log(jqXHR.responseText);
@@ -201,7 +202,48 @@ $( "#hide" ).click(function() {
             });
         });
     </script>
-    
+    <script>
+        $(document).ready(function(){
+            $('#save_all').click(function(e) {
+                e.preventDefault();      
+                $( '.save_button' ).each(function( index ) {
+                    //console.log( index + ": " + $( this ).val() );
+                    $( '.save_button' ).click();
+                    //console.log( index );
+                });
+            });
+        });
+        $(document).ajaxStart(function () {
+            $('.loader').show();
+        }).ajaxComplete(function () {
+            $('.loader').hide();
+        });
+    </script>
+    <style>
+    .block
+    {
+        display:none;
+        position:absolute;
+        width:100%;
+        height:100%;
+        /*background: grey;*/
+        opacity: 0.2;
+    }
+    .loader
+    {
+        display:none;
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        background: url('img/tr/loading.gif') 50% 50% no-repeat;
+        /*background: url('img/tr/loading.gif') 50% 50% no-repeat rgb(249,249,249);*/
+    }
+    </style>
+    <div class="loader"></div>
+    <button style="position:fixed; right:0; top:0;" class="save_all" id="save_all">Save All</button>
     <div id="search-div">Szukaj: <input id="search" type="text" placeholder="szukaj" /></div><!--<input id="search2" type="search" results="5" autosave="a_unique_value" />-->
     <!--<div id="search-result"></div>-->
     <div class="center">
@@ -399,7 +441,7 @@ $( "#hide" ).click(function() {
                             </select> 
                         </td>
                         <td>
-                            <button id="b_save_<?php echo $wyn['p_id']; ?>">Zapisz</button>
+                            <button class="save_button" id="b_save_<?php echo $wyn['p_id']; ?>">Zapisz</button>
                             <button id="b_delete_<?php echo $wyn['p_id']; ?>">Usuń</button>
                             <input id="id_hidden" type="hidden" name="id_rec_<?php echo $wyn['p_id']; ?>" value="<?php echo $wyn['p_id']; ?>" />
                             <input id="id_hidden_prefix" type="hidden" name="prefix_<?php echo $wyn['p_id']; ?>" value="p_" />

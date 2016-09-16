@@ -25,7 +25,7 @@ class DeleteImages
     public function deleteREC($id)
     {
 		$con=$this->connectDB();
-		$result = $con->query("DELETE FROM `".$this->table."` WHERE `id` = '".$id."'");	
+		$result = $con->query("DELETE FROM `".$this->table."` WHERE `c_id` = '".$id."'");	
 		unset ($con);
         if($result) {
 			return true;

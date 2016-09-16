@@ -176,29 +176,29 @@ var_dump($_POST);
                     foreach ($obj_show->showCategoryAll() as $cat) { ?>
                         <script>
                             $( document ).ready(function() {
-                                var idd = '<?php echo $cat['id']; ?>';
+                                var idd = '<?php echo $cat['c_id']; ?>';
                                 $('#b_save_'+idd).click(function(e) {
                                     e.preventDefault();
                                     update_cat(idd);
                                 });
                             });
                             $( document ).ready(function() {
-                                var idd = '<?php echo $cat['id']; ?>';
+                                var idd = '<?php echo $cat['c_id']; ?>';
                                 $('#b_delete_'+idd).click(function(e) {
                                     e.preventDefault();
                                     del_cat(idd);
                                 });
                             });
                         </script>
-                        <tr name="rows_<?php echo $cat['id']; ?>">
+                        <tr name="rows_<?php echo $cat['c_id']; ?>">
                             <td>
-                                <?php echo $cat['id']; ?>
+                                <?php echo $cat['c_id']; ?>
                             </td>
                             <td>
-                                <input name="category_<?php echo $cat['id']; ?>" type="text" value="<?php echo $cat['category']; ?>" />  
+                                <input name="category_<?php echo $cat['c_id']; ?>" type="text" value="<?php echo $cat['category']; ?>" />  
                             </td>
                             <td>
-                                <select name="protect_<?php echo $cat['id']; ?>">
+                                <select name="protect_<?php echo $cat['c_id']; ?>">
                                     <option <?php if( $cat['protect'] == "1" ){ ?>
                                             selected="selected"
                                         <?php } ?> value="1">On</option>
@@ -208,10 +208,10 @@ var_dump($_POST);
                                 </select> 
                             </td>
                             <td>
-                                <input name="password_<?php echo $cat['id']; ?>" type="text" value="<?php echo $cat['password']; ?>" />
+                                <input name="password_<?php echo $cat['c_id']; ?>" type="text" value="<?php echo $cat['password']; ?>" />
                             </td>
                             <td>
-                                <select name="visibility_<?php echo $cat['id']; ?>">
+                                <select name="visibility_<?php echo $cat['c_id']; ?>">
                                     <option <?php if( $cat['visibility'] == "1" ){ ?>
                                             selected="selected"
                                         <?php } ?> value="1">On</option>
@@ -221,9 +221,9 @@ var_dump($_POST);
                                 </select> 
                             </td>
                             <td>
-                                <button id="b_save_<?php echo $cat['id']; ?>">Aktualizuj</button>
-                                <button id="b_delete_<?php echo $cat['id']; ?>">Usuń</button>
-                                <input id="id_hidden" type="hidden" name="id_rec_<?php echo $cat['id']; ?>" value="<?php echo $cat['id']; ?>" />
+                                <button id="b_save_<?php echo $cat['c_id']; ?>">Aktualizuj</button>
+                                <button id="b_delete_<?php echo $cat['c_id']; ?>">Usuń</button>
+                                <input id="id_hidden" type="hidden" name="id_rec_<?php echo $cat['c_id']; ?>" value="<?php echo $cat['c_id']; ?>" />
                             </td>
                         </tr>
                 <?php
