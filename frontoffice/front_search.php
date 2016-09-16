@@ -49,7 +49,7 @@ class Connect_Search
         $dir = '../data/';                                        
         if (@opendir($dir)) {//sprawdzam czy sciezka istnieje
             $dir = 'data/';
-            return '<img class="back-all list mini-image" style="width:100px;" src="'.$dir.$id.'.'.$mime.'" alt="image" />';
+            return '<img class="back-all list mini-image" style="height:200px;" src="'.$dir.$id.'.'.$mime.'" alt="image" />';
         } else {
             return 'Brak';
         }
@@ -67,10 +67,17 @@ $obj_search->__setTable('photos');
 @$_GET['cat_id'] = $_POST['cat_id'];
 $success = $obj_search->__getImagesTag($_POST['string']);
 ?>
+<?php while ($wyn = $success->fetch()) { ?>
+        <div class="div_front" style="position: relative; display: inline-block;">
+            <?php echo $obj_search->showImg($wyn['p_id'], $wyn['photo_mime']);?>
+            <p class="p_front_info" style="position: absolute; bottom: -1em; right: 0; color: white; background: black;">cat: <?php echo $wyn['category']; ?> aut:<?php echo $wyn['author']; ?></p>
+        </div>
+<?php } ?>
+<!--
 <table id="table-list" class="back-all list table" border="2">
     <tr>
         <th>
-            ID <?php echo $_GET['cat_id']; ?>
+            ID
         </th>
         <th>
             Photo
@@ -94,7 +101,7 @@ $success = $obj_search->__getImagesTag($_POST['string']);
             author
         </th>
     </tr>
-    <?php while ($wyn = $success->fetch()) { ?>
+    <?php/* while ($wyn = $success->fetch()) { ?>
         <tr>
             <td>
                 <?php echo $wyn['p_id']; ?>
@@ -121,5 +128,6 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                 <?php echo $wyn['author']; ?>
             </td>
         </tr>
-    <?php } ?>
+    <?php// } */?>
 </table>
+-->

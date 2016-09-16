@@ -220,6 +220,7 @@ html.busy, html.busy * {
 <button style="position:fixed; right:0; top:0;" class="save_all" id="save_all">Save All</button>
 <div id="search-div">Szukaj: <input id="search" type="text" placeholder="szukaj" /></div><!--<input id="search2" type="search" results="5" autosave="a_unique_value" />-->
 <ul>
+    <li><a href="?back" >Wszystkie</a></li>
     <?php
     $obj_show_cat = new ShowImages;
     $obj_show_cat->__setTable('category');

@@ -56,9 +56,9 @@ class ShowImages
         $dir = 'data/';                                        
         if (@opendir($dir)) {//sprawdzam czy sciezka istnieje
             //echo 'ok';
-            echo '<img class="back-all list mini-image" style="width:200px;" src="'.$dir.$id.'.'.$mime.'" alt="image" />';
+            return '<img class="back-all list mini-image" style="height:200px;" src="'.$dir.$id.'.'.$mime.'" alt="image" />';
         } else {
-            echo 'Brak';
+            return 'Brak';
         }
     }
     public function showCategory()// do category menu
@@ -83,7 +83,7 @@ $obj_show->__setTable('photos');
             <?php } ?>
             $.ajax({
                 type: 'POST',
-                url: 'backoffice/back_search.php',
+                url: 'frontoffice/front_search.php',
                 <?php if ( isset($_GET['cat_id']) ) { ?>
                     data: {string : string, cat_id : cat_id },
                 <?php } else { ?>
@@ -98,8 +98,19 @@ $obj_show->__setTable('photos');
         });
     });
 </script>
+<style>
+.p_front_info
+{
+    opacity: 0;    
+}
+.div_front:hover > .p_front_info
+{
+    opacity: 1;    
+}
+</style>
 <div id="search-div">Szukaj: <input id="search" type="text" placeholder="szukaj" /></div>
 <ul>
+    <li><a href="?front" >Wszystkie</a></li>
     <?php
     $obj_show_cat = new ShowImages;
     $obj_show_cat->__setTable('category');
@@ -112,8 +123,16 @@ $obj_show->__setTable('photos');
     <?php } ?>
 </ul>
 <div class="center">
-    <?php if ($obj_show->showAll()) { ?>
+    <?php foreach ($obj_show->showAll() as $wyn) { ?>
+        <div class="div_front" style="position: relative; display: inline-block;">
+            <?php echo $obj_show->showImg($wyn['p_id'], $wyn['photo_mime']);?>
+            <p class="p_front_info" style="position: absolute; bottom: -1em; right: 0; color: white; background: black;">cat: <?php echo $wyn['category']; ?> aut:<?php echo $wyn['author']; ?></p>
+        </div>
+    <?php } ?>
+    <!--
+    <?php/* if ($obj_show->showAll()) { ?>
         Wyświetlanie
+        <br />
         <br />
         <table id="table-list" class="back-all list table" border="2">
             <tr>
@@ -170,6 +189,6 @@ $obj_show->__setTable('photos');
                 </tr>
             <?php } ?>
         </table>
-    <?php } ?>	
+    <?php// } */?>	
 </div>
-
+-->
