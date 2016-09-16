@@ -37,7 +37,8 @@ class Connect_Search
         }
         //var_dump($string);
         foreach($string as $s){
-            $ress = $con->query("SELECT * FROM `".$this->table."` WHERE `tag` LIKE '%".$s."%' OR `author` LIKE '%".$s."%' OR `category` LIKE '%".$s."%' OR `show_place` LIKE '%".$s."%' OR `show_data` LIKE '%".$s."%' ORDER BY `id` ".$order."");
+            //$ress = $con->query("SELECT * FROM `".$this->table."` WHERE `tag` LIKE '%".$s."%' OR `author` LIKE '%".$s."%' OR `category` LIKE '%".$s."%' OR `show_place` LIKE '%".$s."%' OR `show_data` LIKE '%".$s."%' ORDER BY `p_id` ".$order."");
+            $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
             //$res[] = $ress;
             //var_dump($s);
         }
@@ -74,13 +75,13 @@ class Connect_Search
 		unset ($con);
 		return $q;
 	}
-    public function deleteREC()
-    {
-		$con=$this->connectDB();
-		$con->query("DELETE FROM `".$this->table."` WHERE `id` = '".$_SESSION['id_post']."'");	
-		unset ($con);
+    // public function deleteREC()
+    // {
+		// $con=$this->connectDB();
+		// $con->query("DELETE FROM `".$this->table."` WHERE `p_id` = '".$_SESSION['id_post']."'");	
+		// unset ($con);
 	
-	}
+	// }
 }
 $obj_search = new Connect_Search();
 $obj_search->__setTable('photos');
@@ -154,7 +155,7 @@ $success = $obj_search->__getImagesTag($_POST['string']);
     <?php //var_dump($wyn); ?>
                     <script>
                     $( document ).ready(function() {
-                        var idd = '<?php echo $wyn['id']; ?>';
+                        var idd = '<?php echo $wyn['p_id']; ?>';
                         $('#b_save_'+idd).click(function(e) {
                             e.preventDefault();
                             update(idd);
@@ -162,7 +163,7 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                         });
                     });
                     $( document ).ready(function() {
-                        var idd = '<?php echo $wyn['id']; ?>';
+                        var idd = '<?php echo $wyn['p_id']; ?>';
                         $('#b_delete_'+idd).click(function(e) {
                             e.preventDefault();
                             del(idd);
@@ -170,15 +171,15 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                         });
                     });
                     </script>
-                    <tr name="rows_<?php echo $wyn['id']; ?>">
+                    <tr name="rows_<?php echo $wyn['p_id']; ?>">
                         <td>
-                            <?php echo $wyn['id']; ?>
+                            <?php echo $wyn['p_id']; ?>
                         </td>
                         <td>                                          
-                            <?php echo $obj_search->showImg($wyn['id'], $wyn['photo_mime']);?>
+                            <?php echo $obj_search->showImg($wyn['p_id'], $wyn['photo_mime']);?>
                         </td>
                         <td>   
-                            <input name="photo_name_<?php echo $wyn['id']; ?>" type="text" value="<?php echo $wyn['photo_name']; ?>" />
+                            <input name="photo_name_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['photo_name']; ?>" />
                         </td>
                         <td>
                             <?php echo $wyn['photo_mime']; ?>
@@ -187,7 +188,7 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                             <?php echo $wyn['photo_size']; ?>
                         </td>
                         <td>
-                            <select class="" name="category_<?php echo $wyn['id']; ?>">
+                            <select class="" name="category_<?php echo $wyn['p_id']; ?>">
                                 <?php
                                 //zamieniam spacje na podkresliniki dla porownania string
                                 //$cat_in_photos = str_replace(' ', '_', $wyn['category']);
@@ -196,8 +197,8 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                                     foreach ($obj_search->showCategoryAll() as $cat) {
                                         //zamieniam spacje na podkresliniki dla porownania string
                                         //$can_in_category = str_replace(' ', '_', $cat['category']); ?>
-                                        <option value="<?php echo $cat['id']; ?>"
-                                            <?php if( $cat['id'] == $wyn['category'] ){
+                                        <option value="<?php echo $cat['c_id']; ?>"
+                                            <?php if( $cat['category'] == $wyn['category'] ){
                                                 echo $selected = 'selected="selected"'; 
                                             } ?> > <?php echo $cat['category']; ?>
                                         </option>
@@ -224,7 +225,7 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                             $month = $n[1];//miesian
                             $day = $n[2];//dzien
                             ?>
-                            <select name="show_data_year_<?php echo $wyn['id']; ?>">
+                            <select name="show_data_year_<?php echo $wyn['p_id']; ?>">
                                 <?php for ($y = 2010; $y <= 2020; $y++) { ?>
                                     <option <?php if ( $n[0] == $y ) { ?>
                                             selected="selected"
@@ -232,7 +233,7 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                                     ><?php echo $y; ?></option>
                                 <?php } ?>                                       
                             </select>
-                            <select name="show_data_month_<?php echo $wyn['id']; ?>">
+                            <select name="show_data_month_<?php echo $wyn['p_id']; ?>">
                                 <?php for ($m = 1; $m <= 12; $m++) { ?>
                                     <option <?php if ( $n[1] == $m ) { ?>
                                             selected="selected"
@@ -240,7 +241,7 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                                     ><?php echo $m; ?></option>
                                 <?php } ?> 
                             </select>
-                            <select name="show_data_day_<?php echo $wyn['id']; ?>">
+                            <select name="show_data_day_<?php echo $wyn['p_id']; ?>">
                                 <?php for ($d = 1; $d <= 31; $d++) { ?>
                                     <option <?php if ( $n[2] == $d ) { ?>
                                             selected="selected"
@@ -250,16 +251,16 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                             </select>
                         </td>
                         <td>
-                            <textarea name="show_place_<?php echo $wyn['id']; ?>" rows="4" cols="10"><?php echo $wyn['show_place']; ?></textarea> 
+                            <textarea name="show_place_<?php echo $wyn['p_id']; ?>" rows="4" cols="10"><?php echo $wyn['show_place']; ?></textarea> 
                         </td>
                         <td>
-                            <textarea name="tag_<?php echo $wyn['id']; ?>" rows="4" cols="10"><?php echo $wyn['tag']; ?></textarea>                                     
+                            <textarea name="tag_<?php echo $wyn['p_id']; ?>" rows="4" cols="10"><?php echo $wyn['tag']; ?></textarea>                                     
                         </td>
                         <td>
-                            <input name="author_<?php echo $wyn['id']; ?>" type="text" value="<?php echo $wyn['author']; ?>" />
+                            <input name="author_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['author']; ?>" />
                         </td>
                         <td>
-                            <select name="protect_<?php echo $wyn['id']; ?>">
+                            <select name="protect_<?php echo $wyn['p_id']; ?>">
                                 <option <?php if( $wyn['protect'] == "1" ){ ?>
                                         selected="selected"
                                     <?php } ?> value="1">On</option>
@@ -269,10 +270,10 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                             </select> 
                         </td>
                         <td>
-                            <input name="password_<?php echo $wyn['id']; ?>" type="text" value="<?php echo $wyn['password']; ?>" />
+                            <input name="password_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['password']; ?>" />
                         </td>
                         <td>
-                            <select name="visibility_<?php echo $wyn['id']; ?>">
+                            <select name="visibility_<?php echo $wyn['p_id']; ?>">
                                 <option <?php if( $wyn['visibility'] == "1" ){ ?>
                                         selected="selected"
                                     <?php } ?> value="1">On</option>
@@ -282,10 +283,11 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                             </select> 
                         </td>
                         <td>
-                            <button id="b_save_<?php echo $wyn['id']; ?>">Zapisz</button>
-                            <button id="b_delete_<?php echo $wyn['id']; ?>">Usuń</button>
-                            <input id="id_hidden" type="hidden" name="id_rec_<?php echo $wyn['id']; ?>" value="<?php echo $wyn['id']; ?>" />
-                            <input id="mime_hidden" type="hidden" name="photo_mime_<?php echo $wyn['id']; ?>" value="<?php echo $wyn['photo_mime']; ?>" />
+                            <button id="b_save_<?php echo $wyn['p_id']; ?>">Zapisz</button>
+                            <button id="b_delete_<?php echo $wyn['p_id']; ?>">Usuń</button>
+                            <input id="id_hidden" type="hidden" name="id_rec_<?php echo $wyn['p_id']; ?>" value="<?php echo $wyn['p_id']; ?>" />
+                            <input id="id_hidden_prefix" type="hidden" name="prefix_<?php echo $wyn['p_id']; ?>" value="p_" />
+                            <input id="mime_hidden" type="hidden" name="photo_mime_<?php echo $wyn['p_id']; ?>" value="<?php echo $wyn['photo_mime']; ?>" />
                         </td>
                     </tr>
                 <?php } ?>
