@@ -10,13 +10,14 @@ class UpdateImages
 	private $user='szpadlic_baza';
 	private $pass='haslo';
 	private $table;
+	private $prefix;
 	//private $table_sh='SCHEMATA';
 	private $admin;
 	private $autor;
 	public function __setTable($tab_name)
     {
-		$this->table=$tab_name;
-		//echo $this->table."<br />";
+		$this->table = $tab_name;
+		$this->prefix = $tab_name[0].'_';
 	}
 	public function connectDb()
     {
@@ -24,14 +25,14 @@ class UpdateImages
 		return $con;
 		unset ($con);
 	}
-    public function deleteREC($prefix)
+    public function deleteREC()
     {
 		$con=$this->connectDB();
-		$con->query("DELETE FROM `".$this->table."` WHERE `".$prefix."id` = '".$id."'");	
+		$con->query("DELETE FROM `".$this->table."` WHERE `".$this->prefix."id` = '".$id."'");	
 		unset ($con);
 	
 	}
-    public function updateImg($prefix, $id, $photo_name, $category, $show_data, $show_place, 
+    public function updateImg($id, $photo_name, $category, $show_data, $show_place, 
                                 $tag, $author, $protect, $password, $visibility){
         $date = date('Y-m-d H:i:s');
         $con = $this->connectDB();        
@@ -50,7 +51,7 @@ class UpdateImages
             `password` = '".$password."',      
             `visibility` = '".$visibility."'
             WHERE 
-            `".$prefix."id`='".$id."'
+            `".$this->prefix."id`='".$id."'
             ");	
 		unset ($con);	
         //echo "<div class=\"center\" >zapis udany</div>";
@@ -66,7 +67,7 @@ class UpdateImages
     }
 }
 $tab_name = $_POST['tab_name'];
-$prefix = $_POST['prefix'];
+//$prefix = $_POST['prefix'];
 $id = $_POST['id'];
 $photo_name = $_POST['photo_name'];
 $category = $_POST['category'];
@@ -80,5 +81,5 @@ $visibility = $_POST['visibility'];
 //var_dump($_POST);
 $obj_update = new UpdateImages;
 $obj_update -> __setTable($tab_name);
-$obj_update -> updateImg($prefix, $id, $photo_name, $category, $show_data, $show_place, 
+$obj_update -> updateImg($id, $photo_name, $category, $show_data, $show_place, 
                                 $tag, $author, $protect, $password, $visibility);

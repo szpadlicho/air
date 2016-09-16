@@ -10,13 +10,14 @@ class UpdateCategory
 	private $user='szpadlic_baza';
 	private $pass='haslo';
 	private $table;
+	private $prefix;
 	//private $table_sh='SCHEMATA';
 	private $admin;
 	private $autor;
 	public function __setTable($tab_name)
     {
-		$this->table=$tab_name;
-		//echo $this->table."<br />";
+		$this->table = $tab_name;
+		$this->prefix = $tab_name[0].'_';
 	}
 	public function connectDb()
     {
@@ -27,7 +28,7 @@ class UpdateCategory
     public function deleteREC()
     {
 		$con=$this->connectDB();
-		$con->query("DELETE FROM `".$this->table."` WHERE `c_id` = '".$id."'");	
+		$con->query("DELETE FROM `".$this->table."` WHERE `".$this->prefix."id` = '".$id."'");	
 		unset ($con);
 	
 	}
@@ -42,7 +43,7 @@ class UpdateCategory
             `password` = '".$password."',      
             `visibility` = '".$visibility."'
             WHERE 
-            `c_id`='".$id."'
+            `".$this->prefix."id`='".$id."'
             ");	
 		unset ($con);	
         //echo "<div class=\"center\" >zapis udany</div>";

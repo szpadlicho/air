@@ -9,12 +9,14 @@ class ShowImages
 	private $user='szpadlic_baza';
 	private $pass='haslo';
 	private $table;
+    private $prefix;
 	//private $table_sh='SCHEMATA';
 	private $admin;
 	private $autor;
 	public function __setTable($tab_name)
     {
-		$this->table=$tab_name;
+		$this->table = $tab_name;
+		$this->prefix = $tab_name[0].'_';
 	}
 	public function connect()
     {
@@ -37,12 +39,12 @@ class ShowImages
             unset ($con);
         }
 	}
-    public function showAll($prefix)
+    public function showAll()
     {
 		/**/
 		$con=$this->connectDB();
         $order = 'DESC';
-		@$q = $con->query("SELECT * FROM `".$this->table."` ORDER BY `".$prefix."id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
+		@$q = $con->query("SELECT * FROM `".$this->table."` ORDER BY `".$this->prefix."id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}
@@ -78,13 +80,13 @@ class ShowImages
 		// unset ($con);
 		// return $q;
 	// }
-    public function deleteREC($prefix)
-    {
-		$con=$this->connectDB();
-		$con->query("DELETE FROM `".$this->table."` WHERE `".$prefix."id` = '".$_SESSION['id_post']."'");	
-		unset ($con);
+    // public function deleteREC()
+    // {
+		// $con=$this->connectDB();
+		// $con->query("DELETE FROM `".$this->table."` WHERE `".$this->prefix."id` = '".$_SESSION['id_post']."'");	
+		// unset ($con);
 	
-	}
+	// }
 }
 
 $obj_show = new ShowImages;
@@ -113,7 +115,7 @@ $( "#hide" ).click(function() {
     var update = function(id) {
         //get the form values
         var tab_name = 'photos';
-        var prefix = $("[name='prefix_"+id+"']").val();
+        //var prefix = $("[name='prefix_"+id+"']").val();
         var id = $("[name='id_rec_"+id+"']").val();
         var photo_name = $("[name='photo_name_"+id+"']").val();
         var category = $("[name='category_"+id+"']").val();
@@ -127,7 +129,7 @@ $( "#hide" ).click(function() {
         var password = $("[name='password_"+id+"']").val();
         var visibility = $("[name='visibility_"+id+"']").val();
         
-        var myData = ({prefix:prefix, tab_name:tab_name,id:id,photo_name:photo_name,category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,visibility:visibility});
+        var myData = ({tab_name:tab_name,id:id,photo_name:photo_name,category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,visibility:visibility});
         
         console.log('Submitting');
         
@@ -152,10 +154,10 @@ $( "#hide" ).click(function() {
         //get the form values
         var tab_name = 'photos';
         var id = $("[name='id_rec_"+id+"']").val();
-        var prefix = $("[name='prefix_"+id+"']").val();
+        //var prefix = $("[name='prefix_"+id+"']").val();
         var photo_mime = $("[name='photo_mime_"+id+"']").val();
         
-        var myData = ({prefix:prefix, tab_name:tab_name, id:id, photo_mime:photo_mime});
+        var myData = ({tab_name:tab_name, id:id, photo_mime:photo_mime});
         
         console.log('Submitting');
         
@@ -214,21 +216,19 @@ $( "#hide" ).click(function() {
             });
         });
         $(document).ajaxStart(function () {
+            $('html').addClass('busy');
             $('.loader').show();
         }).ajaxComplete(function () {
+            $('html').removeClass('busy');
             $('.loader').hide();
         });
+        //http://stackoverflow.com/questions/8805507/change-mouse-pointer-when-ajax-call
     </script>
     <style>
-    .block
-    {
-        display:none;
-        position:absolute;
-        width:100%;
-        height:100%;
-        /*background: grey;*/
-        opacity: 0.2;
-    }
+    html.busy, html.busy * {  
+        cursor: wait !important;
+        /*cursor: progress !important;*/
+    } 
     .loader
     {
         display:none;
@@ -248,6 +248,9 @@ $( "#hide" ).click(function() {
     <!--<div id="search-result"></div>-->
     <div class="center">
         <?php
+        //$r = explode('', 'photos');
+        //$r = 'photos';
+        //echo $r[0];
         $prefix = 'p_';
         if ($obj_show->showAll($prefix)) { ?>
             <br />

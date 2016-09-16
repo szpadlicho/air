@@ -9,12 +9,14 @@ class DeleteImages
 	private $user='szpadlic_baza';
 	private $pass='haslo';
 	private $table;
+	private $prefix;
 	//private $table_sh='SCHEMATA';
 	private $admin;
 	private $autor;
 	public function __setTable($tab_name)
     {
-		$this->table=$tab_name;
+		$this->table = $tab_name;
+		$this->prefix = $tab_name[0].'_';
 	}
 	public function connectDb()
     {
@@ -48,10 +50,10 @@ class DeleteImages
 			return false;
 		}
 	}
-    public function deleteREC($prefix, $id, $mime)
+    public function deleteREC($id, $mime)
     {
 		$con=$this->connectDB();
-		$result = $con->query("DELETE FROM `".$this->table."` WHERE `".$prefix."id` = '".$id."'");	
+		$result = $con->query("DELETE FROM `".$this->table."` WHERE `".$this->prefix."id` = '".$id."'");	
 		unset ($con);
         if($result) {
             $this->deleteImage($id, $mime);
@@ -63,10 +65,10 @@ class DeleteImages
 	}
 }
 $id = $_POST['id'];
-$prefix = $_POST['prefix'];
+//$prefix = $_POST['prefix'];
 $photo_mime = $_POST['photo_mime'];
 $tab_name = $_POST['tab_name'];
 $obj_del = new DeleteImages;
 $obj_del->__setTable($tab_name);
-$feedback = $obj_del->deleteREC($prefix, $id, $photo_mime);
+$feedback = $obj_del->deleteREC($id, $photo_mime);
 var_dump($feedback);

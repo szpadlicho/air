@@ -10,13 +10,14 @@ class UploadFile
 	private $user='szpadlic_baza';
 	private $pass='haslo';
 	private $table;
+	private $prefix;
 	//private $table_sh='SCHEMATA';
 	private $admin;
 	private $autor;
 	public function __setTable($tab_name)
     {
-		$this->table=$tab_name;
-		//echo $this->table."<br />";
+		$this->table = $tab_name;
+		$this->prefix = $tab_name[0].'_';
 	}
 	public function connectDb()
     {

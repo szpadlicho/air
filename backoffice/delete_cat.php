@@ -9,12 +9,14 @@ class DeleteImages
 	private $user='szpadlic_baza';
 	private $pass='haslo';
 	private $table;
+	private $prefix;
 	//private $table_sh='SCHEMATA';
 	private $admin;
 	private $autor;
 	public function __setTable($tab_name)
     {
-		$this->table=$tab_name;
+		$this->table = $tab_name;
+		$this->prefix = $tab_name[0].'_';
 	}
 	public function connectDb()
     {
@@ -25,7 +27,7 @@ class DeleteImages
     public function deleteREC($id)
     {
 		$con=$this->connectDB();
-		$result = $con->query("DELETE FROM `".$this->table."` WHERE `c_id` = '".$id."'");	
+		$result = $con->query("DELETE FROM `".$this->table."` WHERE `".$this->prefix."id` = '".$id."'");	
 		unset ($con);
         if($result) {
 			return true;

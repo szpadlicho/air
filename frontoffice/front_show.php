@@ -9,12 +9,14 @@ class ShowImages
 	private $user='szpadlic_baza';
 	private $pass='haslo';
 	private $table;
+	private $prefix;
 	//private $table_sh='SCHEMATA';
 	private $admin;
 	private $autor;
 	public function __setTable($tab_name)
     {
-		$this->table=$tab_name;
+		$this->table = $tab_name;
+		$this->prefix = $tab_name[0].'_';
 	}
 	public function connect()
     {
@@ -37,7 +39,7 @@ class ShowImages
             unset ($con);
         }
 	}
-    public function showAll($prefix)
+    public function showAll()
     {
 		/**/
 		$con=$this->connectDB();
@@ -68,14 +70,14 @@ class ShowImages
             echo 'Brak';
         }
     }
-    public function showCategory($prefix)// do category menu
+    public function showCategory()// do category menu
     {
 		$con=$this->connectDB();
-		$q = $con->query("SELECT `".$this->table."`, `".$prefix."id` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		$q = $con->query("SELECT `".$this->table."`, `".$this->prefix."id` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}
-    public function showCategoryJoin($prefix)
+    public function showCategoryJoin()
     {
 		$con=$this->connectDB();
         $order = 'DESC';
@@ -98,10 +100,10 @@ class ShowImages
 
         // ORDER BY id LIMIT 3
 	}    
-    public function showCategoryByID($prefix, $id)
+    public function showCategoryByID($id)
     {
 		$con=$this->connectDB();
-		$q = $con->query("SELECT * FROM `".$this->table."` WHERE ".$prefix."id = ".$id."");/*zwraca false jesli tablica nie istnieje*/
+		$q = $con->query("SELECT * FROM `".$this->table."` WHERE ".$this->prefix."id = ".$id."");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
         //$q = $g->fetch(PDO::FETCH_ASSOC);
 		return $q;
@@ -154,9 +156,8 @@ $obj_show->__setTable('photos');
         // var_dump($_SERVER);
         $obj_show_cat = new ShowImages;
         $obj_show_cat->__setTable('category');
-        $prefix = 'c_';
-        $obj_show_cat->showCategory($prefix);
-        $ret = $obj_show_cat->showCategory($prefix);
+        $obj_show_cat->showCategory();
+        $ret = $obj_show_cat->showCategory();
         $ret = $ret->fetchALL(PDO::FETCH_ASSOC);
         //var_dump($cat_menu);
         foreach ($ret as $cat_menu){ ?>
@@ -185,7 +186,7 @@ $obj_show->__setTable('photos');
 -->
  
         <?php $prefix = 'p_'; ?>
-        <?php if ($obj_show->showAll($prefix)) { ?>
+        <?php if ($obj_show->showAll()) { ?>
             Wyświetlanie
             <br />
             <table id="table-list" class="back-all list table" border="2">
@@ -214,7 +215,7 @@ $obj_show->__setTable('photos');
                     <th>
                         author
                     </th>
-                <?php foreach ($obj_show->showAll($prefix) as $wyn) { ?>
+                <?php foreach ($obj_show->showAll() as $wyn) { ?>
                 <?php //var_dump($wyn); ?>
                     <tr>
                         <td>
