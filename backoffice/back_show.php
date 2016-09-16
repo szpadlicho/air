@@ -37,12 +37,12 @@ class ShowImages
             unset ($con);
         }
 	}
-    public function showAll()
+    public function showAll($prefix)
     {
 		/**/
 		$con=$this->connectDB();
         $order = 'DESC';
-		@$q = $con->query("SELECT * FROM `".$this->table."` ORDER BY `id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
+		@$q = $con->query("SELECT * FROM `".$this->table."` ORDER BY `".$prefix."id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	}
@@ -78,10 +78,10 @@ class ShowImages
 		// unset ($con);
 		// return $q;
 	// }
-    public function deleteREC()
+    public function deleteREC($prefix)
     {
 		$con=$this->connectDB();
-		$con->query("DELETE FROM `".$this->table."` WHERE `id` = '".$_SESSION['id_post']."'");	
+		$con->query("DELETE FROM `".$this->table."` WHERE `".$prefix."id` = '".$_SESSION['id_post']."'");	
 		unset ($con);
 	
 	}
@@ -112,6 +112,7 @@ $( "#hide" ).click(function() {
     var update = function(id) {
         //get the form values
         var tab_name = 'photos';
+        var prefix = $("[name='prefix_"+id+"']").val();
         var id = $("[name='id_rec_"+id+"']").val();
         var photo_name = $("[name='photo_name_"+id+"']").val();
         var category = $("[name='category_"+id+"']").val();
@@ -125,7 +126,7 @@ $( "#hide" ).click(function() {
         var password = $("[name='password_"+id+"']").val();
         var visibility = $("[name='visibility_"+id+"']").val();
         
-        var myData = ({tab_name:tab_name,id:id,photo_name:photo_name,category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,visibility:visibility});
+        var myData = ({prefix:prefix, tab_name:tab_name,id:id,photo_name:photo_name,category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,visibility:visibility});
         
         console.log('Submitting');
         
@@ -150,9 +151,10 @@ $( "#hide" ).click(function() {
         //get the form values
         var tab_name = 'photos';
         var id = $("[name='id_rec_"+id+"']").val();
+        var prefix = $("[name='prefix_"+id+"']").val();
         var photo_mime = $("[name='photo_mime_"+id+"']").val();
         
-        var myData = ({tab_name:tab_name, id:id, photo_mime:photo_mime});
+        var myData = ({prefix:prefix, tab_name:tab_name, id:id, photo_mime:photo_mime});
         
         console.log('Submitting');
         
@@ -204,7 +206,8 @@ $( "#hide" ).click(function() {
     <!--<div id="search-result"></div>-->
     <div class="center">
         <?php
-        if ($obj_show->showAll()) { ?>
+        $prefix = 'p_';
+        if ($obj_show->showAll($prefix)) { ?>
             <br />
             <table id="table-list" class="back-all list table" border="2">
                 <tr>
@@ -259,11 +262,12 @@ $( "#hide" ).click(function() {
                 </tr>
 
                 <?php 
-                foreach ($obj_show->showAll() as $wyn) { ?>
+                $prefix = 'p_';
+                foreach ($obj_show->showAll($prefix) as $wyn) { ?>
                     <?php //var_dump($wyn); ?>
                     <script>
                     $( document ).ready(function() {
-                        var idd = '<?php echo $wyn['id']; ?>';
+                        var idd = '<?php echo $wyn['p_id']; ?>';
                         $('#b_save_'+idd).click(function(e) {
                             e.preventDefault();
                             update(idd);
@@ -271,7 +275,7 @@ $( "#hide" ).click(function() {
                         });
                     });
                     $( document ).ready(function() {
-                        var idd = '<?php echo $wyn['id']; ?>';
+                        var idd = '<?php echo $wyn['p_id']; ?>';
                         $('#b_delete_'+idd).click(function(e) {
                             e.preventDefault();
                             del(idd);
@@ -279,15 +283,15 @@ $( "#hide" ).click(function() {
                         });
                     });
                     </script>
-                    <tr name="rows_<?php echo $wyn['id']; ?>">
+                    <tr name="rows_<?php echo $wyn['p_id']; ?>">
                         <td>
-                            <?php echo $wyn['id']; ?>
+                            <?php echo $wyn['p_id']; ?>
                         </td>
                         <td>                                          
-                            <?php echo $obj_show->showImg($wyn['id'], $wyn['photo_mime']);?>
+                            <?php echo $obj_show->showImg($wyn['p_id'], $wyn['photo_mime']);?>
                         </td>
                         <td>   
-                            <input name="photo_name_<?php echo $wyn['id']; ?>" type="text" value="<?php echo $wyn['photo_name']; ?>" />
+                            <input name="photo_name_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['photo_name']; ?>" />
                         </td>
                         <td>
                             <?php echo $wyn['photo_mime']; ?>
@@ -296,7 +300,7 @@ $( "#hide" ).click(function() {
                             <?php echo $wyn['photo_size']; ?>
                         </td>
                         <td>
-                            <select class="" name="category_<?php echo $wyn['id']; ?>">
+                            <select class="" name="category_<?php echo $wyn['p_id']; ?>">
                                 <?php
                                 //zamieniam spacje na podkresliniki dla porownania string
                                 //$cat_in_photos = str_replace(' ', '_', $wyn['category']);
@@ -305,8 +309,8 @@ $( "#hide" ).click(function() {
                                     foreach ($obj_show->showCategoryAll() as $cat) {
                                         //zamieniam spacje na podkresliniki dla porownania string
                                         //$can_in_category = str_replace(' ', '_', $cat['category']); ?>
-                                        <option value="<?php echo $cat['id']; ?>"
-                                            <?php if( $cat['id'] == $wyn['category'] ){
+                                        <option value="<?php echo $cat['c_id']; ?>"
+                                            <?php if( $cat['c_id'] == $wyn['category'] ){
                                                 echo $selected = 'selected="selected"'; 
                                             } ?> > <?php echo $cat['category']; ?>
                                         </option>
@@ -333,7 +337,7 @@ $( "#hide" ).click(function() {
                             $month = $n[1];//miesian
                             $day = $n[2];//dzien
                             ?>
-                            <select name="show_data_year_<?php echo $wyn['id']; ?>">
+                            <select name="show_data_year_<?php echo $wyn['p_id']; ?>">
                                 <?php for ($y = 2010; $y <= 2020; $y++) { ?>
                                     <option <?php if ( $n[0] == $y ) { ?>
                                             selected="selected"
@@ -341,7 +345,7 @@ $( "#hide" ).click(function() {
                                     ><?php echo $y; ?></option>
                                 <?php } ?>                                       
                             </select>
-                            <select name="show_data_month_<?php echo $wyn['id']; ?>">
+                            <select name="show_data_month_<?php echo $wyn['p_id']; ?>">
                                 <?php for ($m = 1; $m <= 12; $m++) { ?>
                                     <option <?php if ( $n[1] == $m ) { ?>
                                             selected="selected"
@@ -349,7 +353,7 @@ $( "#hide" ).click(function() {
                                     ><?php echo $m; ?></option>
                                 <?php } ?> 
                             </select>
-                            <select name="show_data_day_<?php echo $wyn['id']; ?>">
+                            <select name="show_data_day_<?php echo $wyn['p_id']; ?>">
                                 <?php for ($d = 1; $d <= 31; $d++) { ?>
                                     <option <?php if ( $n[2] == $d ) { ?>
                                             selected="selected"
@@ -359,16 +363,16 @@ $( "#hide" ).click(function() {
                             </select>
                         </td>
                         <td>
-                            <textarea name="show_place_<?php echo $wyn['id']; ?>" rows="4" cols="10"><?php echo $wyn['show_place']; ?></textarea> 
+                            <textarea name="show_place_<?php echo $wyn['p_id']; ?>" rows="4" cols="10"><?php echo $wyn['show_place']; ?></textarea> 
                         </td>
                         <td>
-                            <textarea name="tag_<?php echo $wyn['id']; ?>" rows="4" cols="10"><?php echo $wyn['tag']; ?></textarea>                                     
+                            <textarea name="tag_<?php echo $wyn['p_id']; ?>" rows="4" cols="10"><?php echo $wyn['tag']; ?></textarea>                                     
                         </td>
                         <td>
-                            <input name="author_<?php echo $wyn['id']; ?>" type="text" value="<?php echo $wyn['author']; ?>" />
+                            <input name="author_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['author']; ?>" />
                         </td>
                         <td>
-                            <select name="protect_<?php echo $wyn['id']; ?>">
+                            <select name="protect_<?php echo $wyn['p_id']; ?>">
                                 <option <?php if( $wyn['protect'] == "1" ){ ?>
                                         selected="selected"
                                     <?php } ?> value="1">On</option>
@@ -378,10 +382,10 @@ $( "#hide" ).click(function() {
                             </select> 
                         </td>
                         <td>
-                            <input name="password_<?php echo $wyn['id']; ?>" type="text" value="<?php echo $wyn['password']; ?>" />
+                            <input name="password_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['password']; ?>" />
                         </td>
                         <td>
-                            <select name="visibility_<?php echo $wyn['id']; ?>">
+                            <select name="visibility_<?php echo $wyn['p_id']; ?>">
                                 <option <?php if( $wyn['visibility'] == "1" ){ ?>
                                         selected="selected"
                                     <?php } ?> value="1">On</option>
@@ -391,10 +395,11 @@ $( "#hide" ).click(function() {
                             </select> 
                         </td>
                         <td>
-                            <button id="b_save_<?php echo $wyn['id']; ?>">Zapisz</button>
-                            <button id="b_delete_<?php echo $wyn['id']; ?>">Usuń</button>
-                            <input id="id_hidden" type="hidden" name="id_rec_<?php echo $wyn['id']; ?>" value="<?php echo $wyn['id']; ?>" />
-                            <input id="mime_hidden" type="hidden" name="photo_mime_<?php echo $wyn['id']; ?>" value="<?php echo $wyn['photo_mime']; ?>" />
+                            <button id="b_save_<?php echo $wyn['p_id']; ?>">Zapisz</button>
+                            <button id="b_delete_<?php echo $wyn['p_id']; ?>">Usuń</button>
+                            <input id="id_hidden" type="hidden" name="id_rec_<?php echo $wyn['p_id']; ?>" value="<?php echo $wyn['p_id']; ?>" />
+                            <input id="id_hidden_prefix" type="hidden" name="prefix_<?php echo $wyn['p_id']; ?>" value="p_" />
+                            <input id="mime_hidden" type="hidden" name="photo_mime_<?php echo $wyn['p_id']; ?>" value="<?php echo $wyn['photo_mime']; ?>" />
                         </td>
                     </tr>
                 <?php } ?>

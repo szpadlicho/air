@@ -37,10 +37,13 @@ class Connect_Search
         }
         //var_dump($string);
         foreach($string as $s){
-            $ress = $con->query("SELECT * FROM `".$this->table."` WHERE `id` LIKE '%".$s."%' OR `tag` LIKE '%".$s."%' OR `author` LIKE '%".$s."%' OR `category` LIKE '%".$s."%' OR `show_place` LIKE '%".$s."%' OR `show_data` LIKE '%".$s."%' ORDER BY `id` ".$order."");
+            //$ress = $con->query("SELECT * FROM `".$this->table."` WHERE `p_id` LIKE '%".$s."%' OR `tag` LIKE '%".$s."%' OR `author` LIKE '%".$s."%' OR `category` LIKE '%".$s."%' OR `show_place` LIKE '%".$s."%' OR `show_data` LIKE '%".$s."%' ORDER BY `p_id` ".$order."");
+            //$ress = $con->query("SELECT * FROM photos AS p, category AS c WHERE p.`category` = c.`c_id` OR p.`p_id` LIKE '%".$s."%' OR p.`tag` LIKE '%".$s."%' OR p.`author` LIKE '%".$s."%' OR p.`category` LIKE '%".$s."%' OR p.`show_place` LIKE '%".$s."%' OR p.`show_data` LIKE '%".$s."%' ORDER BY p.`p_id` DESC");/*zwraca false jesli tablica nie istnieje*/
             //$res[] = $ress;
             //var_dump($s);
+            $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
         }
+        
         //$res = $con->query("SELECT * FROM `".$this->table."` WHERE `id` LIKE '%".$s."%' OR `tag` LIKE '%".$string."%' OR `author` LIKE '%".$string."%' OR `category` LIKE '%".$string."%' OR `show_place` LIKE '%".$string."%' OR `show_data` LIKE '%".$string."%' ORDER BY `id` ".$order."");
         //$res = $res->fetch(PDO::FETCH_ASSOC);
         return @$ress;
@@ -95,7 +98,7 @@ class Connect_Search
     public function showCategoryByID($id)
     {
 		$con=$this->connectDB();
-		$q = $con->query("SELECT * FROM `".$this->table."` WHERE id = ".$id."");/*zwraca false jesli tablica nie istnieje*/
+		$q = $con->query("SELECT * FROM `".$this->table."` WHERE c_id = ".$id."");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
         //$q = $g->fetch(PDO::FETCH_ASSOC);
 		return $q;
@@ -104,8 +107,8 @@ class Connect_Search
     {
 		$con=$this->connectDB();
 		$q = $con->query("SELECT * FROM `photos` LEFT JOIN `category`
-                        ON category.id = photos.category
-                        WHERE photos.category = category.id");/*zwraca false jesli tablica nie istnieje*/
+                        ON category.c_id = photos.category
+                        WHERE photos.category = category.c_id");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
 	} 
@@ -164,17 +167,18 @@ $success = $obj_search->__getImagesTag($_POST['string']);
     <?php //var_dump($wyn); ?>
         <tr>
             <td>
-                <?php echo $wyn['id']; ?>
+                <?php echo $wyn['p_id']; ?>
             </td>
             <td>                                          
-                <?php echo $obj_search->showImg($wyn['id'], $wyn['photo_mime']);?>
+                <?php echo $obj_search->showImg($wyn['p_id'], $wyn['photo_mime']);?>
             </td>
             <td>
+                <?php echo $wyn['category']; ?>
                 <?php 
-                    $obj_search->__setTable('category');
-                    $cat = $obj_search->showCategoryByID($wyn['category']);
-                    $q = $cat->fetch(PDO::FETCH_ASSOC);
-                    echo $q['category'];
+                    //$obj_search->__setTable('category');
+                    //$cat = $obj_search->showCategoryByID($wyn['category']);
+                    //$q = $cat->fetch(PDO::FETCH_ASSOC);
+                    //echo $q['category'];
                     //var_dump($q); 
                 ?>
             </td>

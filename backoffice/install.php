@@ -74,7 +74,7 @@ class DataBaseInstall
 			return false;
 		}
 	}
-    public function createTbDynamicRow($arr_row,$arr_val)
+    public function createTbDynamicRow($arr_row, $arr_val, $prefix)
     {
         // Tworze tabele tylko raz co pozwala klikać install bez konsekwencji
 		$con = $this->connectDB();
@@ -90,10 +90,10 @@ class DataBaseInstall
             // Create table
 			$res = $con->query(
                 "CREATE TABLE IF NOT EXISTS `".$this->table."`(
-                `id` INTEGER AUTO_INCREMENT,            
+                `".$prefix."id` INTEGER AUTO_INCREMENT,            
                 ".$columns."
                 `mod` INTEGER(2),
-                PRIMARY KEY(`id`)
+                PRIMARY KEY(`".$prefix."id`)
                 )ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1"
                 );
             ////nie może tu byc return bo sie dalej nie wykona
@@ -124,10 +124,10 @@ class DataBaseInstall
 			return false;
 		}
     }
-    public function addRec($arr_val){
+    public function addRec($arr_val, $prefix){
         $con = $this->connectDB();
 		$res = $con->query(
-            "SELECT 'id' 
+            "SELECT '".$prefix."id' 
             FROM ".$this->table
             );// Zwraca false jesli tablica nie istnieje
             $res = $res->fetch();
@@ -170,6 +170,7 @@ if (isset($_POST['crt'])) {
     //$res = $con->fetch(PDO::FETCH_ASSOC);
     $return = array();// array initiate
     $obj_install->__setTable('photos');
+    $prefix = 'p_';
     $data = date('Y-m-d H:i:s');
     $arr_row = array(
         'photo_name'                =>'TEXT',
@@ -205,9 +206,10 @@ if (isset($_POST['crt'])) {
         'visibility'                =>'1'    
         );
         */
-    $return['photos'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
+    $return['photos'] = $obj_install->createTbDynamicRow($arr_row, $arr_val, $prefix);
     //var_dump($return);
     $obj_install->__setTable('category');
+    $prefix = 'c_';
     $arr_row = array(
         'category'                  =>'TEXT',
         'protect'                   =>'VARCHAR(20)', 
@@ -221,7 +223,7 @@ if (isset($_POST['crt'])) {
         'password'                  =>'', 
         'visibility'                =>'1'    
         );
-    $return['category'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
+    $return['category'] = $obj_install->createTbDynamicRow($arr_row, $arr_val, $prefix);
     //var_dump($return);
     $obj_install->__setTable('category');
     $arr_val = array(
@@ -230,14 +232,14 @@ if (isset($_POST['crt'])) {
         'password'                  =>'', 
         'visibility'                =>'1'    
         );
-    $return['category'] = $obj_install->addRec($arr_val);
+    $return['category'] = $obj_install->addRec($arr_val, $prefix);
     $arr_val = array(
         'category'                  =>'Air',
         'protect'                   =>'0', 
         'password'                  =>'', 
         'visibility'                =>'1'    
         );
-    $return['category'] = $obj_install->addRec($arr_val);
+    $return['category'] = $obj_install->addRec($arr_val, $prefix);
     var_dump($return);
 }
 

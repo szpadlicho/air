@@ -211,7 +211,7 @@ if(isset($_POST['up'])) {
                                 foreach ($obj_upload->showCategoryAll() as $cat) {
                                     //zamieniam spacje na podkresliniki dla porownania string
                                     //$can_in_category = str_replace(' ', '_', $cat['category']); ?>
-                                    <option value="<?php echo $cat['id']; ?>"> <?php echo $cat['category']; ?>
+                                    <option value="<?php echo $cat['c_id']; ?>"> <?php echo $cat['category']; ?>
                                     </option>
                                 <?php
                                 }
