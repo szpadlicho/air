@@ -51,7 +51,6 @@ $obj_ShowImages->__setTable('photos');
         <li><a href="?front&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
     <?php } ?>
 </ul>
-<?php echo count($obj_ShowImages->showAll()->fetchAll(PDO::FETCH_ASSOC)); ?>
 <?php include 'front_pagination.php'; ?>
 <div class="center">
     <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>

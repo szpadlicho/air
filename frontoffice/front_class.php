@@ -91,12 +91,20 @@ class ShowImages
 	}
     public function countRow()// do category menu
     {
-		// $con=$this->connectDB();
-		// $q = $con->query("SELECT COUNT(*) FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
-        // $q = $q->fetch(PDO::FETCH_ASSOC);
-        // $q = $q['COUNT(*)'];
-		// unset ($con);
-        $q = count($this->showAll()->fetchAll(PDO::FETCH_ASSOC));
+        if ( isset($_GET['cat_id']) ) {
+            //$q = count($this->showAll()->fetchAll(PDO::FETCH_ASSOC));
+            //$q = $this->showAll()->fetchAll(PDO::FETCH_ASSOC);
+            $con=$this->connectDB();
+            $q = $con->query("SELECT COUNT(*) FROM `".$this->table."` WHERE `category` = '".$_GET['cat_id']."'");/*zwraca false jesli tablica nie istnieje*/
+            $q = $q->fetch(PDO::FETCH_ASSOC);
+            $q = $q['COUNT(*)'];
+        } else {
+            $con=$this->connectDB();
+            $q = $con->query("SELECT COUNT(*) FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+            $q = $q->fetch(PDO::FETCH_ASSOC);
+            $q = $q['COUNT(*)'];
+        }
+        unset ($con);
 		return $q;
 	}
 }
