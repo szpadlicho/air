@@ -27,19 +27,32 @@ isset($_COOKIE['start']) ? '' : $_COOKIE['start'] = 0;
 <script>
     $(document).ready(function(){
         $('[name=delet_cookie]').click(function(e) {
-            $.removeCookie('start'); // => true
-            $.removeCookie('limit'); // => false
+            $.removeCookie('start');
+            $.removeCookie('limit');
             location.reload();
+        });
+        $('.front.category.menu').click(function(e) {
+            //$.removeCookie('start');
+            //$.removeCookie('limit');
+            //location.reload();
         });
     });
 </script>
 <button name="delet_cookie">Delete</button>
 Zdjęć na strone: 
 <select id="pagination_limit">
-    <option <?php echo ( $_COOKIE['limit'] == ceil($all/5) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/5); ?></option>
-    <option <?php echo ( $_COOKIE['limit'] == ceil($all/3) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/3); ?></option>
-    <option <?php echo ( $_COOKIE['limit'] == ceil($all/2) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/2); ?></option>
-    <option <?php echo ( $_COOKIE['limit'] == $all ) ? 'selected = "selected"' : '' ; ?>><?php echo $all; ?></option>
+    <?php if ( ($all/5) >= 1 ) { ?>
+        <option <?php echo ( $_COOKIE['limit'] == ceil($all/5) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/5); ?></option>
+    <?php } ?>
+    <?php if ( ($all/3) >= 1 ) { ?>
+        <option <?php echo ( $_COOKIE['limit'] == ceil($all/3) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/3); ?></option>
+    <?php } ?>
+    <?php if ( ($all/2) >= 1 ) { ?>
+        <option <?php echo ( $_COOKIE['limit'] == ceil($all/2) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/2); ?></option>
+    <?php } ?>
+    <?php if ( ($all) >= 1 ) { ?>
+        <option <?php echo ( $_COOKIE['limit'] == ceil($all) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all); ?></option>
+    <?php } ?>
 </select>
 Paginacja: <?php for($i = 1; $i <= ceil($all/@$_COOKIE['limit']); $i++) { ?>
             <button class="pagination_start" value="<?php echo $i; ?>"><?php echo $i; ?></button>

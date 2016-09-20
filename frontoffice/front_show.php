@@ -39,7 +39,7 @@ $obj_ShowImages->__setTable('photos');
 </style>
 <div id="search-div">Szukaj: <input id="search" type="text" placeholder="szukaj" /></div>
 <ul>
-    <li><a href="?front" >Wszystkie</a></li>
+    <li><a class="front category menu" href="?front" >Wszystkie</a></li>
     <?php
     $obj_ShowImages_cat = new ShowImages;
     $obj_ShowImages_cat->__setTable('category');
@@ -48,7 +48,7 @@ $obj_ShowImages->__setTable('photos');
     $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
     ?>
     <?php foreach ($ret as $cat_menu){ ?>
-        <li><a href="?front&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
+        <li><a class="front category menu" href="?front&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
     <?php } ?>
 </ul>
 <?php include 'front_pagination.php'; ?>
