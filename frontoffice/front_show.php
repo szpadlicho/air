@@ -41,10 +41,10 @@ $obj_ShowImages->__setTable('photos');
 <ul>
     <li><a class="front category menu" href="?front" >Wszystkie</a></li>
     <?php
-    $obj_ShowImages_cat = new ShowImages;
-    $obj_ShowImages_cat->__setTable('category');
-    $obj_ShowImages_cat->showCategory();
-    $ret = $obj_ShowImages_cat->showCategory();
+    $obj_show_cat = new ShowImages;
+    $obj_show_cat->__setTable('category');
+    $obj_show_cat->showCategory();
+    $ret = $obj_show_cat->showCategory();
     $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
     ?>
     <?php foreach ($ret as $cat_menu){ ?>
@@ -52,7 +52,7 @@ $obj_ShowImages->__setTable('photos');
     <?php } ?>
 </ul>
 <?php include 'front_pagination.php'; ?>
-<div class="center">
+<div class="center" style="text-align:center;">
     <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>
         <div class="div_front" style="position: relative; display: inline-block;">
             <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime']);?>
