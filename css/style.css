@@ -1,0 +1,24 @@
+/* @media screen and (max-width: 2000px) {html,body{font-size:16px;}}
+@media screen and (max-width: 1900px) {html,body{font-size:15.5px;}}
+@media screen and (max-width: 1800px) {html,body{font-size:15px;}}
+@media screen and (max-width: 1700px) {html,body{font-size:14.5px;}}
+@media screen and (max-width: 1600px) {html,body{font-size:14px;}}
+@media screen and (max-width: 1500px) {html,body{font-size:13.5px;}}
+@media screen and (max-width: 1400px) {html,body{font-size:13px;}}
+@media screen and (max-width: 1300px) {html,body{font-size:12.5px;}}
+@media screen and (max-width: 1200px) {html,body{font-size:12px;}}
+@media screen and (max-width: 1100px) {html,body{font-size:11.5px;}}
+@media screen and (max-width: 1000px) {html,body{font-size:11px;}}
+@media screen and (max-width: 900px) {html,body{font-size:10.5px;}}
+@media screen and (max-width: 800px) {html,body{font-size:10px;}}
+@media screen and (max-width: 700px) {html,body{font-size:9.5px;}} */
+/*
+@import url(http://fonts.googleapis.com/css?family=Dosis:200,300,400,500,600,700,800&subset=latin-ext);
+@import url(http://fonts.googleapis.com/css?family=Titillium+Web:400,200,200italic,300,300italic,400italic,600,600italic,700,700italic,900&subset=latin-ext);
+@import url(http://fonts.googleapis.com/css?family=Titillium+Web:400,200,200italic,300,300italic,400italic,600,600italic,700,700italic,900&subset=latin-ext);
+*/
+#debugger{position:fixed; bottom:0em; right:0em; background-color:rgba(134,115,161,0.5); padding:0.6em; z-index:1000; color:white;}
+
+/* .catch{position:fixed; bottom:0em; left:0em; background-color:rgba(134,115,161,0.5); padding:0.6em; z-index:1001;}
+.catch_span{display:block;}
+.center{text-align:center; width:21.428em; margin:0 auto;} */

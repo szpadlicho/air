@@ -66,6 +66,7 @@ $obj_ShowImages->__setTable('photos');
     <?php include 'front_pagination.php'; ?>
 </div>
 <?php echo phpinfo(INFO_GENERAL); ?>
+<?php //echo phpinfo(); ?>
     
     
     
