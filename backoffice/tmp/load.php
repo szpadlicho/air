@@ -3,21 +3,16 @@
 * Picture link
 **/
 $pic = $_POST['pic'];
-//var_dump($_POST['json']);
 /**
 * Object (showAll)
 **/
 $wyn2n = json_decode($_POST['json_wyn']);
-//$wyn2n = $wyn2n->fetchAll(PDO::FETCH_ASSOC);
 $wyn2 = json_decode(json_encode($wyn2n), True);
-//var_dump($wyn2n);
-
 /**
 * Category
 **/
 $cat2n = json_decode($_POST['json_cat']);
 $cat2n = json_decode(json_encode($cat2n), True);
-//var_dump($cat2n);
 ?>
 <script>
 $(document).ready(function() {
@@ -72,11 +67,7 @@ $(document).ready(function() {
             <?php echo $wyn2['update_data']; ?>
         </td>
         <td>
-            <?php 
-            //var_dump ($wyn2['show_data']); 
-            // $dat = explode (' ', $wyn2['show_data']);
-            // $data = $dat[0];
-            // $time = $dat[1];
+            <?php
             $n = explode ('-', $wyn2['show_data']);
             $year = $n[0];//rok
             $month = $n[1];//miesian
@@ -145,4 +136,3 @@ $(document).ready(function() {
         </td>
     </tr>
 </table>
-<?php// } ?>

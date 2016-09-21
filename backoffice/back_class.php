@@ -72,10 +72,10 @@ class ShowImages
     }
     public function showImg($id, $mime)
     {                                        
-        $dir1 = 'data/';                                       
+        $dir1 = 'data/mini/';                                       
         $dir2 = '../data/';                                       
         if (@opendir($dir1) || @opendir($dir2)) {//sprawdzam czy sciezka istnieje
-            //$dir = 'data/';
+            //$dir = 'data/mini/';
             //echo 'ok';
             return '<img class="back-all list mini-image" style="height:100px;" src="'.$dir1.$id.'.'.$mime.'" alt="image" />';
         } else {

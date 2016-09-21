@@ -27,7 +27,8 @@ class DeleteImages
 	public function deleteImage($id, $mime)
     {
         $result = unlink('../data/'.$id.'.'.$mime);
-		if($result) {  
+        $result2 = unlink('../data/mini/'.$id.'.'.$mime);
+		if($result && $result2) {  
 			return true;
 		} else {
 			return false;
