@@ -212,7 +212,7 @@ html.busy, html.busy * {
 </ul>
 <div class="center">
     <?php include 'back_pagination.php'; ?>
-    <?php if ($obj_ShowImages->showAll()) { ?>
+    <?php if ($obj_ShowImages->showAll()) { //to metoda pokazuje bez wyszukiwania jest inna niz w plike search?>
         <table id="table-list" class="back-all list table" border="2">
             <tr>
                 <th>

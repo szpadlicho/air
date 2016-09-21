@@ -1,4 +1,5 @@
 <?php
+//http://stackoverflow.com/questions/14649645/resize-image-in-php
 include_once 'front_class.php';
 $obj_ShowImages->__setTable('photos');
 ?>
@@ -64,7 +65,7 @@ $obj_ShowImages->__setTable('photos');
     <br />
     <?php include 'front_pagination.php'; ?>
 </div>
-
+<?php echo phpinfo(INFO_GENERAL); ?>
     
     
     
