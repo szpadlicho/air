@@ -1,80 +1,15 @@
 <?php
-class Connect_Search
-{
-	private $host='sql.bdl.pl';
-	private $port='';
-	private $dbname='szpadlic_air';
-	//private $dbname_sh='information_schema';
-	private $charset='utf8';
-	private $user='szpadlic_baza';
-	private $pass='haslo';
-	private $table;
-	private $prefix;
-	//private $table_sh='SCHEMATA';
-	private $admin;
-	private $autor;
-	public function __setTable($tab_name)
-    {
-		$this->table = $tab_name;
-		$this->prefix = $tab_name[0].'_';
-	}
-	public function connectDB()
-    {
-		$con=new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
-		return $con;
-		unset ($con);
-	}
-    public function __getImagesTag($string)
-    {
-        $con = $this->connectDB();
-        $order = 'DESC';
-        $start = isset( $_COOKIE['start'] ) ? (int)$_COOKIE['start'] : (int)'0';//numer id od ktorego ma zaczac
-        $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'100';//ilość elementów na stronie
-        $string = explode(' ', $string);
-        if ($string[0] != ''){// warunek zeby pokazal wszysktko jesli pole search puste 
-            $string = array_filter(array_map('trim',$string),'strlen'); //wykluczam spacje z szukania
-        }
-        foreach($string as $s){
-            if ( isset($_GET['cat_id']) ) {
-                $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
-            } else {
-                $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
-            }
-        }
-        return @$ress;
-    }
-    public function showImg($id, $mime)
-    {                                        
-        $dir = '../data/';                                        
-        if (@opendir($dir)) {//sprawdzam czy sciezka istnieje
-            $dir = 'data/';
-            return '<img class="back-all list mini-image" style="width:100px;" src="'.$dir.$id.'.'.$mime.'" alt="image" />';
-        } else {
-            return 'Brak';
-        }
-    }
-    public function showCategoryAll()
-    {
-		$con=$this->connectDB();
-		$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
-		unset ($con);
-		return $q;
-	}
-    public function countRow()// do category menu
-    {
-		$con=$this->connectDB();
-		$q = $con->query("SELECT COUNT(*) FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
-        $q = $q->fetch(PDO::FETCH_ASSOC);
-        $q = $q['COUNT(*)'];
-		unset ($con);
-		return $q;
-	}
-}
-$obj_search = new Connect_Search();
-$obj_search->__setTable('photos');
+include_once 'back_class.php';
+$obj_ShowImages->__setTable('photos');
 @$_GET['cat_id'] = $_POST['cat_id'];
-$success = $obj_search->__getImagesTag($_POST['string']);
+$success = $obj_ShowImages->__getImagesTag($_POST['string']);
 
+$success2 = $obj_ShowImages->__getImagesTag($_POST['string']);
+$search_i = 0;
+while ($wyn2 = $success2->fetch()) {
+    $search_i++;
+}
+//echo $search_i;
 ?>
 <?php include 'back_pagination.php'; ?>
 <table id="table-list" class="back-all list table" border="2">
@@ -150,7 +85,7 @@ $success = $obj_search->__getImagesTag($_POST['string']);
                 <?php echo $wyn['p_id']; ?>
             </td>
             <td>                                          
-                <?php echo $obj_search->showImg($wyn['p_id'], $wyn['photo_mime']);?>
+                <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime']);?>
             </td>
             <td>
                 <?php $n = explode('.', $wyn['photo_name']); ?>
@@ -165,9 +100,9 @@ $success = $obj_search->__getImagesTag($_POST['string']);
             </td>
             <td>
                 <select class="" name="category_<?php echo $wyn['p_id']; ?>">
-                    <?php $obj_search->__setTable('category'); ?>
-                    <?php if ($obj_search->showCategoryAll()) { ?>
-                        <?php foreach ($obj_search->showCategoryAll() as $cat) {?>
+                    <?php $obj_ShowImages->__setTable('category'); ?>
+                    <?php if ($obj_ShowImages->showCategoryAll()) { ?>
+                        <?php foreach ($obj_ShowImages->showCategoryAll() as $cat) {?>
                             <option value="<?php echo $cat['c_id']; ?>"
                                 <?php if( $cat['category'] == $wyn['category'] ){ ?>
                                     selected = "selected" 

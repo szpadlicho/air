@@ -1,112 +1,6 @@
 <?php
-class ShowImages
-{
-	private $host='sql.bdl.pl';
-	private $port='';
-	private $dbname='szpadlic_air';
-	//private $dbname_sh='information_schema';
-	private $charset='utf8';
-	private $user='szpadlic_baza';
-	private $pass='haslo';
-	private $table;
-    private $prefix;
-	//private $table_sh='SCHEMATA';
-	private $admin;
-	private $autor;
-	public function __setTable($tab_name)
-    {
-		$this->table = $tab_name;
-		$this->prefix = $tab_name[0].'_';
-	}
-	public function connect()
-    {
-		$con=new PDO("mysql:host=".$this->host."; port=".$this->port."; charset=".$this->charset,$this->user,$this->pass);
-		return $con;
-		unset ($con);
-	}    
-    public function checkDb()
-    {
-		$con=$this->connect();
-		$ret = $con->query("SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '".$this->dbname."'");/*sprawdzam czy baza istnieje*/
-		$res = $ret->fetch(PDO::FETCH_ASSOC);
-		return $res ?  true : false;
-	}
-	public function connectDb()
-    {
-        if ($this->checkDb()=== true) {
-            $con = new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
-            return $con;
-            unset ($con);
-        }
-	}
-    public function showAll()
-    {
-		$con=$this->connectDB();
-        $order = 'DESC';
-        $start = isset( $_COOKIE['start'] ) ? (int)$_COOKIE['start'] : (int)'0';//numer id od ktorego ma zaczac
-        $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'100';//ilość elementów na stronie
-        if ( isset($_GET['cat_id']) ) {
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` DESC LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
-        } else {
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` ORDER BY photos.`p_id` DESC LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
-        }
-		unset ($con);
-		return $q;
-	}
-    public function showByCategory()
-    {
-		$con=$this->connectDB();
-        $order = 'DESC';
-		@$q = $con->query("SELECT * FROM `".$this->table."` WHERE `category` = ".$_GET['cat_id']." ORDER BY `".$this->prefix."id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
-		unset ($con);
-		return $q;
-	}
-    public function showImg($id, $mime)
-    {                                   
-        $dir = 'data/';                                        
-        if (@opendir($dir)) {//sprawdzam czy sciezka istnieje
-            //echo 'ok';
-            return '<img class="back-all list mini-image" style="width:100px;" src="'.$dir.$id.'.'.$mime.'" alt="image" />';
-        } else {
-            return 'Brak';
-        }
-    }
-    public function showCategory()// do category menu
-    {
-		$con=$this->connectDB();
-		$q = $con->query("SELECT `".$this->table."`, `".$this->prefix."id` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
-		unset ($con);
-		return $q;
-	}
-    public function showCategoryAll()
-    {
-		$con=$this->connectDB();
-		$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
-		unset ($con);
-		return $q;
-	}
-    public function countRow()// do category menu
-    {
-        if ( isset($_GET['cat_id']) ) {
-            //$q = count($this->showAll()->fetchAll(PDO::FETCH_ASSOC));
-            //$q = $this->showAll()->fetchAll(PDO::FETCH_ASSOC);
-            $con=$this->connectDB();
-            $q = $con->query("SELECT COUNT(*) FROM `".$this->table."` WHERE `category` = '".$_GET['cat_id']."'");/*zwraca false jesli tablica nie istnieje*/
-            $q = $q->fetch(PDO::FETCH_ASSOC);
-            $q = $q['COUNT(*)'];
-        } else {
-            $con=$this->connectDB();
-            $q = $con->query("SELECT COUNT(*) FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
-            $q = $q->fetch(PDO::FETCH_ASSOC);
-            $q = $q['COUNT(*)'];
-        }
-        unset ($con);
-		return $q;
-	}
-}
-
-$obj_show = new ShowImages;
-$obj_show->__setTable('photos');
+include_once 'back_class.php';
+$obj_ShowImages->__setTable('photos');
 ?>
 <script>
     var update = function(id) {
@@ -218,6 +112,70 @@ $obj_show->__setTable('photos');
     });
     //http://stackoverflow.com/questions/8805507/change-mouse-pointer-when-ajax-call
 </script>
+<script>
+    $(document).ready(function(){
+        $('.back.button.tag').click(function(e) {
+            e.preventDefault();
+            var $value = $( this ).prev().val();
+            $( '.back.textarea.tag' ).each(function() {
+                $( this ).val($value);
+            });
+        });
+    });
+    $(document).ready(function(){
+        $('.back.button.show_place').click(function(e) {
+            e.preventDefault();
+            var $value = $( this ).prev().val();
+            $( '.back.textarea.show_place' ).each(function() {
+                $( this ).val($value);
+            });
+        });
+    });
+    $(document).ready(function(){
+        $('.back.button.show_data').click(function(e) {
+            e.preventDefault();
+            var $value_day = $( this ).prev().val();
+            var $value_month = $( this ).prev().prev().val();
+            var $value_year = $( this ).prev().prev().prev().val();
+            $( '.back.select.show_data_day' ).each(function() {
+                $( this ).val($value_day);
+            });
+            $( '.back.select.show_data_month' ).each(function() {
+                $( this ).val($value_month);
+            });
+            $( '.back.select.show_data_year' ).each(function() {
+                $( this ).val($value_year);
+            });
+        });
+    });
+    $(document).ready(function(){
+        $('.back.button.category').click(function(e) {
+            e.preventDefault();
+            var $value = $( this ).prev().val();
+            $( '.back.select.category' ).each(function() {
+                $( this ).val($value);
+            });
+        });
+    });
+    $(document).ready(function(){
+        $('.back.button.author').click(function(e) {
+            e.preventDefault();
+            var $value = $( this ).prev().val();
+            $( '.back.input.author' ).each(function() {
+                $( this ).val($value);
+            });
+        });
+    });
+    $(document).ready(function(){
+        $('.back.button.visibility').click(function(e) {
+            e.preventDefault();
+            var $value = $( this ).prev().val();
+            $( '.back.select.visibility' ).each(function() {
+                $( this ).val($value);
+            });
+        });
+    });
+</script>
 <style>
 html.busy, html.busy * {  
     cursor: wait !important;
@@ -240,7 +198,7 @@ html.busy, html.busy * {
 <button style="position:fixed; right:0; top:0;" class="save_all" id="save_all">Save All</button>
 <div id="search-div">Szukaj: <input id="search" type="text" placeholder="szukaj" /></div><!--<input id="search2" type="search" results="5" autosave="a_unique_value" />-->
 <ul>
-    <li><a href="?back" >Wszystkie</a></li>
+    <li><a class="back category menu" href="?back" >Wszystkie</a></li>
     <?php
     $obj_show_cat = new ShowImages;
     $obj_show_cat->__setTable('category');
@@ -249,12 +207,12 @@ html.busy, html.busy * {
     $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
     ?>
     <?php foreach ($ret as $cat_menu){ ?>
-        <li><a href="?back&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
+        <li><a class="back category menu" href="?back&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
     <?php } ?>
 </ul>
-<?php include 'back_pagination.php'; ?>
 <div class="center">
-    <?php if ($obj_show->showAll()) { ?>
+    <?php include 'back_pagination.php'; ?>
+    <?php if ($obj_ShowImages->showAll()) { ?>
         <table id="table-list" class="back-all list table" border="2">
             <tr>
                 <th>
@@ -263,6 +221,7 @@ html.busy, html.busy * {
                 <th>
                     Photo
                 </th>
+                <!--
                 <th>
                     photo_name
                 </th>
@@ -272,15 +231,18 @@ html.busy, html.busy * {
                 <th>
                     photo_size
                 </th>
+                -->
                 <th>
                     category
                 </th>
+                <!--
                 <th>
                     add_data
                 </th>
                 <th>
                     update_data
                 </th>
+                -->
                 <th>
                     show_data
                 </th>
@@ -293,12 +255,14 @@ html.busy, html.busy * {
                 <th>
                     author
                 </th>
+                <!--
                 <th>
                     protect
                 </th>
                 <th>
                     password
                 </th>
+                -->
                 <th>
                     visibility
                 </th>
@@ -307,7 +271,7 @@ html.busy, html.busy * {
                 </th>
             </tr>
 
-            <?php foreach ($obj_show->showAll() as $wyn) { ?>
+            <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>
                 <script>
                 $( document ).ready(function() {
                     var idd = '<?php echo $wyn['p_id']; ?>';
@@ -329,10 +293,11 @@ html.busy, html.busy * {
                         <?php echo $wyn['p_id']; ?>
                     </td>
                     <td>                                          
-                        <?php echo $obj_show->showImg($wyn['p_id'], $wyn['photo_mime']);?>
+                        <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime']);?>
                     </td>
+                    <!--
                     <td>
-                        <?php $n = explode('.', $wyn['photo_name']); ?>
+                        <?php /* $n = explode('.', $wyn['photo_name']); ?>
                         <input name="photo_name_<?php echo $wyn['p_id']; ?>" type="text" 
                         value="<?php echo $n[0]; ?>" />
                     </td>
@@ -340,13 +305,14 @@ html.busy, html.busy * {
                         <?php echo $wyn['photo_mime']; ?>
                     </td>
                     <td>
-                        <?php echo $wyn['photo_size']; ?>
+                        <?php echo $wyn['photo_size']; */ ?>
                     </td>
+                    -->
                     <td>
-                        <select class="" name="category_<?php echo $wyn['p_id']; ?>">
-                            <?php $obj_show->__setTable('category'); ?>
-                            <?php if ($obj_show->showCategoryAll()) { ?>
-                                <?php foreach ($obj_show->showCategoryAll() as $cat) {?>
+                        <select class="back select category" name="category_<?php echo $wyn['p_id']; ?>">
+                            <?php $obj_ShowImages->__setTable('category'); ?>
+                            <?php if ($obj_ShowImages->showCategoryAll()) { ?>
+                                <?php foreach ($obj_ShowImages->showCategoryAll() as $cat) {?>
                                     <option value="<?php echo $cat['c_id']; ?>"
                                         <?php if( $cat['category'] == $wyn['category'] ){ ?>
                                             selected = "selected" 
@@ -355,13 +321,16 @@ html.busy, html.busy * {
                                 <?php } ?>
                             <?php } ?>
                         </select>
+                        <button class="back button category">Copy</button>
+                    </td>
+                    <!--
+                    <td>
+                        <?php /* echo $wyn['add_data']; ?>
                     </td>
                     <td>
-                        <?php echo $wyn['add_data']; ?>
+                        <?php echo $wyn['update_data']; */ ?>
                     </td>
-                    <td>
-                        <?php echo $wyn['update_data']; ?>
-                    </td>
+                    -->
                     <td>
                         <?php 
                         $n = explode ('-', $wyn['show_data']);
@@ -369,7 +338,7 @@ html.busy, html.busy * {
                         $month = $n[1];//miesian
                         $day = $n[2];//dzien
                         ?>
-                        <select name="show_data_year_<?php echo $wyn['p_id']; ?>">
+                        <select class="back select show_data_year" name="show_data_year_<?php echo $wyn['p_id']; ?>">
                             <?php for ($y = 2010; $y <= 2020; $y++) { ?>
                                 <option <?php if ( $n[0] == $y ) { ?>
                                         selected="selected"
@@ -377,7 +346,7 @@ html.busy, html.busy * {
                                 ><?php echo $y; ?></option>
                             <?php } ?>                                       
                         </select>
-                        <select name="show_data_month_<?php echo $wyn['p_id']; ?>">
+                        <select class="back select show_data_month" name="show_data_month_<?php echo $wyn['p_id']; ?>">
                             <?php for ($m = 1; $m <= 12; $m++) { ?>
                                 <option <?php if ( $n[1] == $m ) { ?>
                                         selected="selected"
@@ -385,7 +354,7 @@ html.busy, html.busy * {
                                 ><?php echo $m; ?></option>
                             <?php } ?> 
                         </select>
-                        <select name="show_data_day_<?php echo $wyn['p_id']; ?>">
+                        <select class="back select show_data_day" name="show_data_day_<?php echo $wyn['p_id']; ?>">
                             <?php for ($d = 1; $d <= 31; $d++) { ?>
                                 <option <?php if ( $n[2] == $d ) { ?>
                                         selected="selected"
@@ -393,18 +362,23 @@ html.busy, html.busy * {
                                 ><?php echo $d; ?></option>
                             <?php } ?> 
                         </select>
+                        <button class="back button show_data">Copy</button>
                     </td>
                     <td>
-                        <textarea name="show_place_<?php echo $wyn['p_id']; ?>" rows="4" cols="10"><?php echo $wyn['show_place']; ?></textarea> 
+                        <textarea class="back textarea show_place" name="show_place_<?php echo $wyn['p_id']; ?>" rows="4" cols="10"><?php echo $wyn['show_place']; ?></textarea>
+                        <button class="back button show_place">Copy</button>
                     </td>
                     <td>
-                        <textarea name="tag_<?php echo $wyn['p_id']; ?>" rows="4" cols="10"><?php echo $wyn['tag']; ?></textarea>                                     
+                        <textarea class="back textarea tag" name="tag_<?php echo $wyn['p_id']; ?>" rows="4" cols="10"><?php echo $wyn['tag']; ?></textarea>
+                        <button class="back button tag">Copy</button>
                     </td>
                     <td>
-                        <input name="author_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['author']; ?>" />
+                        <input class="back input author" name="author_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['author']; ?>" />
+                        <button class="back button author">Copy</button>
                     </td>
+                    <!--
                     <td>
-                        <select name="protect_<?php echo $wyn['p_id']; ?>">
+                        <select name="protect_<?php /* echo $wyn['p_id']; ?>">
                             <option <?php if( $wyn['protect'] == "1" ){ ?>
                                     selected="selected"
                                 <?php } ?> value="1">On</option>
@@ -414,10 +388,11 @@ html.busy, html.busy * {
                         </select> 
                     </td>
                     <td>
-                        <input name="password_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['password']; ?>" />
+                        <input name="password_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['password']; */ ?>" />
                     </td>
+                    -->
                     <td>
-                        <select name="visibility_<?php echo $wyn['p_id']; ?>">
+                        <select class="back select visibility" name="visibility_<?php echo $wyn['p_id']; ?>">
                             <option <?php if( $wyn['visibility'] == "1" ){ ?>
                                     selected="selected"
                                 <?php } ?> value="1">On</option>
@@ -425,6 +400,7 @@ html.busy, html.busy * {
                                     selected="selected"
                                 <?php } ?> value="0">Off</option>
                         </select> 
+                        <button class="back button visibility">Copy</button>
                     </td>
                     <td>
                         <button class="save_button" id="b_save_<?php echo $wyn['p_id']; ?>">Zapisz</button>
@@ -437,5 +413,6 @@ html.busy, html.busy * {
             <?php } ?>
         </table>
     <?php } ?>	
+    <?php include 'back_pagination.php'; ?>
 </div>
-<?php include 'back_pagination.php'; ?>
+

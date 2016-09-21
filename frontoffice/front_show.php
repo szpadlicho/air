@@ -51,16 +51,20 @@ $obj_ShowImages->__setTable('photos');
         <li><a class="front category menu" href="?front&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
     <?php } ?>
 </ul>
-<?php include 'front_pagination.php'; ?>
-<div class="center" style="text-align:center;">
+
+<div class="center" style="">
+    <?php include 'front_pagination.php'; ?>
+    <br />
     <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>
         <div class="div_front" style="position: relative; display: inline-block;">
             <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime']);?>
             <p class="p_front_info" style="position: absolute; bottom: -1em; right: 0; color: white; background: black;">cat: <?php echo $wyn['category']; ?> aut:<?php echo $wyn['author']; ?></p>
         </div>
     <?php } ?>   
+    <br />
+    <?php include 'front_pagination.php'; ?>
 </div>
-<?php include 'front_pagination.php'; ?>
+
     
     
     

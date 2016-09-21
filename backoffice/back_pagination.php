@@ -1,7 +1,12 @@
 <?php
+include_once 'back_class.php';
+$obj_show_cat = new ShowImages;
 $obj_show_cat->__setTable('photos');
-$all = $obj_show_cat->countRow();
-
+if ( isset($search_i) ) {
+    $all = $search_i;
+} else {
+    $all = $obj_show_cat->countRow();
+}
 //var_dump($all);
 //echo $ile;
 //var_dump($_COOKIE);
@@ -32,8 +37,8 @@ isset($_COOKIE['start']) ? '' : $_COOKIE['start'] = 0;
             location.reload();
         });
         $('.front.category.menu').click(function(e) {
-            //$.removeCookie('start');
-            //$.removeCookie('limit');
+            $.removeCookie('start');
+            $.removeCookie('limit');
             //location.reload();
         });
     });
