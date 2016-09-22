@@ -85,7 +85,7 @@ class ShowImages
             // return 'Brak';
         // }
     // }    
-    public function showImg($id, $mime)
+    public function showImg($id, $mime, $tag)
     {                                        
         $dir0 = 'data/';
         $dir1 = 'data/mini/';                                       
@@ -95,8 +95,8 @@ class ShowImages
             //echo 'ok';
             //return '<img class="back-all list mini-image" style="height:200px;" src="'.$dir1.$id.'.'.$mime.'" alt="image" />';
             ?>
-            <a class="fancybox-button" rel="fancybox-button" href="<?php echo $dir0.$id.'.'.$mime ?>" title="trzeba by zapodac z bazy danych">
-                <img src="<?php echo $dir1.$id.'.'.$mime ?>" alt="image" />
+            <a class="fancybox-button" rel="fancybox-button" style="" href="<?php echo $dir0.$id.'.'.$mime; ?>" title="<?php echo $tag; ?>">
+                <img style="vertical-align: middle; padding:0; margin:0px -3px;" align="" src="<?php echo $dir1.$id.'.'.$mime; ?>" alt="image" />
             </a>
             <?php
         } else {

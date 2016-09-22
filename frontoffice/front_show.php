@@ -19,7 +19,7 @@ $obj_ShowImages->__setTable('photos');
                 <?php } else { ?>
                     data: {string : string},
                 <?php } ?>
-                cache: false,
+                //cache: false,
                 dataType: 'text',
                 success: function(data){
                     $('.center').html(data);
@@ -28,6 +28,33 @@ $obj_ShowImages->__setTable('photos');
         });
     });
 </script>
+<script>
+    $(document).ajaxStart(function () {
+        $('html').addClass('busy');
+        $('.loader').show();
+    }).ajaxComplete(function () {
+        $('html').removeClass('busy');
+        $('.loader').hide();
+    });
+</script>
+<style>
+html.busy, html.busy * {  
+    cursor: wait !important;
+    /*cursor: progress !important;*/
+} 
+.loader
+{
+    display:none;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('img/tr/loading.gif') 50% 50% no-repeat;
+    /*background: url('img/tr/loading.gif') 50% 50% no-repeat rgb(249,249,249);*/
+}
+</style>
 <style>
 .p_front_info
 {
@@ -38,6 +65,7 @@ $obj_ShowImages->__setTable('photos');
     opacity: 1;    
 }
 </style>
+<div class="loader"></div>
 <div id="search-div">Szukaj: <input id="search" type="text" placeholder="szukaj" /></div>
 <ul>
     <li><a class="front category menu" href="?front" >Wszystkie</a></li>
@@ -53,16 +81,17 @@ $obj_ShowImages->__setTable('photos');
     <?php } ?>
 </ul>
 
-<div class="center" style="">
+<div class="center" style="text-align:center;">
     <?php include 'front_pagination.php'; ?>
     <br />
     <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>
         <div class="div_front" style="position: relative; display: inline-block;">
-            <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime']);?>
-            <p class="p_front_info" style="position: absolute; bottom: -1em; right: 0; color: white; background: black;">cat: <?php echo $wyn['category']; ?> aut:<?php echo $wyn['author']; ?></p>
+            <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
+            <p class="p_front_info" style="position: absolute; bottom: -1em; right: 0em; color: white; background: black;">cat: <?php echo $wyn['category']; ?> aut:<?php echo $wyn['author']; ?></p>
         </div>
     <?php } ?>   
     <br />
+    <!--<br style="clear:both;" />-->
     <?php include 'front_pagination.php'; ?>
 </div>
 <?php //echo phpinfo(INFO_GENERAL); ?>

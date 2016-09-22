@@ -15,7 +15,7 @@ while ($wyn2 = $success2->fetch()) {
 <br />
 <?php while ($wyn = $success->fetch()) { ?>
         <div class="div_front" style="position: relative; display: inline-block;">
-            <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime']);?>
+            <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
             <p class="p_front_info" style="position: absolute; bottom: -1em; right: 0; color: white; background: black;">cat: <?php echo $wyn['category']; ?> aut:<?php echo $wyn['author']; ?></p>
         </div>
 <?php } ?>

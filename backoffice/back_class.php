@@ -72,12 +72,18 @@ class ShowImages
     }
     public function showImg($id, $mime)
     {                                        
+        $dir0 = 'data/';
         $dir1 = 'data/mini/';                                       
-        $dir2 = '../data/';                                       
+        $dir2 = '../data/';                                    
         if (@opendir($dir1) || @opendir($dir2)) {//sprawdzam czy sciezka istnieje
             //$dir = 'data/mini/';
             //echo 'ok';
-            return '<img class="back-all list mini-image" style="height:100px;" src="'.$dir1.$id.'.'.$mime.'" alt="image" />';
+            //return '<img class="back-all list mini-image" style="height:100px;" src="'.$dir1.$id.'.'.$mime.'" alt="image" />';
+            ?>
+            <a class="fancybox-button" rel="fancybox-button" style="" href="<?php echo $dir0.$id.'.'.$mime; ?>" title="<?php echo $tag; ?>">
+                <img style="vertical-align: middle; padding:0; margin:0px -3px;" align="" src="<?php echo $dir1.$id.'.'.$mime; ?>" alt="image" />
+            </a>
+            <?php
         } else {
             return 'Brak';
         }

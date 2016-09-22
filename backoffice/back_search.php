@@ -92,7 +92,7 @@ while ($wyn2 = $success2->fetch()) {
                         <?php echo $wyn['p_id']; ?>
                     </td>
                     <td>                                          
-                        <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime']);?>
+                        <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
                     </td>
                     <!--
                     <td>

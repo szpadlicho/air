@@ -31,7 +31,10 @@ session_start();
     <link rel="stylesheet" href="js/fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
     <script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
     <script type="text/javascript">
-        $(document).ready(function() {
+        /**fancy box**/
+        /**http://osdir.com/ml/fancybox/2011-09/msg00319.html**/
+        $(document).delegate(".fancybox-button", "mouseenter", function(e){
+            e.preventDefault();
             $(".fancybox-button").fancybox({
                 prevEffect		: 'none',
                 nextEffect		: 'none',
@@ -42,6 +45,7 @@ session_start();
                 }
             });
         });
+        /**fancy box**/
     </script>
     <!--fancybox-->
     
