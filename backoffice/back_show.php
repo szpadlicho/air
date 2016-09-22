@@ -82,9 +82,9 @@ $obj_ShowImages->__setTable('photos');
                 type: 'POST',
                 url: 'backoffice/back_search.php',
                 <?php if ( isset($_GET['cat_id']) ) { ?>
-                    data: {string : string, cat_id : cat_id },
+                    data: {string : string, cat_id : cat_id, back : 'back' },
                 <?php } else { ?>
-                    data: {string : string},
+                    data: {string : string, back : 'back' },
                 <?php } ?>
                 cache: false,
                 dataType: 'text',
@@ -208,7 +208,8 @@ html.busy, html.busy * {
     $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
     ?>
     <?php foreach ($ret as $cat_menu){ ?>
-        <li><a class="back category menu" href="?back&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
+    <?php //var_dump($cat_menu); ?>
+        <li><a class="back category menu" href="?back&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?> <?php echo (@$cat_menu['c_visibility'] == 0) ? 'Off' : ''; ?></a></li>
     <?php } ?>
 </ul>
 <div class="center">
@@ -289,6 +290,7 @@ html.busy, html.busy * {
                     });
                 });
                 </script>
+                <?php //var_dump($wyn); ?>
                 <tr name="rows_<?php echo $wyn['p_id']; ?>">
                     <td>
                         <?php echo $wyn['p_id']; ?>
@@ -393,11 +395,12 @@ html.busy, html.busy * {
                     </td>
                     -->
                     <td>
+                        <?php// echo $wyn['p_visibility']; ?>
                         <select class="back select visibility" name="visibility_<?php echo $wyn['p_id']; ?>">
-                            <option <?php if( $wyn['visibility'] == "1" ){ ?>
+                            <option <?php if( $wyn['p_visibility'] == "1" ){ ?>
                                     selected="selected"
                                 <?php } ?> value="1">On</option>
-                            <option <?php if( $wyn['visibility'] == "0" ){ ?>
+                            <option <?php if( $wyn['p_visibility'] == "0" ){ ?>
                                     selected="selected"
                                 <?php } ?> value="0">Off</option>
                         </select> 

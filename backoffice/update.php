@@ -48,7 +48,7 @@ class UpdateImages
             `author` = '".$author."',
             `protect` = '".$protect."',
             `password` = '".$password."',      
-            `visibility` = '".$visibility."'
+            `".$this->prefix."visibility` = '".$visibility."'
             WHERE 
             `".$this->prefix."id`='".$id."'
             ");	

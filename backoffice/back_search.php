@@ -3,6 +3,7 @@
 include_once '../method/ShowImagesClass.php';
 $obj_ShowImages->__setTable('photos');
 @$_GET['cat_id'] = $_POST['cat_id'];
+$_POST['back'] ? $_GET['back'] = $_POST['back'] : null ;
 $success = $obj_ShowImages->__getImagesTag($_POST['string']);
 ?>
 <?php /*include 'back_pagination.php';*/ $obj_ShowImages->showPagination($obj_ShowImages->count_i($_POST['string'])); ?>
@@ -64,7 +65,7 @@ $success = $obj_ShowImages->__getImagesTag($_POST['string']);
                 </th>
             </tr>
 
-            <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>
+            <?php while ($wyn = $success->fetch()) { ?>
                 <script>
                 $( document ).ready(function() {
                     var idd = '<?php echo $wyn['p_id']; ?>';
@@ -186,10 +187,10 @@ $success = $obj_ShowImages->__getImagesTag($_POST['string']);
                     -->
                     <td>
                         <select class="back select visibility" name="visibility_<?php echo $wyn['p_id']; ?>">
-                            <option <?php if( $wyn['visibility'] == "1" ){ ?>
+                            <option <?php if( $wyn['p_visibility'] == "1" ){ ?>
                                     selected="selected"
                                 <?php } ?> value="1">On</option>
-                            <option <?php if( $wyn['visibility'] == "0" ){ ?>
+                            <option <?php if( $wyn['p_visibility'] == "0" ){ ?>
                                     selected="selected"
                                 <?php } ?> value="0">Off</option>
                         </select> 

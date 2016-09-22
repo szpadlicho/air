@@ -60,7 +60,7 @@ class UploadFile
         `author`,
         `protect`,
         `password`,      
-        `visibility`
+        `".$this->prefix."visibility`
         ) VALUES (
         '".$file_name."',
         '".$file_type."',

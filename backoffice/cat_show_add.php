@@ -4,6 +4,9 @@ class AddShowCategory
     /*
     * caly plik mozna dodac do upload
     * ten od upladu plikow
+    * bedzie problem z odswiezaniem wyboru kategorii przy 
+    * uploudzie pliku po usunieciu ktorejs
+    * chyba ze categorie i upload caly na php sie zrobi
     */
 	private $host='sql.bdl.pl';
 	private $port='';
@@ -13,12 +16,14 @@ class AddShowCategory
 	private $user='szpadlic_baza';
 	private $pass='haslo';
 	private $table;
+	private $prefix;
 	//private $table_sh='SCHEMATA';
 	private $admin;
 	private $autor;
 	public function __setTable($tab_name)
     {
-		$this->table=$tab_name;
+		$this->table = $tab_name;
+		$this->prefix = $tab_name[0].'_';
 	}
 	public function connectDb()
     {
@@ -44,7 +49,7 @@ class AddShowCategory
         `category`,
         `protect`,
         `password`,      
-        `visibility`
+        `".$this->prefix."visibility`
         ) VALUES (
         '".$category."',
         0,
@@ -201,10 +206,10 @@ $obj_show = new AddShowCategory;
                         -->
                         <td>
                             <select name="visibility_<?php echo $cat['c_id']; ?>">
-                                <option <?php if( $cat['visibility'] == "1" ){ ?>
+                                <option <?php if( $cat['c_visibility'] == "1" ){ ?>
                                         selected="selected"
                                     <?php } ?> value="1">On</option>
-                                <option <?php if( $cat['visibility'] == "0" ){ ?>
+                                <option <?php if( $cat['c_visibility'] == "0" ){ ?>
                                         selected="selected"
                                     <?php } ?> value="0">Off</option>
                             </select> 

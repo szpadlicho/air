@@ -74,7 +74,7 @@ if ( isset($_GET['uplad']) ){
     include 'backoffice/upload.php';
 }
 if ( isset($_GET['category']) ){
-    include 'backoffice/cat_add.php';
+    include 'backoffice/cat_show_add.php';
     //include 'backoffice/cat_show.php';
 }
 if ( isset($_GET['front']) && !isset($_GET['cat_id']) ){

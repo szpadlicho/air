@@ -182,7 +182,7 @@ if (isset($_POST['crt'])) {
         'author'                    =>'VARCHAR(20)', 
         'protect'                   =>'VARCHAR(20)', 
         'password'                  =>'VARCHAR(20)', 
-        'visibility'                =>'INTEGER(1) UNSIGNED'
+        'p_visibility'              =>'INTEGER(1) UNSIGNED'
         );
     $arr_val = array();
     $return['photos'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
@@ -191,14 +191,14 @@ if (isset($_POST['crt'])) {
         'category'                  =>'TEXT',
         'protect'                   =>'VARCHAR(20)', 
         'password'                  =>'VARCHAR(20)', 
-        'visibility'                =>'INTEGER(1) UNSIGNED'
+        'c_visibility'              =>'INTEGER(1) UNSIGNED'
         );
     //$arr_val = array();
     $arr_val = array(
         'category'                  =>'Air Show Warszawa',
         'protect'                   =>'0', 
         'password'                  =>'', 
-        'visibility'                =>'1'    
+        'c_visibility'              =>'1'    
         );
     $return['category'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
     $obj_install->__setTable('category');
@@ -206,14 +206,14 @@ if (isset($_POST['crt'])) {
         'category'                  =>'Air Show Radom',
         'protect'                   =>'0', 
         'password'                  =>'', 
-        'visibility'                =>'1'    
+        'c_visibility'              =>'1'    
         );
     $return['category'] = $obj_install->addRec($arr_val);
     $arr_val = array(
         'category'                  =>'Air Shop',
         'protect'                   =>'0', 
         'password'                  =>'', 
-        'visibility'                =>'1'    
+        'c_visibility'              =>'1'    
         );
     $return['category'] = $obj_install->addRec($arr_val);
     var_dump($return);

@@ -16,9 +16,9 @@ $obj_ShowImages->__setTable('photos');
                 type: 'POST',
                 url: 'frontoffice/front_search.php',
                 <?php if ( isset($_GET['cat_id']) ) { ?>
-                    data: {string : string, cat_id : cat_id },
+                    data: {string : string, cat_id : cat_id, where : 'front'},
                 <?php } else { ?>
-                    data: {string : string},
+                    data: {string : string, where : 'front'},
                 <?php } ?>
                 //cache: false,
                 dataType: 'text',
