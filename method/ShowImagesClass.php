@@ -130,8 +130,19 @@ class ShowImages
 		// unset ($con);
 		// return $q;
 	// }
+    public function count_i($string)
+    {   
+        $success = $this->__getImagesTag($string);
+        $search_i = 0;
+        while ($wyn = $success->fetch()) {
+            $search_i++;
+        }
+        return $search_i;
+    }
+    //public function showPagination($string)
     public function showPagination($search_i)
     {
+        //$search_i = $this->count_i($string);
         //$obj_show_cat = new ShowImages;
         $this->__setTable('photos');
         if ( isset($search_i) ) {

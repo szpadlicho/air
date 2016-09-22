@@ -4,15 +4,8 @@ include_once '../method/ShowImagesClass.php';
 $obj_ShowImages->__setTable('photos');
 @$_GET['cat_id'] = $_POST['cat_id'];
 $success = $obj_ShowImages->__getImagesTag($_POST['string']);
-
-$success2 = $obj_ShowImages->__getImagesTag($_POST['string']);
-$search_i = 0;
-while ($wyn2 = $success2->fetch()) {
-    $search_i++;
-}
-//echo $search_i;
 ?>
-    <?php /*include 'front_pagination.php';*/ $obj_ShowImages->showPagination(@$search_i); ?>
+    <?php /*include 'front_pagination.php';*/ $obj_ShowImages->showPagination($obj_ShowImages->count_i($_POST['string'])); ?>
 <br />
 <?php while ($wyn = $success->fetch()) { ?>
         <div class="div_front" style="position: relative; display: inline-block;">
