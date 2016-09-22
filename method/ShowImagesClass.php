@@ -43,7 +43,7 @@ class ShowImages
     {
 		$con=$this->connectDB();
         $start = isset( $_COOKIE['start'] ) ? (int)$_COOKIE['start'] : (int)'0';//numer id od ktorego ma zaczac
-        $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'100';//ilość elementów na stronie
+        $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'10';//ilość elementów na stronie
         $order = 'DESC';
         if ( isset($_GET['back']) ) {//co ma pokazac jesli jestes na zapleczu (czyli razem z ukrytymi)
             if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana

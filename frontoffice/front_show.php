@@ -99,6 +99,7 @@ html.busy, html.busy * {
 </div>
 <?php //echo phpinfo(INFO_GENERAL); ?>
 <?php //echo phpinfo(); ?>
+<?php //var_dump($_COOKIE); ?>
     
     
     
