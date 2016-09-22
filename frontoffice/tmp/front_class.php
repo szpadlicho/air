@@ -46,9 +46,9 @@ class ShowImages
         $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'100';//ilość elementów na stronie
         $order = 'DESC';
         if ( isset($_GET['cat_id']) ) {
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` DESC LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
         } else {
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` ORDER BY photos.`p_id` DESC LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
         }
 		unset ($con);
 		return $q;
@@ -58,7 +58,7 @@ class ShowImages
         $con = $this->connectDB();
         $order = 'DESC';
         $start = isset( $_COOKIE['start'] ) ? (int)$_COOKIE['start'] : (int)'0';//numer id od ktorego ma zaczac
-        $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'100';//ilość elementów na stronie
+        $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'10';//ilość elementów na stronie
         $string = explode(' ', $string);
         if ($string[0] != ''){// warunek zeby pokazal wszysktko jesli pole search puste 
             $string = array_filter(array_map('trim',$string),'strlen'); //wykluczam spacje z szukania
@@ -70,21 +70,8 @@ class ShowImages
                 $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
             }
         }
-        
         return @$ress;
-    }
-    // public function showImg($id, $mime)
-    // {                                        
-        // $dir1 = 'data/mini/';                                       
-        // $dir2 = '../data/';                                       
-        // if (@opendir($dir1) || @opendir($dir2)) {//sprawdzam czy sciezka istnieje
-            // //$dir = 'data/mini/';
-            // //echo 'ok';
-            // return '<img class="back-all list mini-image" style="height:200px;" src="'.$dir1.$id.'.'.$mime.'" alt="image" />';
-        // } else {
-            // return 'Brak';
-        // }
-    // }    
+    }   
     public function showImg($id, $mime, $tag)
     {                                        
         $dir0 = 'data/';
@@ -131,3 +118,19 @@ class ShowImages
 }
 $obj_ShowImages = new ShowImages;
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

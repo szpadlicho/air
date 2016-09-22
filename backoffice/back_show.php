@@ -1,5 +1,6 @@
 <?php
-include_once 'back_class.php';
+//include_once 'back_class.php';
+include_once 'method/ShowImagesClass.php';
 $obj_ShowImages->__setTable('photos');
 ?>
 <script>
@@ -211,7 +212,7 @@ html.busy, html.busy * {
     <?php } ?>
 </ul>
 <div class="center">
-    <?php include 'back_pagination.php'; ?>
+    <?php /*include 'back_pagination.php';*/ $obj_ShowImages->showPagination(@$search_i); ?>
     <?php if ($obj_ShowImages->showAll()) { //to metoda pokazuje bez wyszukiwania jest inna niz w plike search?>
         <table id="table-list" class="back-all list table" border="2">
             <tr>
@@ -413,6 +414,6 @@ html.busy, html.busy * {
             <?php } ?>
         </table>
     <?php } ?>	
-    <?php include 'back_pagination.php'; ?>
+    <?php /*include 'back_pagination.php';*/ $obj_ShowImages->showPagination(@$search_i); ?>
 </div>
 

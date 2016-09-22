@@ -1,6 +1,7 @@
 <?php
 //http://stackoverflow.com/questions/14649645/resize-image-in-php
-include_once 'front_class.php';
+//include_once 'front_class.php';
+include_once 'method/ShowImagesClass.php';
 $obj_ShowImages->__setTable('photos');
 ?>
 <script type="text/javascript">
@@ -82,7 +83,7 @@ html.busy, html.busy * {
 </ul>
 
 <div class="center" style="text-align:center;">
-    <?php include 'front_pagination.php'; ?>
+    <?php /*include 'front_pagination.php';*/ $obj_ShowImages->showPagination(@$search_i); ?>
     <br />
     <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>
         <div class="div_front" style="position: relative; display: inline-block;">
@@ -92,7 +93,7 @@ html.busy, html.busy * {
     <?php } ?>   
     <br />
     <!--<br style="clear:both;" />-->
-    <?php include 'front_pagination.php'; ?>
+    <?php /*include 'front_pagination.php';*/ $obj_ShowImages->showPagination(@$search_i); ?>
 </div>
 <?php //echo phpinfo(INFO_GENERAL); ?>
 <?php //echo phpinfo(); ?>

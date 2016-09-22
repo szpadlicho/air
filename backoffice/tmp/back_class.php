@@ -18,6 +18,12 @@ class ShowImages
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
 	}
+	public function connect()
+    {
+		$con=new PDO("mysql:host=".$this->host."; port=".$this->port."; charset=".$this->charset,$this->user,$this->pass);
+		return $con;
+		unset ($con);
+	}
     public function checkDb()
     {
 		$con=$this->connect();
@@ -25,28 +31,24 @@ class ShowImages
 		$res = $ret->fetch(PDO::FETCH_ASSOC);
 		return $res ?  true : false;
 	}
-	public function connect()
+	public function connectDb()
     {
-		$con=new PDO("mysql:host=".$this->host."; port=".$this->port."; charset=".$this->charset,$this->user,$this->pass);
-		return $con;
-		unset ($con);
-	}
-	public function connectDB()
-    {
-		$con=new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
-		return $con;
-		unset ($con);
+        if ($this->checkDb()=== true) {
+            $con = new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
+            return $con;
+            unset ($con);
+        }
 	}
     public function showAll()
     {
 		$con=$this->connectDB();
-        $order = 'DESC';
         $start = isset( $_COOKIE['start'] ) ? (int)$_COOKIE['start'] : (int)'0';//numer id od ktorego ma zaczac
         $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'100';//ilość elementów na stronie
+        $order = 'DESC';
         if ( isset($_GET['cat_id']) ) {
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` DESC LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
         } else {
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` ORDER BY photos.`p_id` DESC LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
         }
 		unset ($con);
 		return $q;
@@ -56,7 +58,7 @@ class ShowImages
         $con = $this->connectDB();
         $order = 'DESC';
         $start = isset( $_COOKIE['start'] ) ? (int)$_COOKIE['start'] : (int)'0';//numer id od ktorego ma zaczac
-        $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'100';//ilość elementów na stronie
+        $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'10';//ilość elementów na stronie
         $string = explode(' ', $string);
         if ($string[0] != ''){// warunek zeby pokazal wszysktko jesli pole search puste 
             $string = array_filter(array_map('trim',$string),'strlen'); //wykluczam spacje z szukania
@@ -70,7 +72,7 @@ class ShowImages
         }
         return @$ress;
     }
-    public function showImg($id, $mime)
+    public function showImg($id, $mime, $tag)
     {                                        
         $dir0 = 'data/';
         $dir1 = 'data/mini/';                                       
@@ -95,30 +97,6 @@ class ShowImages
 		unset ($con);
 		return $q;
 	}
-    public function showByCategory()
-    {
-		$con=$this->connectDB();
-        $order = 'DESC';
-		@$q = $con->query("SELECT * FROM `".$this->table."` WHERE `category` = ".$_GET['cat_id']." ORDER BY `".$this->prefix."id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
-		unset ($con);
-		return $q;
-	}
-    public function showCategoryAll()
-    {
-		$con=$this->connectDB();
-		$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
-		unset ($con);
-		return $q;
-	}
-    // public function countRow()// do category menu
-    // {
-		// $con=$this->connectDB();
-		// $q = $con->query("SELECT COUNT(*) FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
-        // $q = $q->fetch(PDO::FETCH_ASSOC);
-        // $q = $q['COUNT(*)'];
-		// unset ($con);
-		// return $q;
-	// }
     public function countRow()// do category menu
     {
         if ( isset($_GET['cat_id']) ) {
@@ -137,5 +115,21 @@ class ShowImages
         unset ($con);
 		return $q;
 	}
+    public function showCategoryAll()//metoda dla mozliwosci wybrania odpowiedniej kategorii back_search.php, back_show.php, back_category_show.php, upload.php
+    {
+		$con=$this->connectDB();
+		$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+		unset ($con);
+		return $q;
+	}
+    // public function showByCategory()
+    // {
+		// $con=$this->connectDB();
+        // $order = 'DESC';
+		// @$q = $con->query("SELECT * FROM `".$this->table."` WHERE `category` = ".$_GET['cat_id']." ORDER BY `".$this->prefix."id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+		// return $q;
+	// }
 }
 $obj_ShowImages = new ShowImages();
+?>

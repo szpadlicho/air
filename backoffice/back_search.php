@@ -1,5 +1,6 @@
 <?php
-include_once 'back_class.php';
+//include_once 'back_class.php';
+include_once '../method/ShowImagesClass.php';
 $obj_ShowImages->__setTable('photos');
 @$_GET['cat_id'] = $_POST['cat_id'];
 $success = $obj_ShowImages->__getImagesTag($_POST['string']);
@@ -11,7 +12,7 @@ while ($wyn2 = $success2->fetch()) {
 }
 //echo $search_i;
 ?>
-<?php include 'back_pagination.php'; ?>
+<?php /*include 'back_pagination.php';*/ $obj_ShowImages->showPagination(@$search_i); ?>
 <table id="table-list" class="back-all list table" border="2">
             <tr>
                 <th>
@@ -211,4 +212,4 @@ while ($wyn2 = $success2->fetch()) {
                 </tr>
             <?php } ?>
         </table>
-<?php include 'back_pagination.php'; ?>
+<?php /*include 'back_pagination.php';*/ $obj_ShowImages->showPagination(@$search_i); ?>

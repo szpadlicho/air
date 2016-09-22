@@ -1,5 +1,4 @@
 <?php
-include_once 'back_class.php';
 $obj_show_cat = new ShowImages;
 $obj_show_cat->__setTable('photos');
 if ( isset($search_i) ) {
@@ -44,21 +43,23 @@ isset($_COOKIE['start']) ? '' : $_COOKIE['start'] = 0;
     });
 </script>
 <button name="delet_cookie">Delete</button>
-Zdjęć na strone: 
-<select id="pagination_limit">
-    <?php if ( ($all/5) >= 1 ) { ?>
-        <option <?php echo ( $_COOKIE['limit'] == ceil($all/5) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/5); ?></option>
+<?php if ( $all != 0 ) { ?>
+    Zdjęć na strone: 
+    <select id="pagination_limit">
+        <?php if ( ($all/5) >= 1 ) { ?>
+            <option <?php echo ( $_COOKIE['limit'] == ceil($all/5) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/5); ?></option>
+        <?php } ?>
+        <?php if ( ($all/3) >= 1 ) { ?>
+            <option <?php echo ( $_COOKIE['limit'] == ceil($all/3) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/3); ?></option>
+        <?php } ?>
+        <?php if ( ($all/2) >= 1 ) { ?>
+            <option <?php echo ( $_COOKIE['limit'] == ceil($all/2) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/2); ?></option>
+        <?php } ?>
+        <?php if ( ($all) >= 1 ) { ?>
+            <option <?php echo ( $_COOKIE['limit'] == ceil($all) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all); ?></option>
+        <?php } ?>
+    </select>
+    Paginacja: <?php for($i = 1; $i <= ceil($all/@$_COOKIE['limit']); $i++) { ?>
+                <button class="pagination_start" value="<?php echo $i; ?>"><?php echo $i; ?></button>
     <?php } ?>
-    <?php if ( ($all/3) >= 1 ) { ?>
-        <option <?php echo ( $_COOKIE['limit'] == ceil($all/3) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/3); ?></option>
-    <?php } ?>
-    <?php if ( ($all/2) >= 1 ) { ?>
-        <option <?php echo ( $_COOKIE['limit'] == ceil($all/2) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all/2); ?></option>
-    <?php } ?>
-    <?php if ( ($all) >= 1 ) { ?>
-        <option <?php echo ( $_COOKIE['limit'] == ceil($all) ) ? 'selected = "selected"' : '' ; ?>><?php echo ceil($all); ?></option>
-    <?php } ?>
-</select>
-Paginacja: <?php for($i = 1; $i <= ceil($all/@$_COOKIE['limit']); $i++) { ?>
-            <button class="pagination_start" value="<?php echo $i; ?>"><?php echo $i; ?></button>
 <?php } ?>

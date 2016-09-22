@@ -64,8 +64,10 @@ session_start();
     <br />
 <?php
 if ( isset($_GET['back']) && !isset($_GET['cat_id']) ){
+    //include_once 'method/ShowImagesClass.php';
     include 'backoffice/back_show.php';
 } else if ( isset($_GET['back']) && isset($_GET['cat_id']) ) {
+    //include_once 'method/ShowImagesClass.php';
     include 'backoffice/back_show.php';
 }
 if ( isset($_GET['uplad']) ){
@@ -76,8 +78,10 @@ if ( isset($_GET['category']) ){
     include 'backoffice/back_category_show.php';
 }
 if ( isset($_GET['front']) && !isset($_GET['cat_id']) ){
+    //include_once 'method/ShowImagesClass.php';
     include 'frontoffice/front_show.php';
 } else if ( isset($_GET['front']) && isset($_GET['cat_id']) ) {
+    //include_once 'method/ShowImagesClass.php';
     include 'frontoffice/front_show.php';
 }
 if ( isset($_GET['resize']) ){
@@ -87,6 +91,7 @@ if ( isset($_GET['install']) ){
     include 'backoffice/install.php';
 }
 if ( empty($_GET) ) {
+    //include_once 'method/ShowImagesClass.php';
     include 'frontoffice/front_show.php';
 }
 ?>

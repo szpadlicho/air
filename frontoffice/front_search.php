@@ -1,5 +1,6 @@
 <?php
-include_once 'front_class.php';
+//include_once 'front_class.php';
+include_once '../method/ShowImagesClass.php';
 $obj_ShowImages->__setTable('photos');
 @$_GET['cat_id'] = $_POST['cat_id'];
 $success = $obj_ShowImages->__getImagesTag($_POST['string']);
@@ -11,7 +12,7 @@ while ($wyn2 = $success2->fetch()) {
 }
 //echo $search_i;
 ?>
-<?php include 'front_pagination.php'; ?>
+    <?php /*include 'front_pagination.php';*/ $obj_ShowImages->showPagination(@$search_i); ?>
 <br />
 <?php while ($wyn = $success->fetch()) { ?>
         <div class="div_front" style="position: relative; display: inline-block;">
@@ -20,4 +21,4 @@ while ($wyn2 = $success2->fetch()) {
         </div>
 <?php } ?>
 <br />
-<?php include 'front_pagination.php'; ?>
+    <?php /*include 'front_pagination.php';*/ $obj_ShowImages->showPagination(@$search_i); ?>
