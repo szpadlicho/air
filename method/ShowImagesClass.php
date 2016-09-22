@@ -187,7 +187,8 @@ class ShowImages
             });
         </script>
         <button name="delet_cookie">Delete</button>
-        <?php if ( $all != 0 ) { ?>
+        
+        <?php if ( ($all != 0) && ($_COOKIE['limit'] != 0) ) { ?>
             Zdjęć na strone: 
             <select id="pagination_limit">
                 <?php if ( ($all/5) >= 1 ) { ?>

@@ -14,4 +14,4 @@ $success = $obj_ShowImages->__getImagesTag($_POST['string']);
         </div>
 <?php } ?>
 <br />
-    <?php /*include 'front_pagination.php';*/ $obj_ShowImages->showPagination(@$search_i); ?>
+    <?php /*include 'front_pagination.php';*/ $obj_ShowImages->showPagination($obj_ShowImages->count_i($_POST['string'])); ?>

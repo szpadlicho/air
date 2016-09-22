@@ -161,7 +161,6 @@ if(isset($_POST['up'])) {
     $obj_upload->__setTable('photos');
     $obj_upload->upLoad();
 }
-
 ?>
 <div class="center">
     Upload plików

@@ -58,7 +58,7 @@ session_start();
     <a href="?back">Back</a>
     <a href="?category">Category</a>
     <a href="?uplad">Upload</a>
-    <a href="?resize">Resize</a>
+    <!--<a href="?resize">Resize</a>-->
     <a href="?install">Install</a>
     <a href="?">Clear</a>
     <br />
@@ -74,8 +74,8 @@ if ( isset($_GET['uplad']) ){
     include 'backoffice/upload.php';
 }
 if ( isset($_GET['category']) ){
-    include 'backoffice/back_category_add.php';
-    include 'backoffice/back_category_show.php';
+    include 'backoffice/cat_add.php';
+    //include 'backoffice/cat_show.php';
 }
 if ( isset($_GET['front']) && !isset($_GET['cat_id']) ){
     //include_once 'method/ShowImagesClass.php';
@@ -84,9 +84,9 @@ if ( isset($_GET['front']) && !isset($_GET['cat_id']) ){
     //include_once 'method/ShowImagesClass.php';
     include 'frontoffice/front_show.php';
 }
-if ( isset($_GET['resize']) ){
-    include 'backoffice/resize.php';
-}
+// if ( isset($_GET['resize']) ){
+    // include 'backoffice/resize.php';
+// }
 if ( isset($_GET['install']) ){
     include 'backoffice/install.php';
 }
