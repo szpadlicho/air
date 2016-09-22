@@ -101,7 +101,7 @@ class ShowImages
             //return '<img class="back-all list mini-image" style="height:100px;" src="'.$dir1.$id.'.'.$mime.'" alt="image" />';
             ?>
             <a class="fancybox-button" rel="fancybox-button" style="" href="<?php echo $dir0.$id.'.'.$mime; ?>" title="<?php echo $tag; ?>">
-                <img style="vertical-align: middle; padding:0; margin:0px -3px;" align="" src="<?php echo $dir1.$id.'.'.$mime; ?>" alt="image" />
+                <img style="vertical-align: middle; " align="" src="<?php echo $dir1.$id.'.'.$mime; ?>" alt="image" />
             </a>
             <?php
         } else {
@@ -208,7 +208,7 @@ class ShowImages
                 });
             });
         </script>
-        <button name="delet_cookie">Delete</button>
+        <!--<button name="delet_cookie">Delete</button>-->
         
         <?php if ( ($all != 0) && ($_COOKIE['limit'] != 0) ) { ?>
             Zdjęć na strone: 

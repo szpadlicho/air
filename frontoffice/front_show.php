@@ -9,23 +9,25 @@ $obj_ShowImages->__setTable('photos');
         $(document).on('keyup', '#search, #search2', function() {
             //console.log( $( this ).val() );
             var string = $( this ).val();
-            <?php if ( isset($_GET['cat_id']) ) { ?>
-                var cat_id = '<?php echo $_GET['cat_id']; ?>';
-            <?php } ?>
-            $.ajax({
-                type: 'POST',
-                url: 'frontoffice/front_search.php',
+            if (string.length >= 3) { 
                 <?php if ( isset($_GET['cat_id']) ) { ?>
-                    data: {string : string, cat_id : cat_id, where : 'front'},
-                <?php } else { ?>
-                    data: {string : string, where : 'front'},
+                    var cat_id = '<?php echo $_GET['cat_id']; ?>';
                 <?php } ?>
-                //cache: false,
-                dataType: 'text',
-                success: function(data){
-                    $('.center').html(data);
-                }
-            });
+                $.ajax({
+                    type: 'POST',
+                    url: 'frontoffice/front_search.php',
+                    <?php if ( isset($_GET['cat_id']) ) { ?>
+                        data: {string : string, cat_id : cat_id, where : 'front'},
+                    <?php } else { ?>
+                        data: {string : string, where : 'front'},
+                    <?php } ?>
+                    //cache: false,
+                    dataType: 'text',
+                    success: function(data){
+                        $('.center').html(data);
+                    }
+                });
+            }
         });
     });
 </script>
@@ -82,11 +84,11 @@ html.busy, html.busy * {
     <?php } ?>
 </ul>
 
-<div class="center" style="text-align:center;">
+<div class="center" style="text-align:center; font-size: 0px;">
     <?php /*include 'front_pagination.php';*/ $obj_ShowImages->showPagination(@$search_i); ?>
     <br />
     <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>
-        <div class="div_front" style="position: relative; display: inline-block;">
+        <div class="div_front" style="position: relative; display: inline-block; font-size: 16px;">
             <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
             <p class="p_front_info" style="position: absolute; bottom: -1em; right: 0em; color: white; background: black;">cat: <?php echo $wyn['category']; ?> aut:<?php echo $wyn['author']; ?></p>
         </div>

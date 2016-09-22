@@ -75,23 +75,25 @@ $obj_ShowImages->__setTable('photos');
         $(document).on('keyup', '#search, #search2', function() {
             //console.log( $( this ).val() );
             var string = $( this ).val();
-            <?php if ( isset($_GET['cat_id']) ) { ?>
-                var cat_id = '<?php echo $_GET['cat_id']; ?>';
-            <?php } ?>
-            $.ajax({
-                type: 'POST',
-                url: 'backoffice/back_search.php',
+            if (string.length >= 3) { 
                 <?php if ( isset($_GET['cat_id']) ) { ?>
-                    data: {string : string, cat_id : cat_id, back : 'back' },
-                <?php } else { ?>
-                    data: {string : string, back : 'back' },
+                    var cat_id = '<?php echo $_GET['cat_id']; ?>';
                 <?php } ?>
-                cache: false,
-                dataType: 'text',
-                success: function(data){
-                    $('.center').html(data);
-                }
-            });
+                $.ajax({
+                    type: 'POST',
+                    url: 'backoffice/back_search.php',
+                    <?php if ( isset($_GET['cat_id']) ) { ?>
+                        data: {string : string, cat_id : cat_id, back : 'back' },
+                    <?php } else { ?>
+                        data: {string : string, back : 'back' },
+                    <?php } ?>
+                    cache: false,
+                    dataType: 'text',
+                    success: function(data){
+                        $('.center').html(data);
+                    }
+                });
+            }
         });
     });
 </script>

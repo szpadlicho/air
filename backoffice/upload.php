@@ -42,8 +42,8 @@ class UploadFile
         $show_place = $_POST['show_place'];
         $tag = $_POST['tag'];
         $author = $_POST['author'];
-        $protect = $_POST['protect'];
-        $password = $_POST['password'];
+        //$protect = $_POST['protect'];
+        //$password = $_POST['password'];
         $visibility = $_POST['visibility'];
         $none = NULL;
         $feedback = $con->exec("INSERT INTO `".$this->table."`(
@@ -73,8 +73,8 @@ class UploadFile
         '".$show_place."',
         '".$tag."',
         '".$author."',
-        '".$protect."',
-        '".$password."',
+        '0',
+        '',
         '".(int)$visibility."'
         )");
 		unset ($con);
@@ -186,12 +186,14 @@ if(isset($_POST['up'])) {
                 <th>
                     author
                 </th>
+                <!--
                 <th>
                     protect
                 </th>
                 <th>
                     password
                 </th>
+                -->
                 <th>
                     visibility
                 </th>
@@ -256,6 +258,7 @@ if(isset($_POST['up'])) {
                 <td>
                     <input name="author" type="text" value="deoc" />
                 </td>
+                <!--
                 <td>
                     <select name="protect">
                         <option value="1">On</option>
@@ -265,6 +268,7 @@ if(isset($_POST['up'])) {
                 <td>
                     <input name="password" type="text" value="haslo" />
                 </td>
+                -->
                 <td>
                     <select name="visibility">
                         <option selected="selected" value="1">On</option>

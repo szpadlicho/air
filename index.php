@@ -49,18 +49,28 @@ session_start();
     </script>
     <!--fancybox-->
     
+    
 	<style type="text/css"></style>
 	<style type="text/css"></style>
-	<script type="text/javascript"></script>
+	<script type="text/javascript">
+        $(document).ready(function(){
+            $('a.menu.top').click(function(e) {
+                $.removeCookie('start');
+                $.removeCookie('limit');
+                //alert('ff');
+                //location.reload();
+            });
+        });
+    </script>
 </head>
 <body>
-    <a href="?front">Front</a>
-    <a href="?back">Back</a>
-    <a href="?category">Category</a>
-    <a href="?uplad">Upload</a>
-    <!--<a href="?resize">Resize</a>-->
-    <a href="?install">Install</a>
-    <a href="?">Clear</a>
+    <a class="menu top" href="?front">Front</a>
+    <a class="menu top" href="?back">Back</a>
+    <a class="menu top" href="?category">Category</a>
+    <a class="menu top" href="?uplad">Upload</a>
+    <!--<a class="menu top" href="?resize">Resize</a>-->
+    <a class="menu top" href="?install">Install</a>
+    <a class="menu top" href="?">Clear</a>
     <br />
 <?php
 if ( isset($_GET['back']) && !isset($_GET['cat_id']) ){
