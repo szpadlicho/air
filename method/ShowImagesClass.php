@@ -105,7 +105,7 @@ class ShowImages
             </a>
             <?php
         } else {
-            return 'Brak';
+            return 'Upss..coś poszło nie tak';
         }
     }
     public function showCategory()// do category menu

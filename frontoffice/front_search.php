@@ -8,7 +8,7 @@ $success = $obj_ShowImages->__getImagesTag($_POST['string']);
     <?php /*include 'front_pagination.php';*/ $obj_ShowImages->showPagination($obj_ShowImages->count_i($_POST['string'])); ?>
 <br />
 <?php while ($wyn = $success->fetch()) { ?>
-        <div class="div_front" style="position: relative; display: inline-block;">
+        <div class="div_front" style="position: relative; display: inline-block; font-size: 16px;">
             <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
             <p class="p_front_info" style="position: absolute; bottom: -1em; right: 0; color: white; background: black;">cat: <?php echo $wyn['category']; ?> aut:<?php echo $wyn['author']; ?></p>
         </div>
