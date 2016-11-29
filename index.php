@@ -48,10 +48,20 @@ session_start();
         /**fancy box**/
     </script>
     <!--fancybox-->
-    
-    
-	<style type="text/css"></style>
-	<style type="text/css"></style>
+    <!--carousel-->
+      <link rel="stylesheet" href="../dist/styles/jquery.carousel-3d.default.css">
+      
+      <!--<script src="http://localhost:35729/livereload.js"></script>-->
+      <script src="../bower_components/jquery/jquery.js"></script>
+      <script src="../bower_components/javascript-detect-element-resize/jquery.resize.js"></script>
+      <script src="../bower_components/waitForImages/dist/jquery.waitforimages.js"></script>
+      <script src="../bower_components/modernizr/modernizr.js"></script>
+      <script src="../dist/jquery.carousel-3d.js"></script>
+    <!--carousel-->
+
+	<link rel="stylesheet" type="text/css" href="css/view.css.php" />
+    <link rel="stylesheet" type="text/css" href="css/view.css" />
+
 	<script type="text/javascript">
         $(document).ready(function(){
             $('a.menu.top').click(function(e) {
@@ -62,48 +72,70 @@ session_start();
             });
         });
     </script>
+    <script type="text/javascript">
+        // $(document).ready(function(){
+            // $("div.div_front").each(function () {
+                // var div = $(this);
+                // var children= div.children();
+                // children.detach();
+                // div.empty();
+                // div.append(children);
+            // });
+        // });
+    </script>
 </head>
 <body>
-    <a class="menu top" href="?front">Front</a>
-    <a class="menu top" href="?back">Back</a>
-    <a class="menu top" href="?category">Category</a>
-    <a class="menu top" href="?uplad">Upload</a>
-    <!--<a class="menu top" href="?resize">Resize</a>-->
-    <a class="menu top" href="?install">Install</a>
-    <a class="menu top" href="?">Clear</a>
-    <br />
+<?php include_once 'view/technics_menu.html'; ?>
 <?php
 if ( isset($_GET['back']) && !isset($_GET['cat_id']) ){
-    //include_once 'method/ShowImagesClass.php';
-    include 'backoffice/back_show.php';
+    include_once 'method/ShowImagesClass.php';
+    include 'backoffice/back_show.html.php';
 } else if ( isset($_GET['back']) && isset($_GET['cat_id']) ) {
-    //include_once 'method/ShowImagesClass.php';
-    include 'backoffice/back_show.php';
+    include_once 'method/ShowImagesClass.php';
+    include 'backoffice/back_show.html.php';
 }
 if ( isset($_GET['uplad']) ){
-    include 'backoffice/upload.php';
+    include_once 'method/UploadImagesClass.php';
+    include 'backoffice/upload.html.php';
 }
 if ( isset($_GET['category']) ){
-    include 'backoffice/cat_show_add.php';
-    //include 'backoffice/cat_show.php';
+    include_once 'method/AddShowCategoryClass.php';    
+    include 'backoffice/cat_add_show.html.php';
 }
 if ( isset($_GET['front']) && !isset($_GET['cat_id']) ){
-    //include_once 'method/ShowImagesClass.php';
-    include 'frontoffice/front_show.php';
+    include_once 'method/ShowImagesClass.php';
+    include_once 'frontoffice/front_show.html.php';
 } else if ( isset($_GET['front']) && isset($_GET['cat_id']) ) {
-    //include_once 'method/ShowImagesClass.php';
-    include 'frontoffice/front_show.php';
+    include_once 'method/ShowImagesClass.php';
+    include_once 'frontoffice/front_show.html.php';
 }
 // if ( isset($_GET['resize']) ){
     // include 'backoffice/resize.php';
 // }
+if ( isset($_GET['front_table']) ){
+    include 'view/front_table.html';
+}
 if ( isset($_GET['install']) ){
     include 'backoffice/install.php';
 }
 if ( empty($_GET) ) {
-    //include_once 'method/ShowImagesClass.php';
-    include 'frontoffice/front_show.php';
+    //include_once 'method/HomeClass.php';
+    include 'frontoffice/home.html.php';
 }
 ?>
+<!--
+<div>
+    <?php for ($i = 1; $i <= 11; $i++) { ?>
+    <div class="div_front">
+        <a class="fancybox-button" rel="fancybox-button">
+            <img class="front_img" style="vertical-align: middle; font-size: 0px;" src="data/mini/<?php //echo $i ?>.jpg" alt="image" align="" />
+        </a>
+    </div>
+    <?php } ?>
+</div>
+-->
 </body>
 </html>
+<?php
+
+//var_dump($_FILES);
