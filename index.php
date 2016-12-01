@@ -4,6 +4,8 @@ header('Content-Type: text/html; charset=utf-8');
 session_start();
 /**
 *http://fancyapps.comjs/fancybox/
+HAVE TO DO
+- zlikwidowac polskie litery z wyszukiwania !!!!!!!
 **/
 ?>
 <!DOCTYPE HTML>
@@ -48,16 +50,11 @@ session_start();
         /**fancy box**/
     </script>
     <!--fancybox-->
-    <!--carousel-->
-      <link rel="stylesheet" href="../dist/styles/jquery.carousel-3d.default.css">
-      
-      <!--<script src="http://localhost:35729/livereload.js"></script>-->
-      <script src="../bower_components/jquery/jquery.js"></script>
-      <script src="../bower_components/javascript-detect-element-resize/jquery.resize.js"></script>
-      <script src="../bower_components/waitForImages/dist/jquery.waitforimages.js"></script>
-      <script src="../bower_components/modernizr/modernizr.js"></script>
-      <script src="../dist/jquery.carousel-3d.js"></script>
-    <!--carousel-->
+
+	<!-- Start WOWSlider.com HEAD section --> <!-- add to the <head> of your page -->
+	<link rel="stylesheet" type="text/css" href="js/slider/style.css" />
+	<!--<script type="text/javascript" src="js/slider/jquery.js"></script>--><!--jquery.cookie.js not working with this version-->
+	<!-- End WOWSlider.com HEAD section -->
 
 	<link rel="stylesheet" type="text/css" href="css/view.css.php" />
     <link rel="stylesheet" type="text/css" href="css/view.css" />
@@ -85,41 +82,51 @@ session_start();
     </script>
 </head>
 <body>
-<?php include_once 'view/technics_menu.html'; ?>
 <?php
-if ( isset($_GET['back']) && !isset($_GET['cat_id']) ){
-    include_once 'method/ShowImagesClass.php';
+//if ( !empty($_GET) ) {
+    include_once 'view/technics_menu.html';
+//}
+?>
+<?php //include_once 'view/technics_menu.html'; ?>
+
+<?php
+if ( isset($_GET['back']) ){
+    include_once 'method/ImagesClass.php';
     include 'backoffice/back_show.html.php';
-} else if ( isset($_GET['back']) && isset($_GET['cat_id']) ) {
-    include_once 'method/ShowImagesClass.php';
-    include 'backoffice/back_show.html.php';
+}
+if ( isset($_GET['fsearch']) ){
+    //include_once 'method/ImagesClass.php';
+    include 'frontoffice/front_search.html.php';
 }
 if ( isset($_GET['uplad']) ){
-    include_once 'method/UploadImagesClass.php';
-    include 'backoffice/upload.html.php';
+    include_once 'method/ImagesClass.php';
+    include 'backoffice/images.html.php';
+}
+if ( isset($_GET['slider']) ){
+    include_once 'method/SliderClass.php';
+    include 'backoffice/slider.html.php';
 }
 if ( isset($_GET['category']) ){
-    include_once 'method/AddShowCategoryClass.php';    
-    include 'backoffice/cat_add_show.html.php';
+    include_once 'method/CategoryClass.php';    
+    include 'backoffice/category.html.php';
 }
-if ( isset($_GET['front']) && !isset($_GET['cat_id']) ){
-    include_once 'method/ShowImagesClass.php';
-    include_once 'frontoffice/front_show.html.php';
-} else if ( isset($_GET['front']) && isset($_GET['cat_id']) ) {
-    include_once 'method/ShowImagesClass.php';
+if ( isset($_GET['galery']) ){
+    include_once 'method/ImagesClass.php';
     include_once 'frontoffice/front_show.html.php';
 }
 // if ( isset($_GET['resize']) ){
     // include 'backoffice/resize.php';
 // }
-if ( isset($_GET['front_table']) ){
-    include 'view/front_table.html';
-}
+// if ( isset($_GET['front_table']) ){
+    // include_once 'method/ImagesClass.php';
+    // include 'view/front_table.html';
+// }
 if ( isset($_GET['install']) ){
     include 'backoffice/install.php';
 }
 if ( empty($_GET) ) {
-    //include_once 'method/HomeClass.php';
+    include_once 'method/SliderClass.php';// slider na glownej stronie
+    include_once 'method/ImagesClass.php';// dla pokaziania wybranych zdjec na glownej stronie
     include 'frontoffice/home.html.php';
 }
 ?>

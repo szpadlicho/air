@@ -1,7 +1,5 @@
 <?php
 //http://stackoverflow.com/questions/14649645/resize-image-in-php
-//include_once 'front_class.php';
-$obj_ShowImages->__setTable('photos');
 ?>
 <script type="text/javascript">
     $(function(){
@@ -16,31 +14,23 @@ $obj_ShowImages->__setTable('photos');
                     type: 'POST',
                     url: 'frontoffice/front_search.html.php',
                     <?php if ( isset($_GET['cat_id']) ) { ?>
-                        data: {string : string, cat_id : cat_id, where : 'front'},
+                        data: {string : string, cat_id : cat_id, galery : 'galery'},
                     <?php } else { ?>
-                        data: {string : string, where : 'front'},
+                        data: {string : string, galery : 'galery'},
                     <?php } ?>
                     //cache: false,
                     dataType: 'text',
                     success: function(data){
-                        $('#td_content').html(data);
-                        $('.tr_pagination').hide();
+                        $('#table_content').html(data);
+                        //$('.tr_pagination').hide();
+                        $.cookie('string', string, { expires: 3600 });
+                        console.log($.cookie('string'));
                     }
                 });
-                // $.ajax({
-                    // type: 'POST',
-                    // url: 'frontoffice/pagination.php',
-                    // <?php if ( isset($_GET['cat_id']) ) { ?>
-                        // data: {string : string, cat_id : cat_id, where : 'front'},
-                    // <?php } else { ?>
-                        // data: {string : string, where : 'front'},
-                    // <?php } ?>
-                    // //cache: false,
-                    // dataType: 'text',
-                    // success: function(data){
-                        // $('.td_pagination').html(data);
-                    // }
-                // });
+            }
+            if (string.length == 0) {
+                $.removeCookie('string');
+                location.reload();
             }
         });
     });
@@ -57,7 +47,7 @@ $obj_ShowImages->__setTable('photos');
 <div class="loader"></div>
 
 <div class="center">
-    <table class="front_table" border="1" style="width:90%; margin: 0 auto; border-collapse: separate;">
+    <table class="front_table">
         <thead>
             <tr>
                 <th colspan="2">Header</th>
@@ -75,39 +65,44 @@ $obj_ShowImages->__setTable('photos');
             <tr id="tr_menu">
                 <td id="td_menu" rowspan="4">
                     <ul>
-                        <li><a class="front category menu" href="?front" >Wszystkie</a></li>
+                        <li><a class="front category menu" href="?galery" >Wszystkie</a></li>
                         <?php
-                            $obj_show_cat = new ShowImages;
-                            $obj_show_cat->__setTable('category');
-                            $obj_show_cat->showCategory();
-                            $ret = $obj_show_cat->showCategory();
+                            $obj_showCategory = new ShowImages;
+                            $obj_showCategory->__setTable('category');
+                            $obj_showCategory->showCategory();
+                            $ret = $obj_showCategory->showCategory();
                             $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                         <?php foreach ($ret as $cat_menu){ ?>
-                            <li><a class="front category menu" href="?front&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
+                            <?php //echo $_GET['cat_id'] == $cat_menu['c_id'] ? 'active' : ''; ?>
+                            <li class="<?php echo @$_GET['cat_id'] == @$cat_menu['c_id'] ? 'active' : ''; ?>"><a class="front category menu" href="?galery&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
                         <?php } ?>
                     </ul>
                 </td>
-                <tr class="tr_pagination">
-                    <td class="td_pagination">
-                        <?php $obj_ShowImages->showPagination(@$search_i); ?>
-                    </td>
-                </tr>
-                <tr id="tr_content">
-                    <td id="td_content">
-                        <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>
-                            <div class="div_front">
-                                <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
-                                <p class="p_front_info" >kat: <?php echo $wyn['category']; ?> aut:<?php echo $wyn['author']; ?></p>
-                            </div>
-                        <?php } ?> 
-                    </td>
-                </tr>
-                <tr class="tr_pagination">
-                    <td class="td_pagination">
-                        <?php $obj_ShowImages->showPagination(@$search_i); ?>
-                    </td>
-                </tr>
+                <td>
+                    <table id="table_content">
+                        <tr class="tr_pagination">
+                            <td class="td_pagination">
+                                <?php $obj_ShowImages->showPagination(''); ?>
+                            </td>
+                        </tr>
+                        <tr id="tr_content">
+                            <td id="td_content">
+                                <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>
+                                    <div class="div_front">
+                                        <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
+                                        <p class="p_front_info" >Autor:<?php echo $wyn['author']; ?><br />Album: <?php echo $wyn['category']; ?></p>
+                                    </div>
+                                <?php } ?> 
+                            </td>
+                        </tr>
+                        <tr class="tr_pagination">
+                            <td class="td_pagination">
+                                <?php $obj_ShowImages->showPagination(''); ?>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
         </tbody>
         <tfoot>

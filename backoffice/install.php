@@ -77,7 +77,7 @@ class DataBaseInstall
     public function createTbDynamicRow($arr_row, $arr_val)
     {
         // Tworze tabele tylko raz co pozwala klikać install bez konsekwencji
-		$con = $this->connectDB();
+		$con = $this->connectDb();
 		$res = $con->query(
             "SELECT 1 
             FROM ".$this->table
@@ -124,7 +124,7 @@ class DataBaseInstall
 		}
     }
     public function addRec($arr_val){
-        $con = $this->connectDB();
+        $con = $this->connectDb();
 		$res = $con->query(
             "SELECT '".$this->prefix."id' 
             FROM ".$this->table
@@ -156,7 +156,7 @@ class DataBaseInstall
     }
     public function deleteTb($table)
     {
-        $con = $this->connectDB();
+        $con = $this->connectDb();
         $res = $con->query('DROP TABLE `'.$table.'`');
         return $res ? true : false;
     }
@@ -180,6 +180,8 @@ if (isset($_POST['crt'])) {
         'show_place'                =>'VARCHAR(50)',
         'tag'                       =>'TEXT',
         'author'                    =>'VARCHAR(20)', 
+        'home'                      =>'VARCHAR(20)',
+        'position'                  =>'VARCHAR(20)',
         'protect'                   =>'VARCHAR(20)', 
         'password'                  =>'VARCHAR(20)', 
         'p_visibility'              =>'INTEGER(1) UNSIGNED'
@@ -222,12 +224,52 @@ if (isset($_POST['crt'])) {
 if (isset($_POST['del'])) {
 	$obj_install->deleteDb();
 }
+
+/**
+* Slider install
+**/
+if (isset($_POST['crt_slider'])) {
+    $obj_install->createDb();
+    $return = array();// array initiate
+    $obj_install->__setTable('slider');
+    $arr_row = array(
+        'slider_name'               =>'TEXT',
+        'slider_mime'               =>'VARCHAR(20)',
+        'slider_src'                =>'TEXT',
+        'slider_href'               =>'TEXT',
+        'slider_alt'                =>'TEXT',
+        'slider_title'              =>'TEXT',
+        'slider_des'                =>'TEXT',
+        's_visibility'              =>'INTEGER(1) UNSIGNED'
+        );
+    $arr_val = array();
+    $return['slider'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
+    var_dump($return);
+    $obj_install->__setTable('description');
+    $arr_row = array(
+        'home_des'                  =>'TEXT',
+        'd_visibility'              =>'INTEGER(1) UNSIGNED'
+        );
+    $arr_val = array(
+        'home_des'                  =>'About Me',
+        'd_visibility'              =>'1'    
+        );
+    $return['description'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
+    var_dump($return);
+}
+if (isset($_POST['del_slider'])) {
+	$obj_install->deleteTb('slider');
+    $obj_install->rrmdir('img/slider/images/');
+    $obj_install->rrmdir('img/slider/tooltips/');
+}
 ?>
 <div class="center">
     Zarządzanie Bazą Danych
     <form name="install" enctype="multipart/form-data" action="" method="POST">
             <input class="input_cls" type="submit" name="del" value="Delete DB" />
-            <input class="input_cls" type="submit" name="crt" value="Create" />
+            <input class="input_cls" type="submit" name="crt" value="Create DB" />
+            <input class="input_cls" type="submit" name="del_slider" value="Delete Slider" />
+            <input class="input_cls" type="submit" name="crt_slider" value="Create Slider" />
     </form>
 </div>
 
