@@ -321,34 +321,18 @@ class ShowImages
 	}
     public function countRow()// do category menu
     {
-        if ( isset($_GET['back']) ) { //dla zaplecza z ukrytumi
-            if ( isset($_GET['cat_id']) ) {
-                //$q = count($this->showAll()->fetchAll(PDO::FETCH_ASSOC));
-                //$q = $this->showAll()->fetchAll(PDO::FETCH_ASSOC);
-                $con=$this->connectDb();
-                $q = $con->query("SELECT COUNT(*) FROM `".$this->table."` WHERE `category` = '".$_GET['cat_id']."'");/*zwraca false jesli tablica nie istnieje*/
-                $q = $q->fetch(PDO::FETCH_ASSOC);
-                $q = $q['COUNT(*)'];
-            } else {
-                $con=$this->connectDb();
-                $q = $con->query("SELECT COUNT(*) FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
-                $q = $q->fetch(PDO::FETCH_ASSOC);
-                $q = $q['COUNT(*)'];
-            }
-        } else { //dla galerii bez ukrytych
-            if ( isset($_GET['cat_id']) ) {
-                //$q = count($this->showAll()->fetchAll(PDO::FETCH_ASSOC));
-                //$q = $this->showAll()->fetchAll(PDO::FETCH_ASSOC);
-                $con=$this->connectDb();
-                $q = $con->query("SELECT COUNT(*) FROM `".$this->table."` WHERE `category` = '".$_GET['cat_id']."' AND `p_visibility` = '1' ");/*zwraca false jesli tablica nie istnieje*/
-                $q = $q->fetch(PDO::FETCH_ASSOC);
-                $q = $q['COUNT(*)'];
-            } else {
-                $con=$this->connectDb();
-                $q = $con->query("SELECT COUNT(*) FROM `".$this->table."` WHERE `p_visibility` = '1' ");/*zwraca false jesli tablica nie istnieje*/
-                $q = $q->fetch(PDO::FETCH_ASSOC);
-                $q = $q['COUNT(*)'];
-            }
+        if ( isset($_GET['cat_id']) ) {
+            //$q = count($this->showAll()->fetchAll(PDO::FETCH_ASSOC));
+            //$q = $this->showAll()->fetchAll(PDO::FETCH_ASSOC);
+            $con=$this->connectDb();
+            $q = $con->query("SELECT COUNT(*) FROM `".$this->table."` WHERE `category` = '".$_GET['cat_id']."'");/*zwraca false jesli tablica nie istnieje*/
+            $q = $q->fetch(PDO::FETCH_ASSOC);
+            $q = $q['COUNT(*)'];
+        } else {
+            $con=$this->connectDb();
+            $q = $con->query("SELECT COUNT(*) FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
+            $q = $q->fetch(PDO::FETCH_ASSOC);
+            $q = $q['COUNT(*)'];
         }
         unset ($con);
 		return $q;
@@ -383,6 +367,38 @@ class ShowImages
 		unset ($con);
 		return $q;
 	}
+    public function showAllByTagOrg($string)
+    {
+        $con = $this->connectDb();
+        $order = 'DESC';
+        $default = 20;
+        $all = $this->countRow();
+        $count = floor($all/$default);
+        $limit = isset($_COOKIE['limit']) ? '' : $_COOKIE['limit'] = $default;/* default limit images show per page */
+        $start = isset($_COOKIE['start']) ? '' : $_COOKIE['start'] = 0;/* default begin image */
+        $string = explode(' ', $string);
+        if ($string[0] != ''){// warunek zeby pokazal wszysktko jesli pole search puste 
+            $string = array_filter(array_map('trim',$string),'strlen'); //wykluczam spacje z szukania
+        }
+        if ( isset($_GET['back']) ) {//co ma pokazac jesli jestes na zapleczu (czyli razem z ukrytymi)
+            foreach($string as $s){
+                if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                    $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+                } else { //szuka we wszystkich kategoriach
+                    $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+                }
+            }
+        } else {
+            foreach($string as $s){
+                if ( isset($_GET['cat_id']) ) {
+                    $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+                } else {
+                    $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+                }
+            }
+        }
+        return @$ress;
+    }
     public function showAllByTag($string)
     {
         $con = $this->connectDb();
@@ -436,33 +452,41 @@ class ShowImages
         $output = array_slice($input, $_COOKIE['start'], $_COOKIE['limit']);
         return array($output, $cu);
     }
-    public function showLast()//pokazuje wszystkie fotki sprzed miesiaca
+    public function showAllByTagOne($string)
     {
-		$con=$this->connectDb();
+        $con = $this->connectDb();
         $order = 'DESC';
-        
-        //$limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'21';//ilość elementów na stronie
-        //$start = isset( $_COOKIE['start'] ) ? (int)$_COOKIE['start'] : (int)'0';//numer id od ktorego ma zaczac
-        
-        
-        //$default = 20;
-        //$limit = isset($_COOKIE['limit']) ? (int)$_COOKIE['limit'] : $_COOKIE['limit'] = (int)$default;/* default limit images show per page */
-        //$start = isset($_COOKIE['start']) ? (int)$_COOKIE['start'] : $_COOKIE['start'] = (int)0;/* default begin image */
-
-        //$ress0 = array();
-        //$ress1 = array();
-              
-        if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND photos.`add_data` > DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
-        } else {//pokazuje fotki ze wszystkich kategorii
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND DATE(photos.`add_data`) > DATE_SUB(CURRENT_DATE, INTERVAL 2 DAY) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+        $default = 20;
+        $all = $this->countRow();
+        $count = floor($all/$default);
+        $limit = isset($_COOKIE['limit']) ? '' : $_COOKIE['limit'] = $default;/* default limit images show per page */
+        $start = isset($_COOKIE['start']) ? '' : $_COOKIE['start'] = 0;/* default begin image */
+        $string = explode(' ', $string);
+        $ress0 = array();
+        $ress1 = array();
+        if ($string[0] != ''){// warunek zeby pokazal wszysktko jesli pole search puste 
+            $string = array_filter(array_map('trim',$string),'strlen'); //wykluczam spacje z szukania
         }
-		unset ($con);
-		return $q;
-        //$d = $q;
-        //$cu = count($d->fetchAll(PDO::FETCH_ASSOC));
-        //return array($q, $cu);
-	}
+        /*****/
+        foreach($string as $s){
+            $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+            $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
+            $ress0[] = $ress;
+        }
+        foreach($ress0 as $su){
+            $cu[] = count($su);
+        }
+        $cu = array_sum($cu);
+        foreach($ress0 as $re){
+            foreach($re as $er){
+                $ress1[] = $er;
+            }
+        }
+        $input = $ress1;
+        $output = array_slice($input, $_COOKIE['start'], $_COOKIE['limit']);
+        return array($output, $cu);
+        /****/
+    }
     public function showImg($id, $mime, $tag)
     {                                        
         $dir0 = 'data/';
@@ -499,12 +523,24 @@ class ShowImages
 		unset ($con);
 		return $q;
 	}
-    public function copyButton($name)
-    {
-        ?>
-        <button class="back button copy <?php echo $name; ?>"></button>
-        <?php
-	}
+    // public function showByCategory()
+    // {
+		// $con=$this->connectDb();
+        // $order = 'DESC';
+		// @$q = $con->query("SELECT * FROM `".$this->table."` WHERE `category` = ".$_GET['cat_id']." ORDER BY `".$this->prefix."id` ".$order."");/*zwraca false jesli tablica nie istnieje*/
+		// unset ($con);
+		// return $q;
+	// }
+    // public function count_i($string)
+    // {   
+        // $success = $this->__getImagesTag($string);
+        // $search_i = 0;
+        // while ($wyn = $success->fetch()) {
+            // $search_i++;
+        // }
+        // return $search_i;
+    // }
+    //public function showPagination($string)
     public function showPagination($cu)
     {
         $default = 20;

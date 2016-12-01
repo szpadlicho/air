@@ -6,6 +6,9 @@ session_start();
 *http://fancyapps.comjs/fancybox/
 HAVE TO DO
 - zlikwidowac polskie litery z wyszukiwania !!!!!!!
+- fb insa
+- ostatnio dodane
+- liczy z ukrytymi paginacje
 **/
 ?>
 <!DOCTYPE HTML>
@@ -13,10 +16,14 @@ HAVE TO DO
 <head>
 	<title>Index</title>
     <link rel="stylesheet" href="css/html5reset.css">
-    <link rel="stylesheet" href="css/css.css">
+    <!--
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
+    -->
+    <script type="text/javascript" src="js/google/jquery.min.js"></script>
+    <link rel="stylesheet" href="js/google/jquery-ui.css">
+    <script src="js/google/jquery-ui.min.js"></script>
     <script src="js/jquery.cookie.js"></script>
     <!--fancybox-->
     <!-- Add mousewheel plugin (this is optional) -->
@@ -82,11 +89,15 @@ HAVE TO DO
     </script>
 </head>
 <body>
-<?php
-//if ( !empty($_GET) ) {
-    include_once 'view/technics_menu.html';
-//}
-?>
+<div id="top_menu_placeholder">
+    <div id="top_menu">
+    <?php
+    //if ( !empty($_GET) ) {
+        include_once 'view/technics_menu.html.php';
+    //}
+    ?>
+    </div>
+</div>
 <?php //include_once 'view/technics_menu.html'; ?>
 
 <?php
@@ -98,7 +109,7 @@ if ( isset($_GET['fsearch']) ){
     //include_once 'method/ImagesClass.php';
     include 'frontoffice/front_search.html.php';
 }
-if ( isset($_GET['uplad']) ){
+if ( isset($_GET['upload']) ){
     include_once 'method/ImagesClass.php';
     include 'backoffice/images.html.php';
 }
@@ -113,6 +124,10 @@ if ( isset($_GET['category']) ){
 if ( isset($_GET['galery']) ){
     include_once 'method/ImagesClass.php';
     include_once 'frontoffice/front_show.html.php';
+}
+if ( isset($_GET['last']) ){
+    include_once 'method/ImagesClass.php';
+    include_once 'frontoffice/last.html.php';
 }
 // if ( isset($_GET['resize']) ){
     // include 'backoffice/resize.php';
