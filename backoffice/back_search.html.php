@@ -1,11 +1,13 @@
 <?php
 include_once '../method/ImagesClass.php';
+//var_dump($_POST['string']);
 @$_GET['cat_id'] = $_POST['cat_id'];
 $_POST['back'] ? $_GET['back'] = $_POST['back'] : null ;
 $success = $obj_ShowImages->showAllByTag($_POST['string']);
 ?>
 <tr class="tr_pagination">
     <td class="td_pagination">
+        <?php echo $success[1]; ?>
         <?php $obj_ShowImages->showPagination($success[1]); ?>
     </td>
 </tr>
@@ -75,6 +77,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                     action
                 </th>
             </tr>
+            <?php //var_dump($success); ?>
             <?php foreach($success[0] as $wyn){ //to metoda pokazuje z wyszukiwania jest inna niz w plike show ?>
                 <script>
                 $( document ).ready(function() {

@@ -30,9 +30,16 @@
             }
             if (string.length == 0) {
                 $.removeCookie('string');
+                //$( "#search" ).focus();
+                $.cookie('search', this.id, { expires: 5*1000 });
                 location.reload();
             }
         });
+        var serach = $.cookie('search');//zeby sie nie foucusowalo non stop na search
+        if (serach) {
+            $('#'+serach).focus();
+            console.log(serach);
+        }
     });
 </script>
 <script>

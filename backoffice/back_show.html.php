@@ -103,9 +103,16 @@
             }
             if (string.length == 0) {
                 $.removeCookie('string');
+                //$( "#search" ).focus();
+                $.cookie('search', this.id, { expires: 5*1000 });
                 location.reload();
             }
         });
+        var serach = $.cookie('search');//zeby sie nie foucusowalo non stop na search
+        if (serach) {
+            $('#'+serach).focus();
+            console.log(serach);
+        }
     });
 </script>
 <script>
@@ -116,7 +123,21 @@
                 $( '.save_button' ).click();
             });
         });
-    });
+    });    
+    // $(document).ready(function(){
+        // $(function() {
+            // $(".nav li").on("click",function(e) {
+              // if (e.target.nodeName == "A") {
+                  // e.preventDefault();
+              // }
+              // $(this).siblings().removeClass()
+              // $(this).addClass("active");
+              // $.cookie("li",this.id);
+          // });
+          // var li = $.cookie("li");
+          // if (li) $("#"+li).addClass("active");
+        // });
+    // });
     $(document).ajaxStart(function () {
         $('html').addClass('busy');
         $('.loader').show();
@@ -494,4 +515,4 @@
 <div id="status_text"></div>
 <?php //echo phpinfo(INFO_GENERAL); ?>
 <?php //echo phpinfo(); ?>
-<?php //var_dump($_COOKIE); ?>
+<?php var_dump($_COOKIE); ?>

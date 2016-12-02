@@ -1,6 +1,6 @@
 <div style="text-align:center;">
     <a class="menu top" href="?">Start</a>
-    <a class="menu top" href="?last">Ostatnio dodane</a>
+    <a class="menu top" href="?last">Nowe</a>
     <a class="menu top" href="?galery">Galeria</a> | 
     <!--<a class="menu top" href="?front_table">Front Table</a>-->
     <a class="menu top" href="?back">Back</a>

@@ -11,8 +11,8 @@ class UploadSlider
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	private $admin;
-	private $autor;
+	//private $admin;
+	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
@@ -145,8 +145,8 @@ class UpdateSlider
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	private $admin;
-	private $autor;
+	//private $admin;
+	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
@@ -222,8 +222,8 @@ class DeleteSlider
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	private $admin;
-	private $autor;
+	//private $admin;
+	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
@@ -271,8 +271,8 @@ class ShowSlider
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	private $admin;
-	private $autor;
+	//private $admin;
+	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;

@@ -1,12 +1,4 @@
 <?php
-define('DB_HOST', 'sql.bdl.pl');
-define('DB_PORT', '');
-define('DB_SCHEMA', 'information_schema');
-define('DB_NAME', 'szpadlic_air');
-define('DB_USER', 'szpadlic_baza');
-define('DB_PASSWORD', 'haslo');
-define('DB_ENCODING', 'utf8');
-define('DB_CHARSET', 'utf8');
 class UploadImage
 {
 	private $host='sql.bdl.pl';
@@ -19,8 +11,8 @@ class UploadImage
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
+	private $admin;
+	private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
@@ -185,8 +177,8 @@ class UpdateImages
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
+	private $admin;
+	private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
@@ -250,8 +242,8 @@ class DeleteImages
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
+	private $admin;
+	private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
@@ -289,11 +281,18 @@ class DeleteImages
 }
 class ShowImages
 {
+	private $host='sql.bdl.pl';
+	private $port='';
+	private $dbname='szpadlic_air';
+	//private $dbname_sh='information_schema';
+	private $charset='utf8';
+	private $user='szpadlic_baza';
+	private $pass='haslo';
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
+	private $admin;
+	private $autor;
 	private $order = 'DESC';
 	private $default_on = 20;
 	public function __setTable($tab_name)
@@ -303,26 +302,21 @@ class ShowImages
 	}
 	public function connect()
     {
-		$con=new PDO("mysql:host=".DB_HOST."; port=".DB_PORT."; charset=".DB_CHARSET, DB_USER, DB_PASSWORD);
+		$con=new PDO("mysql:host=".$this->host."; port=".$this->port."; charset=".$this->charset,$this->user,$this->pass);
 		return $con;
 		unset ($con);
 	}
     public function checkDb()
     {
 		$con=$this->connect();
-		$ret = $con->query("SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '".DB_NAME."'");/*sprawdzam czy baza istnieje*/
+		$ret = $con->query("SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '".$this->dbname."'");/*sprawdzam czy baza istnieje*/
 		$res = $ret->fetch(PDO::FETCH_ASSOC);
 		return $res ?  true : false;
 	}
 	public function connectDb()
     {
         if ($this->checkDb()=== true) {
-            //$con = new PDO("mysql:host=".DB_HOST."; port=".DB_PORT."; dbname=".DB_NAME."; charset=".DB_CHARSET, DB_USER, DB_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8 COLLATE utf8_polish_ci"));//unicode
-            $con = new PDO("mysql:host=".DB_HOST."; port=".DB_PORT."; dbname=".DB_NAME."; charset=".DB_CHARSET, DB_USER, DB_PASSWORD);//unicode
-            //$con->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            //$con->setAttribute(PDO::ERRMODE_EXCEPTION, true);
-            //$con->setAttribute(PDO::ATTR_ERRMODE, true);
-            //$con -> query('SET CHARACTER_SET utf8_polish_ci'); //utf8_polish_ci
+            $con = new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
             return $con;
             unset ($con);
         }
@@ -394,7 +388,6 @@ class ShowImages
     public function showAllByTag($string)
     {
         $con = $this->connectDb();
-        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $order = $this->order;
         //$default = 20;
         $all = $this->countRow();
@@ -408,57 +401,27 @@ class ShowImages
             $string = array_filter(array_map('trim',$string),'strlen'); //wykluczam spacje z szukania
         }
         if ( isset($_GET['back']) ) {//co ma pokazac jesli jestes na zapleczu (czyli razem z ukrytymi)
-            //foreach($string = array('zaz') as $s){
             foreach($string as $s){
-                if (preg_match('@[ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]@', $s)) {// są polskie znaki
-                    //try{ 
-                    if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*///unicode
-                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
-                        $ress0[] = $ress;
-                    } else { //szuka we wszystkich kategoriach
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
-                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
-                        $ress0[] = $ress;
-                    }
-                    //}
-                    //catch(PDOException $exception){ 
-                       //return $exception->getMessage(); 
-                    //}
-                } else { // brak polskich znaków
-                    if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
-                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
-                        $ress0[] = $ress;
-                    } else { //szuka we wszystkich kategoriach
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
-                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
-                        $ress0[] = $ress;
-                    }
+                if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                    $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                    $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
+                    $ress0[] = $ress;
+                } else { //szuka we wszystkich kategoriach
+                    $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                    $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
+                    $ress0[] = $ress;
                 }
             }
         } else { //co ma pokazac jesli jestes w galerii (czyli bez ukrytych)
             foreach($string as $s){
-                if (preg_match('@[ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]@', $s)) {// są polskie znaki
-                    if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
-                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
-                        $ress0[] = $ress;
-                    } else {  //szuka we wszystkich kategoriach
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
-                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
-                        $ress0[] = $ress;
-                    }
-                } else { // brak polskich znaków
-                    if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
-                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
-                        $ress0[] = $ress;
-                    } else {  //szuka we wszystkich kategoriach
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
-                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
-                        $ress0[] = $ress;
-                    }
+                if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                    $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                    $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
+                    $ress0[] = $ress;
+                } else {  //szuka we wszystkich kategoriach
+                    $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                    $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
+                    $ress0[] = $ress;
                 }
             }
         }
@@ -562,7 +525,7 @@ class ShowImages
     public function showPagination($cu)
     {
         //$default = 20;
-        if ( (isset($cu) && !empty($cu)) || $cu == 0 ) {
+        if ( isset($cu) && !empty($cu) ) {
             //var_dump($cu);
             $all = $cu;
             //echo 'adasdsada';

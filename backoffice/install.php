@@ -11,8 +11,8 @@ class DataBaseInstall
 	private $table;
     private $prefix;
 	//private $table_sh='SCHEMATA';
-	private $admin;
-	private $autor;
+	//private $admin;
+	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
@@ -160,6 +160,30 @@ class DataBaseInstall
         $res = $con->query('DROP TABLE `'.$table.'`');
         return $res ? true : false;
     }
+    public function updateRow($row, $value, $where_id)//wgranie zawartości wywołane wewnątrz funkcji _getString
+    {
+        //zapis
+        try{ 
+            $con = $this->connectDB();
+            $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $res = $con->query("UPDATE `".$this->table."` 
+                SET
+                `".$row."` = '".$value."'
+                WHERE
+                `".$this->prefix."id` = '".$where_id."'
+                ");
+            if ($res) {
+                echo "<div class=\"center\" >Zapis: OK!</div>";
+                echo "<div class=\"center\" >Last id: ".$con->lastInsertId()."</div>";
+            } else {
+                echo "<div class=\"center\" >Zapis: ERROR!</div>";
+            }
+        } 
+        catch(PDOException $exception){ 
+           return $exception->getMessage(); 
+        } 
+        unset($con);
+    }
 }
 
 $obj_install = new DatabaseInstall;
@@ -262,6 +286,13 @@ if (isset($_POST['del_slider'])) {
     $obj_install->rrmdir('img/slider/images/');
     $obj_install->rrmdir('img/slider/tooltips/');
 }
+if (isset($_POST['updat_row'])) {
+	$obj_install->__setTable('photos');
+    for ($i = $_POST['start_id']; $i < $_POST['stop_id']; $i++) {
+        $return['photos'] = $obj_install->updateRow('add_data', $_POST['updat_value'], $i);
+        //var_dump($return);
+    }
+}
 ?>
 <div class="center">
     Zarządzanie Bazą Danych
@@ -270,6 +301,10 @@ if (isset($_POST['del_slider'])) {
             <input class="input_cls" type="submit" name="crt" value="Create DB" />
             <input class="input_cls" type="submit" name="del_slider" value="Delete Slider" />
             <input class="input_cls" type="submit" name="crt_slider" value="Create Slider" />
+            <input class="input_cls" type="submit" name="updat_row" value="Update" />
+            <input class="input_cls" type="text" name="updat_value" placeholder="updat_value" value="2016-11-01 00:00:00" />
+            <input class="input_cls" type="text" name="start_id" placeholder="start_id" value="0" />
+            <input class="input_cls" type="text" name="stop_id" placeholder="stop_id" value="96" />            
     </form>
 </div>
 

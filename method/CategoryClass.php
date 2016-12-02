@@ -18,8 +18,8 @@ class AddCategory
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	private $admin;
-	private $autor;
+	//private $admin;
+	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
@@ -83,8 +83,8 @@ class UpdateCategory
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	private $admin;
-	private $autor;
+	//private $admin;
+	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
@@ -136,8 +136,8 @@ class DeleteImages
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	private $admin;
-	private $autor;
+	//private $admin;
+	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
@@ -174,8 +174,8 @@ class ShowCategory
 	private $table;
 	private $prefix;
 	//private $table_sh='SCHEMATA';
-	private $admin;
-	private $autor;
+	//private $admin;
+	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
