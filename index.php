@@ -5,17 +5,20 @@ session_start();
 /**
 *http://fancyapps.comjs/fancybox/
 HAVE TO DO
-- zlikwidowac polskie litery z wyszukiwania !!!!!!!
 - fb insa
-- ostatnio dodane
-- liczy z ukrytymi paginacje
 **/
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
 	<title>Index</title>
-    <link rel="stylesheet" href="css/html5reset.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Opis strony">
+    <meta name="author" content="Szpadel">
+    
+    <!--<link rel="stylesheet" href="css/html5reset.css">-->
     <!--
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/themes/smoothness/jquery-ui.css">
@@ -63,8 +66,7 @@ HAVE TO DO
 	<!--<script type="text/javascript" src="js/slider/jquery.js"></script>--><!--jquery.cookie.js not working with this version-->
 	<!-- End WOWSlider.com HEAD section -->
 
-	<link rel="stylesheet" type="text/css" href="css/view.css.php" />
-    <link rel="stylesheet" type="text/css" href="css/view.css" />
+	
 
 	<script type="text/javascript">
         $(document).ready(function(){
@@ -87,6 +89,10 @@ HAVE TO DO
             // });
         // });
     </script>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/view.css.php" />
+    <link rel="stylesheet" type="text/css" href="css/view.css" />
 </head>
 <body>
 <div id="top_menu_placeholder">

@@ -556,13 +556,14 @@ class ShowImages
     public function copyButton($name)
     {
         ?>
-        <button class="back button copy <?php echo $name; ?>"></button>
+        <button class="copy <?php echo $name; ?>"></button>
         <?php
 	}
     public function showPagination($cu)
     {
         //$default = 20;
-        if ( (isset($cu) && !empty($cu)) || $cu == 0 ) {
+        //if ( (isset($cu) && !empty($cu)) || $cu == 0 ) {
+        if ( isset($cu) && !empty($cu)) {
             //var_dump($cu);
             $all = $cu;
             //echo 'adasdsada';
@@ -713,13 +714,13 @@ class ShowImages
             asort($option);
             //var_dump($option);
             ?>
-            <select class="pagination_limit">
+            <select class="form-control pagination_limit">
                 <?php foreach($option as $opt) { ?>
                     <option <?php echo ( $_COOKIE['limit'] == $opt ) ? 'selected = "selected"' : '' ; ?> ><?php echo $opt; ?></option>
                 <?php } ?>
             </select>
             <?php for($i = 1; $i <= ceil($all/@$_COOKIE['limit']); $i++) { ?>
-                <button class="pagination_start <?php echo @$_COOKIE['pagination'] == $i ? 'p_active' : '' ; ?>" value="<?php echo $i; ?>"><?php echo $i; ?></button>
+                <button class="form-control pagination_start <?php echo @$_COOKIE['pagination'] == $i ? 'p_active' : '' ; ?>" value="<?php echo $i; ?>"><?php echo $i; ?></button>
             <?php } ?>
             <?php
         }

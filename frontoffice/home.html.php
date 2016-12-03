@@ -29,15 +29,15 @@
 <script type="text/javascript" src="js/slider/script.js"></script>
 <!-- End WOWSlider.com BODY section -->
 <div class="center">
-<br />
-<br />
-<div class="home description"><?php echo $obj_ShowSlider->showDescription()['d_visibility'] == '1' ? $obj_ShowSlider->showDescription()['home_des'] : ''; ?></div>
-<h2>Wybrane</h2>
-<?php foreach ($obj_ShowImages->showAllHome() as $wyn) { ?>
-    <?php //var_dump($wyn); ?>
-    <div class="div_front">
-        <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
-        <p class="p_front_info" >Autor:<?php echo $wyn['author']; ?><br />Album: <?php echo $wyn['category']; ?></p>
+    <div class="home description">
+        <?php echo nl2br($obj_ShowSlider->showDescription()['d_visibility'] == '1' ? '<br />'.$obj_ShowSlider->showDescription()['home_des'].'<br />' : '' ); ?>
     </div>
-<?php } ?>
+    <h2>Wybrane</h2>
+    <?php foreach ($obj_ShowImages->showAllHome() as $wyn) { ?>
+        <?php //var_dump($wyn); ?>
+        <div class="div_front">
+            <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
+            <p class="p_front_info" >Autor:<?php echo $wyn['author']; ?><br />Album: <?php echo $wyn['category']; ?></p>
+        </div>
+    <?php } ?>
 </div>

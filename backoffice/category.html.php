@@ -62,34 +62,30 @@
         $( "[name='rows_"+id+"']" ).hide( 'slow' );
     }
 </script>
-<div class="center">
-    <form name="add_cat" enctype="multipart/form-data" action="" method="POST">
-        <table id="table-list" class="back-all list table" border="2">
-            <tr>
-                <th>
-                    id
-                </th>
-                <th>
-                    category
-                </th>
-                <!--
-                <th>
-                    protect
-                </th>
-                <th>
-                    password
-                </th>
-                -->
-                <th>
-                    visibility
-                </th>
-                <th>
-                    action
-                </th>
-            </tr>
-            <?php $obj_ShowCategory->__setTable('category'); ?>
-            <?php if ($obj_ShowCategory->showCategoryAll()) { ?>
-                <?php foreach ($obj_ShowCategory->showCategoryAll() as $cat) { ?>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+            <form name="add_cat" enctype="multipart/form-data" action="" method="POST">
+            <table class="table table-condensed table-hover table_list">
+                <thead>
+                    <tr>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Album
+                        </th>
+                        <th>
+                            Widoczny
+                        </th>
+                        <th>
+                            Akcja
+                        </th>
+                    </tr>
+                </thead>
+                <?php $obj_ShowCategory->__setTable('category'); ?>
+                <?php if ($obj_ShowCategory->showCategoryAll()) { ?>
+                    <?php foreach ($obj_ShowCategory->showCategoryAll() as $cat) { ?>
                     <script>
                         $( document ).ready(function() {
                             var idd = '<?php echo $cat['c_id']; ?>';
@@ -106,74 +102,51 @@
                             });
                         });
                     </script>
-                    <tr name="rows_<?php echo $cat['c_id']; ?>">
-                        <td>
-                            <?php echo $cat['c_id']; ?>
-                        </td>
-                        <td>
-                            <input name="category_<?php echo $cat['c_id']; ?>" type="text" value="<?php echo $cat['category']; ?>" />  
-                        </td>
-                        <!--
-                        <td>
-                            <select name="protect_<?php /* echo $cat['c_id']; ?>">
-                                <option <?php if( $cat['protect'] == "1" ){ ?>
-                                        selected="selected"
-                                    <?php } ?> value="1">On</option>
-                                <option <?php if( $cat['protect'] == "0" ){ ?>
-                                        selected="selected"
-                                    <?php } ?> value="0">Off</option>
-                            </select> 
-                        </td>
-                        <td>
-                            <input name="password_<?php echo $cat['c_id']; ?>" type="text" value="<?php echo $cat['password']; */ ?>" />
-                        </td>
-                        -->
-                        <td>
-                            <select name="visibility_<?php echo $cat['c_id']; ?>">
-                                <option <?php if( $cat['c_visibility'] == "1" ){ ?>
-                                        selected="selected"
-                                    <?php } ?> value="1">On</option>
-                                <option <?php if( $cat['c_visibility'] == "0" ){ ?>
-                                        selected="selected"
-                                    <?php } ?> value="0">Off</option>
-                            </select> 
-                        </td>
-                        <td>
-                            <button id="b_save_<?php echo $cat['c_id']; ?>">Aktualizuj</button>
-                            <button id="b_delete_<?php echo $cat['c_id']; ?>">Usuń</button>
-                            <input id="id_hidden" type="hidden" name="id_rec_<?php echo $cat['c_id']; ?>" value="<?php echo $cat['c_id']; ?>" />
-                        </td>
-                    </tr>
+            <tbody>
+                <tr name="rows_<?php echo $cat['c_id']; ?>">
+                    <td>
+                        <?php echo $cat['c_id']; ?>
+                    </td>
+                    <td>
+                        <input class="form-control" name="category_<?php echo $cat['c_id']; ?>" type="text" value="<?php echo $cat['category']; ?>" />  
+                    </td>
+                    <td>
+                        <select class="form-control" name="visibility_<?php echo $cat['c_id']; ?>">
+                            <option <?php if( $cat['c_visibility'] == "1" ){ ?>
+                                    selected="selected"
+                                <?php } ?> value="1">On</option>
+                            <option <?php if( $cat['c_visibility'] == "0" ){ ?>
+                                    selected="selected"
+                                <?php } ?> value="0">Off</option>
+                        </select> 
+                    </td>
+                    <td>
+                        <button class="form-control" id="b_save_<?php echo $cat['c_id']; ?>">Aktualizuj</button>
+                        
+                        <button class="form-control" id="b_delete_<?php echo $cat['c_id']; ?>">Usuń</button>
+                        <input id="id_hidden" type="hidden" name="id_rec_<?php echo $cat['c_id']; ?>" value="<?php echo $cat['c_id']; ?>" />
+                    </td>
+                </tr>
+                    <?php } ?>
                 <?php } ?>
-            <?php } ?>
-            <tr>
-                <td>
-                    x
-                </td>
-                <td>
-                    <input name="category" type="text" value="new" />
-                </td>
-                <!--
-                <td>
-                    <select name="protect">
-                        <option value="1">On</option>
-                        <option selected="selected" value="0">Off</option>
-                    </select> 
-                </td>
-                <td>
-                    <input name="password" type="text" value="haslo" />
-                </td>
-                -->
-                <td>
-                    <select name="visibility">
-                        <option selected="selected" value="1">On</option>
-                        <option value="0">Off</option>
-                    </select> 
-                </td>
-                <td>
-                    <input class="input_cls" type="submit" name="i_add" value="Dodaj" />
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        x
+                    </td>
+                    <td>
+                        <input class="form-control" name="category" type="text" value="new" />
+                    </td>
+                    <td>
+                        <select class="form-control" name="visibility">
+                            <option selected="selected" value="1">On</option>
+                            <option value="0">Off</option>
+                        </select> 
+                    </td>
+                    <td>
+                        <input class="form-control" class="input_cls" type="submit" name="i_add" value="Dodaj" />
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </form>
 </div>

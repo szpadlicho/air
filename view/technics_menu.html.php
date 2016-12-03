@@ -4,7 +4,7 @@
     <a class="menu top" href="?galery">Galeria</a> | 
     <!--<a class="menu top" href="?front_table">Front Table</a>-->
     <a class="menu top" href="?back">Back</a>
-    <?php if ( isset($_GET['back']) ) { ?>
+    <?php //if ( isset($_GET['back']) ) { ?>
         ---
         <!--<a class="menu top" href="?fsearch">fsearch</a>-->
         <a class="menu top" href="?category">Category</a>
@@ -13,5 +13,5 @@
         <!--<a class="menu top" href="?resize">Resize</a>-->
         ---
         <a class="menu top" href="?install">Install</a>
-    <?php } ?>
+    <?php //} ?>
 </div>
