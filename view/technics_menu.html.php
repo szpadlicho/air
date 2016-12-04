@@ -58,5 +58,3 @@
         </div>
     </div>
 </div>
-<div id="status_text"></div>
-<div id="php"></div>

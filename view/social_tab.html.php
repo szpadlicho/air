@@ -1,3 +1,20 @@
+<script>
+    $(function() {
+        /**
+        * for social tab on smartphone
+        **/
+        $( '.lab' ).on( 'click', function() {
+            var pos = $( '.social' ).css('right');
+            pos = parseInt(pos); // clera px
+            if ( pos == 0) {
+                $( '.social' ).css({'right' : '-50px'});
+            } else if ( pos < 0) {
+                $( '.social' ).css({'right' : '0'});
+            }
+            console.log( pos );
+        });
+    });
+</script>
 <div class="social">
     <div class="lab">
         <div>SOCIAL</div>

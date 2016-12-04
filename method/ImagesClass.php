@@ -1,36 +1,11 @@
 <?php
-define('DB_HOST', 'sql.bdl.pl');
-define('DB_PORT', '');
-define('DB_SCHEMA', 'information_schema');
-define('DB_NAME', 'szpadlic_air');
-define('DB_USER', 'szpadlic_baza');
-define('DB_PASSWORD', 'haslo');
-define('DB_ENCODING', 'utf8');
-define('DB_CHARSET', 'utf8');
-class UploadImage
+include_once 'DefineConnect.php';
+class UploadImage extends DefineConnect
 {
-	private $host='sql.bdl.pl';
-	private $port='';
-	private $dbname='szpadlic_air';
-	//private $dbname_sh='information_schema';
-	private $charset='utf8';
-	private $user='szpadlic_baza';
-	private $pass='haslo';
-	private $table;
-	private $prefix;
-	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
-	}
-	public function connectDb()
-    {
-		$con = new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
-		return $con;
-		unset ($con);
 	}
     public function __getNextId()
     {
@@ -45,18 +20,11 @@ class UploadImage
         $data = date('Y-m-d H:i:s');
         $data_short = date('Y-m-d');
         $category = $_POST['category'];
-        
         $show_data = $_POST['show_data_year'].'-'.$_POST['show_data_month'].'-'.$_POST['show_data_day'];
         $show_place = $_POST['show_place'];
         $tag = $_POST['tag'];
         $author = $_POST['author'];
-        //$protect = $_POST['protect'];
-        //$password = $_POST['password'];
-        //if ( $_POST['home'] == '' ) {
-            //$home = '0';
-        //} else {
-            $home = $_POST['home'];
-        //}
+        $home = $_POST['home'];
         $position = '';
         $visibility = $_POST['visibility'];
         $none = NULL;
@@ -173,30 +141,12 @@ class UploadImage
 		return $q;
 	}
 }
-class UpdateImages
+class UpdateImages extends DefineConnect
 {
-	private $host='sql.bdl.pl';
-	private $port='';
-	private $dbname='szpadlic_air';
-	//private $dbname_sh='information_schema';
-	private $charset='utf8';
-	private $user='szpadlic_baza';
-	private $pass='haslo';
-	private $table;
-	private $prefix;
-	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
-	}
-	public function connectDb()
-    {
-		$con = new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
-		return $con;
-		unset ($con);
 	}
     public function deleteREC()
     {
@@ -238,30 +188,12 @@ class UpdateImages
         }
     }
 }
-class DeleteImages
+class DeleteImages extends DefineConnect
 {
-	private $host='sql.bdl.pl';
-	private $port='';
-	private $dbname='szpadlic_air';
-	//private $dbname_sh='information_schema';
-	private $charset='utf8';
-	private $user='szpadlic_baza';
-	private $pass='haslo';
-	private $table;
-	private $prefix;
-	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
-	}
-	public function connectDb()
-    {
-        $con = new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
-        return $con;
-        unset ($con);
 	}
 	public function deleteImage($id, $mime)
     {
@@ -287,45 +219,14 @@ class DeleteImages
 	
 	}
 }
-class ShowImages
+class ShowImages extends DefineConnect
 {
-	private $table;
-	private $prefix;
-	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
 	private $order = 'DESC';
 	private $default_on = 20;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
-	}
-	public function connect()
-    {
-		$con=new PDO("mysql:host=".DB_HOST."; port=".DB_PORT."; charset=".DB_CHARSET, DB_USER, DB_PASSWORD);
-		return $con;
-		unset ($con);
-	}
-    public function checkDb()
-    {
-		$con=$this->connect();
-		$ret = $con->query("SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '".DB_NAME."'");/*sprawdzam czy baza istnieje*/
-		$res = $ret->fetch(PDO::FETCH_ASSOC);
-		return $res ?  true : false;
-	}
-	public function connectDb()
-    {
-        if ($this->checkDb()=== true) {
-            //$con = new PDO("mysql:host=".DB_HOST."; port=".DB_PORT."; dbname=".DB_NAME."; charset=".DB_CHARSET, DB_USER, DB_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8 COLLATE utf8_polish_ci"));//unicode
-            $con = new PDO("mysql:host=".DB_HOST."; port=".DB_PORT."; dbname=".DB_NAME."; charset=".DB_CHARSET, DB_USER, DB_PASSWORD);//unicode
-            //$con->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            //$con->setAttribute(PDO::ERRMODE_EXCEPTION, true);
-            //$con->setAttribute(PDO::ATTR_ERRMODE, true);
-            //$con -> query('SET CHARACTER_SET utf8_polish_ci'); //utf8_polish_ci
-            return $con;
-            unset ($con);
-        }
 	}
     public function countRow()// do category menu
     {
@@ -591,7 +492,7 @@ class ShowImages
                         $.ajax({
                             type: 'POST',
                             <?php if ( isset($_GET['back']) ) { ?>
-                                url: 'backoffice/back_search.html.php',
+                                url: 'view/back_search.html.php',
                                 <?php if ( isset($_GET['cat_id']) ) { ?>
                                     data: {string : string, cat_id : cat_id, back : 'back'},
                                 <?php } else { ?>
@@ -599,7 +500,7 @@ class ShowImages
                                 <?php } ?>
                             <?php } ?>
                             <?php if ( isset($_GET['galery']) ) { ?>
-                                url: 'frontoffice/front_search.html.php',
+                                url: 'view/front_search.html.php',
                                 <?php if ( isset($_GET['cat_id']) ) { ?>
                                     data: {string : string, cat_id : cat_id, galery : 'galery'},
                                 <?php } else { ?>
@@ -653,7 +554,7 @@ class ShowImages
                         $.ajax({
                             type: 'POST',
                             <?php if ( isset($_GET['back']) ) { ?>
-                                url: 'backoffice/back_search.html.php',
+                                url: 'view/back_search.html.php',
                                 <?php if ( isset($_GET['cat_id']) ) { ?>
                                     data: {string : string, cat_id : cat_id, back : 'back'},
                                 <?php } else { ?>
@@ -661,7 +562,7 @@ class ShowImages
                                 <?php } ?>
                             <?php } ?>
                             <?php if ( isset($_GET['galery']) ) { ?>
-                                url: 'frontoffice/front_search.html.php',
+                                url: 'view/front_search.html.php',
                                 <?php if ( isset($_GET['cat_id']) ) { ?>
                                     data: {string : string, cat_id : cat_id, galery : 'galery'},
                                 <?php } else { ?>
@@ -686,14 +587,14 @@ class ShowImages
                 });
                 $('.category.menu').click(function(e) {
                     $.removeCookie('start');
-                    //$.removeCookie('limit');
+                    $.removeCookie('limit');
                     $.removeCookie('pagination');
                     $.removeCookie('string');
                     $.removeCookie('search');
                 });
                 $('.menu.top').click(function(e) {
                     $.removeCookie('start');
-                    //$.removeCookie('limit');
+                    $.removeCookie('limit');
                     $.removeCookie('pagination');
                     $.removeCookie('string');
                     $.removeCookie('search');
@@ -721,7 +622,7 @@ class ShowImages
                     var first = $(this).val();
                     $.cookie('pagination', first, { expires: 3600 });//na potrzeby zaznaczania aktywnego
                 });
-                $( '.first' ).click(function() {
+                $( '.last' ).click(function() {
                     var last = $(this).val();
                     $.cookie('pagination', last, { expires: 3600 });//na potrzeby zaznaczania aktywnego
                 });
@@ -752,8 +653,11 @@ class ShowImages
             </select> 
             <!-- limit na stronie -->
             <!-- paginacja -->
-            <?php //echo '<br />'.$i.' -i<br />'.$all.' -all<br />'.@$_COOKIE['pagination'].' -cp<br />'.$_COOKIE['limit'].' -cl'; ?>
+            <?php //echo '<br />'.$i.' -i max<br />'.$all.' -all<br />'.@$_COOKIE['pagination'].' -cp<br />'.$_COOKIE['limit'].' -cl<br />'; ?>
             <?php
+                /**
+                * For first prel next last button
+                **/
                 $allnr = ceil($all/@$_COOKIE['limit']);
                 @$_COOKIE['pagination'] ? @$current = @$_COOKIE['pagination'] : $current = 1;
                 /** stat stop **/
@@ -768,18 +672,36 @@ class ShowImages
                 /** keep 7 show on page **/
                 //$next === $allnr ? $start = ($start-3) : '';
                 //$prev === 1 ? $stop = ($stop+3)-($current-1) : '';
-                switch($current) {//for right show
-                    case 3: $stop = $stop + 1; break;
-                    case 2: $stop = $stop + 2; break;
-                    case 1: $stop = $stop + 3; break;
+                /**
+                * for show always 7 button
+                **/
+                if ( $stop < $i ) {// for next
+                    //echo 1;
+                    if ( !isset($_COOKIE['pagination']) || @$_COOKIE['pagination'] == 1 ) {
+                        //echo ;
+                        $stop = $stop + 3;
+                    } else if ( $start == 1 && @$_COOKIE['pagination'] < 3 ) {
+                        //echo 3;
+                        $stop = $stop + 2;
+                    } else if ( $start == 1 && @$_COOKIE['pagination'] == 3 ) {
+                        //echo 4;
+                        $stop = $stop + 1;
+                    }
                 }
-                switch($current) {//for right show
-                    case $allnr: $start = $start - 3; break;
-                    case $allnr-1: $start = $start - 2; break;
-                    case $allnr-2: $start = $start - 1; break;
-                }
-                //$current < 4 ? $stop = $stop + $prev :'';
-                //echo '<br />next-'.$next.' prev-'.$prev.' start-'.$start.' stop-'.$stop.'<br />';
+                if ( $stop == $i && $start > 1) {// for prev
+                    //echo 1;
+                    if ( @$_COOKIE['pagination'] == $i ) {
+                        $start = $start - 3;
+                        //echo 2;
+                    } else if ( (@$_COOKIE['pagination'] + 1) == $i ) {
+                        //echo 3;
+                        $start = $start - 2;
+                    } else if ( (@$_COOKIE['pagination'] + 2) == $i ) {
+                        //echo 4;
+                        $start = $start - 1;
+                    }
+                } 
+                //echo '<br />next-'.$next.' prev-'.$prev.' start-'.$start.' stop-'.$stop.' i-'.$i.' all-'.$all.'<br />';
                 
                 echo '<button class="form-control pagination_start first" '.@$dprev.' value="1">First</button>';
                 echo '<button class="form-control pagination_start" '.@$dprev.' value="'.$prev.'">Prev</button>';
@@ -813,8 +735,8 @@ if(isset($_POST['trigger_update'])) {
     $show_place = $_POST['show_place'];
     $tag = $_POST['tag'];
     $author = $_POST['author'];
-    $protect = $_POST['protect'];
-    $password = $_POST['password'];
+    $protect = '';
+    $password = '';
     $home = $_POST['home'];
     $position = '';
     $visibility = $_POST['visibility'];

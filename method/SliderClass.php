@@ -1,28 +1,11 @@
 <?php
-class UploadSlider
+include_once 'DefineConnect.php';
+class UploadSlider extends DefineConnect
 {
-	private $host='sql.bdl.pl';
-	private $port='';
-	private $dbname='szpadlic_air';
-	//private $dbname_sh='information_schema';
-	private $charset='utf8';
-	private $user='szpadlic_baza';
-	private $pass='haslo';
-	private $table;
-	private $prefix;
-	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
-	}
-	public function connectDb()
-    {
-		$con = new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
-		return $con;
-		unset ($con);
 	}
     public function __getNextId()
     {
@@ -133,30 +116,12 @@ class UploadSlider
 		}
 	}
 }
-class UpdateSlider
+class UpdateSlider extends DefineConnect
 {
-	private $host='sql.bdl.pl';
-	private $port='';
-	private $dbname='szpadlic_air';
-	//private $dbname_sh='information_schema';
-	private $charset='utf8';
-	private $user='szpadlic_baza';
-	private $pass='haslo';
-	private $table;
-	private $prefix;
-	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
-	}
-	public function connectDb()
-    {
-		$con = new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
-		return $con;
-		unset ($con);
 	}
     public function deleteREC()
     {
@@ -210,30 +175,12 @@ class UpdateSlider
         }
     }
 }
-class DeleteSlider
+class DeleteSlider extends DefineConnect
 {
-	private $host='sql.bdl.pl';
-	private $port='';
-	private $dbname='szpadlic_air';
-	//private $dbname_sh='information_schema';
-	private $charset='utf8';
-	private $user='szpadlic_baza';
-	private $pass='haslo';
-	private $table;
-	private $prefix;
-	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
-	}
-	public function connectDb()
-    {
-        $con = new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
-        return $con;
-        unset ($con);
 	}
 	public function deleteImage($id, $mime)
     {
@@ -259,45 +206,12 @@ class DeleteSlider
 	
 	}
 }
-class ShowSlider
+class ShowSlider extends DefineConnect
 {
-	private $host='sql.bdl.pl';
-	private $port='';
-	private $dbname='szpadlic_air';
-	//private $dbname_sh='information_schema';
-	private $charset='utf8';
-	private $user='szpadlic_baza';
-	private $pass='haslo';
-	private $table;
-	private $prefix;
-	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
-	}
-	public function connect()
-    {
-		$con=new PDO("mysql:host=".$this->host."; port=".$this->port."; charset=".$this->charset,$this->user,$this->pass);
-		return $con;
-		unset ($con);
-	}
-    public function checkDb()
-    {
-		$con=$this->connect();
-		$ret = $con->query("SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '".$this->dbname."'");/*sprawdzam czy baza istnieje*/
-		$res = $ret->fetch(PDO::FETCH_ASSOC);
-		return $res ?  true : false;
-	}
-	public function connectDb()
-    {
-        if ($this->checkDb()=== true) {
-            $con = new PDO("mysql:host=".$this->host."; port=".$this->port."; dbname=".$this->dbname."; charset=".$this->charset,$this->user,$this->pass);
-            return $con;
-            unset ($con);
-        }
 	}
     public function showAll()
     {
