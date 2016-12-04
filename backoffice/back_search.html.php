@@ -16,7 +16,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
         //alert(dane);
     });
 </script>
-<div class="row">
+<div class="row center">
     <div class="col-md-12 pagination">
         <?php $obj_ShowImages->showPagination($success[1]); ?>
     </div>
@@ -62,12 +62,18 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                     del(idd);
                 });
             });
+            $( document ).ready(function() {
+                var ide = '<?php echo $wyn['p_id']; ?>';
+                var dane = $('#back_img_'+ide).height();
+                $('#back_img_'+ide).next().children().css('height', dane);
+                //$('textarea').height(dane-4);
+            });
         </script>
         <tr name="rows_<?php echo $wyn['p_id']; ?>">
             <td>
                 <?php echo $wyn['p_id']; ?>
             </td>
-            <td class="back_img">
+            <td class="back_img" id="back_img_<?php echo $wyn['p_id']; ?>">
                 <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
             </td>
             <td>
@@ -234,7 +240,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
     </tbody>
 </table>
 <?php } ?>
-<div class="row">
+<div class="row center">
     <div class="col-md-12 pagination">
         <?php $obj_ShowImages->showPagination($success[1]); ?>
     </div>

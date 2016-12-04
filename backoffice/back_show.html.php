@@ -201,6 +201,7 @@
         * bootstrap
         **/
         var dane = $('.dane').height();
+        //var dane = $('.back_img').height();
         $('textarea').height(dane-4);
         //$('#table_list .galery_img').height(dane-4);
         //alert(dane);
@@ -216,14 +217,14 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-2 left menu">
+		<div class="col-md-2 menu left">
 			<div class="row">
 				<div class="col-md-12">
                 <!--empty-->&nbsp
 				</div>
 			</div>
 			<ul>
-                <li><a class="back category menu" href="?back" >Wszystkie</a></li>
+                <li><a class="category menu" href="?back" >Wszystkie</a></li>
                 <?php
                 $obj_show_cat = new ShowImages;
                 $obj_show_cat->__setTable('category');
@@ -232,12 +233,12 @@
                 $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
                 ?>
                 <?php foreach ($ret as $cat_menu){ ?>
-                    <li class="<?php echo @$_GET['cat_id'] == @$cat_menu['c_id'] ? 'active' : ''; ?>"><a class="back category menu" href="?back&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
+                    <li class="<?php echo @$_GET['cat_id'] == @$cat_menu['c_id'] ? 'active' : ''; ?>"><a class="category menu" href="?back&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
                 <?php } ?>
             </ul>
 		</div>
 		<div id="table_content" class="col-md-10">
-			<div class="row">
+			<div class="row center">
 				<div class="col-md-12 pagination">
                 <?php $obj_ShowImages->showPagination(''); ?>
 				</div>
@@ -283,12 +284,18 @@
                                 del(idd);
                             });
                         });
+                        $( document ).ready(function() {
+                            var ide = '<?php echo $wyn['p_id']; ?>';
+                            var dane = $('#back_img_'+ide).height();
+                            $('#back_img_'+ide).next().children().css('height', dane);
+                            //$('textarea').height(dane-4);
+                        });
                     </script>
 					<tr name="rows_<?php echo $wyn['p_id']; ?>">
 						<td>
 							<?php echo $wyn['p_id']; ?>
 						</td>
-                        <td class="back_img">
+                        <td class="back_img" id="back_img_<?php echo $wyn['p_id']; ?>">
 							<?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
 						</td>
                         <td>
@@ -455,7 +462,7 @@
 				</tbody>
 			</table>
             <?php } ?>
-			<div class="row">
+			<div class="row center">
 				<div class="col-md-12 pagination">
                 <?php $obj_ShowImages->showPagination(''); ?>
 				</div>
@@ -464,4 +471,6 @@
 	</div>
 </div>
 <div id="status_text"></div>
+<div id="php">
 <?php var_dump($_COOKIE); ?>
+</div>

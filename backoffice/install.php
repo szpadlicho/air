@@ -307,5 +307,7 @@ if (isset($_POST['updat_row'])) {
             <input class="input_cls" type="text" name="stop_id" placeholder="stop_id" value="96" />            
     </form>
 </div>
+<div id="status_text"></div>
+<div id="php"></div>
 
 

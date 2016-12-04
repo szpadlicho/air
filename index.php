@@ -65,8 +65,15 @@ HAVE TO DO
 	<link rel="stylesheet" type="text/css" href="js/slider/style.css" />
 	<!--<script type="text/javascript" src="js/slider/jquery.js"></script>--><!--jquery.cookie.js not working with this version-->
 	<!-- End WOWSlider.com HEAD section -->
-
+    
+    <!--Progress bar-->
+    <script src="js/progress/jquery.form.js"></script>
+    <!--Progress bar-->
 	
+    <!--Pagination-->
+    <!--*-->
+
+    <!--Pagination-->
 
 	<script type="text/javascript">
         $(document).ready(function(){
@@ -95,18 +102,8 @@ HAVE TO DO
     <link rel="stylesheet" type="text/css" href="css/view.css" />
 </head>
 <body>
-<div id="top_menu_placeholder">
-    <div id="top_menu">
-    <?php
-    //if ( !empty($_GET) ) {
-        include_once 'view/technics_menu.html.php';
-    //}
-    ?>
-    </div>
-</div>
-<?php //include_once 'view/technics_menu.html'; ?>
-
 <?php
+include_once 'view/technics_menu.html.php';
 if ( isset($_GET['back']) ){
     include_once 'method/ImagesClass.php';
     include 'backoffice/back_show.html.php';
@@ -142,7 +139,7 @@ if ( isset($_GET['last']) ){
     // include_once 'method/ImagesClass.php';
     // include 'view/front_table.html';
 // }
-if ( isset($_GET['install']) ){
+if ( isset($_GET['install_2016']) ){
     include 'backoffice/install.php';
 }
 if ( empty($_GET) ) {
@@ -150,20 +147,13 @@ if ( empty($_GET) ) {
     include_once 'method/ImagesClass.php';// dla pokaziania wybranych zdjec na glownej stronie
     include 'frontoffice/home.html.php';
 }
+if ( empty($_GET) || isset($_GET['galery']) || isset($_GET['last']) ){
+    include_once 'view/social_tab.html.php';
+}
 ?>
-<!--
-<div>
-    <?php for ($i = 1; $i <= 11; $i++) { ?>
-    <div class="div_front">
-        <a class="fancybox-button" rel="fancybox-button">
-            <img class="front_img" style="vertical-align: middle; font-size: 0px;" src="data/mini/<?php //echo $i ?>.jpg" alt="image" align="" />
-        </a>
-    </div>
-    <?php } ?>
-</div>
--->
 </body>
 </html>
-<?php
-
-//var_dump($_FILES);
+<div id="status_text"></div>
+<div id="php">
+<?php var_dump($_COOKIE); ?>
+</div>

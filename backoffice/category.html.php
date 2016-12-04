@@ -134,7 +134,7 @@
                         x
                     </td>
                     <td>
-                        <input class="form-control" name="category" type="text" value="new" />
+                        <input class="form-control" name="category" type="text" placeholder="Nowy album" />
                     </td>
                     <td>
                         <select class="form-control" name="visibility">
@@ -150,3 +150,5 @@
         </table>
     </form>
 </div>
+<div id="status_text"></div>
+<div id="php"></div>

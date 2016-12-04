@@ -1,4 +1,11 @@
 <script>
+    $(document).ajaxStart(function () {
+        $('html').addClass('busy');
+        $('.loader').show();
+    }).ajaxComplete(function () {
+        $('html').removeClass('busy');
+        $('.loader').hide();
+    });
     $(document).ready(function(){
         /**
         * bootstrap
@@ -9,6 +16,8 @@
         //alert(dane);
     });
 </script>
+<div class="loader"></div>
+
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
@@ -39,7 +48,7 @@
                                 <input class="form-control input_cls" type="file" name="img[]" multiple />
                             </td>
                             <td>
-                                <textarea class="form-control" name="tag">raz dwa trzy</textarea>
+                                <textarea class="form-control" name="tag" placeholder="Tagi"></textarea>
                             </td>
                             <td>
                                 <table class="table table-condensed table-hover dane">
@@ -65,7 +74,7 @@
                                             Miejsce:
                                         </td>
                                         <td>
-                                            <input class="form-control" name="show_place" type="text" value="Częstochowa"></textarea>
+                                            <input class="form-control" name="show_place" type="text" placeholder="Miejsce wykonania" />
                                         </td>
                                     <tr>
                                     <tr>
@@ -73,7 +82,7 @@
                                             Autor:
                                         </td>
                                         <td>
-                                            <input class="form-control" name="author" type="text" value="deoc" />
+                                            <input class="form-control" name="author" type="text" placeholder="Autor" />
                                         </td>
                                     <tr>
                                 </table>
@@ -147,9 +156,16 @@
                                 <input id="id_hidden" type="hidden" name="id_rec" value="" />
                             </td>
                         </tr>
+                        <tr class="nopadding">
+                            <td colspan="5">
+                                <?php include_once'view/progress_bar.html.php'; ?>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </form>
         </div>
     </div>
 </div>
+<div id="status_text"></div>
+<div id="php"></div>

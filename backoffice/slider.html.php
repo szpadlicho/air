@@ -58,16 +58,16 @@
                                 <input class="form-control" type="file" name="img[]" multiple />
                             </td>
                             <td>
-                                <input class="form-control" type="text" name="slider_href" value="#" />
+                                <input class="form-control" type="text" name="slider_href" placeholder="Wszystko z adresu po '?'" />
                             </td>
                             <td>
-                                <input class="form-control" type="text" name="slider_alt" value="Alt text" />
+                                <input class="form-control" type="text" name="slider_alt" placeholder="Alternatywny tekst" />
                             </td>
                             <td>
-                                <input class="form-control" type="text" name="slider_title" value="Title text" />
+                                <input class="form-control" type="text" name="slider_title" placeholder="Tytuł slajdu" />
                             </td>
                             <td>
-                                <input class="form-control" type="text" name="slider_des" value="Opis text" />
+                                <input class="form-control" type="text" name="slider_des" placeholder="Opis slajdu" />
                             </td>
                             <td>
                                 <select name="visibility">
@@ -78,6 +78,11 @@
                             <td>
                                 <input class="form-control" type="submit" name="upload_slider" value="Upload" />
                                 <input id="id_hidden" type="hidden" name="id_rec" value="" />
+                            </td>
+                        </tr>
+                        <tr class="nopadding">
+                            <td colspan="7">
+                                <?php include_once'view/progress_bar.html.php'; ?>
                             </td>
                         </tr>
                     </tbody>
@@ -332,3 +337,4 @@
     </div>
 </div>
 <div id="status_text"></div>
+<div id="php"></div>

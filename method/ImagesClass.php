@@ -57,7 +57,7 @@ class UploadImage
         //} else {
             $home = $_POST['home'];
         //}
-        $position = $_POST['position'];
+        $position = '';
         $visibility = $_POST['visibility'];
         $none = NULL;
         $feedback = $con->exec("INSERT INTO `".$this->table."`(
@@ -143,7 +143,7 @@ class UploadImage
         //if (! in_array($file_type, $allowed)) {
 		$allowed = array ('jpg', 'jpeg', 'avi', '3gp', '4gp', 'mov', 'png', 'gif');/*pliki które mozna uploadowac */
 		if ( in_array($file_type, $allowed)) {		
-			echo '<span class="catch_span">plik zaladowany: -'.$i.'- '.$_FILES['img']['name'][$i].'</span><br />';
+			//echo '<span class="catch_span">plik zaladowany: -'.$i.'- '.$_FILES['img']['name'][$i].'</span><br />';
 			move_uploaded_file($_FILES['img']['tmp_name'][$i], $file_id);
             //here create image
             $mini_is_up = $this->createMini($file_id, $next_id, $file_type);
@@ -556,7 +556,7 @@ class ShowImages
     public function copyButton($name)
     {
         ?>
-        <button class="copy <?php echo $name; ?>"></button>
+        <button class="copy <?php echo $name; ?>" title="Kopiuj"></button>
         <?php
 	}
     public function showPagination($cu)
@@ -565,10 +565,10 @@ class ShowImages
         //if ( (isset($cu) && !empty($cu)) || $cu == 0 ) {
         if ( isset($cu) && !empty($cu)) {
             //var_dump($cu);
-            $all = $cu;
+            $all = $cu; //dla wyszukiwarki
             //echo 'adasdsada';
         } else {
-            $all = $this->countRow();
+            $all = $this->countRow();//normalnie dla strony
         }
         $count = floor($all/$this->default_on);
         isset($_COOKIE['limit']) ? '' : $_COOKIE['limit'] = $this->default_on;/* default limit images show per page */
@@ -640,6 +640,7 @@ class ShowImages
                     //console.log('Submitting');
                     $.cookie('start', start, { expires: 3600 });
                     $.cookie('pagination', pagination, { expires: 3600 });//na potrzeby zaznaczania aktywnego
+                    //alert(';asdasd');
                     if ( $.cookie('string') ) { 
                         /**
                         * for show and work dynamic search pagination
@@ -697,6 +698,33 @@ class ShowImages
                     $.removeCookie('string');
                     $.removeCookie('search');
                 });
+                /**
+                * set active first pagination start
+                * when cookies not exist
+                **/
+                if ($.cookie('pagination')) {
+                    //alert('yes');
+                } else {
+                    //$('.pagination_start').first().addClass('p_active');
+                    $('.pagination_start:nth(2)').addClass('p_active');
+                    //$('.pagination_start:nth(1)').addClass('pagination_hide');
+                    $('.pagination_start:nth(1)').attr('disabled', 'disabled');
+                    $('.pagination_start:nth(0)').attr('disabled', 'disabled');
+                    
+                    //alert('not');
+                }
+                //$(".pagination_start").slice(0,20);
+                //$(".pagination_start").hide();
+                //alert('dfgv');
+                //$(".pagination_start:lt(1)").hide();
+                $( '.first' ).click(function() {
+                    var first = $(this).val();
+                    $.cookie('pagination', first, { expires: 3600 });//na potrzeby zaznaczania aktywnego
+                });
+                $( '.first' ).click(function() {
+                    var last = $(this).val();
+                    $.cookie('pagination', last, { expires: 3600 });//na potrzeby zaznaczania aktywnego
+                });
             });
         </script>
         <?php 
@@ -711,17 +739,60 @@ class ShowImages
                 $option[] = (int)$_COOKIE['limit'];
             }
             $option[] = (int)$all;
-            asort($option);
+            asort($option);//sortuje dane
+            $option = array_unique($option);//wykluczam takie same wartosci z tablicy
+            //$tab = array();
             //var_dump($option);
             ?>
+            <!-- limit na stronie -->
             <select class="form-control pagination_limit">
                 <?php foreach($option as $opt) { ?>
                     <option <?php echo ( $_COOKIE['limit'] == $opt ) ? 'selected = "selected"' : '' ; ?> ><?php echo $opt; ?></option>
                 <?php } ?>
-            </select>
-            <?php for($i = 1; $i <= ceil($all/@$_COOKIE['limit']); $i++) { ?>
-                <button class="form-control pagination_start <?php echo @$_COOKIE['pagination'] == $i ? 'p_active' : '' ; ?>" value="<?php echo $i; ?>"><?php echo $i; ?></button>
-            <?php } ?>
+            </select> 
+            <!-- limit na stronie -->
+            <!-- paginacja -->
+            <?php //echo '<br />'.$i.' -i<br />'.$all.' -all<br />'.@$_COOKIE['pagination'].' -cp<br />'.$_COOKIE['limit'].' -cl'; ?>
+            <?php
+                $allnr = ceil($all/@$_COOKIE['limit']);
+                @$_COOKIE['pagination'] ? @$current = @$_COOKIE['pagination'] : $current = 1;
+                /** stat stop **/
+                $current > 3 ? $start = $current-3 : $start = 1;
+                $current < $allnr-3 ? $stop = $current+3 : $stop = $allnr;
+                /** next prev **/
+                ($current+1) < $allnr ? $next = $current+1 : $next = $allnr;//set disable here
+                ($current-1) > 1 ? $prev = $current-1 : $prev = 1;//set disable here
+                /** hide next prev **/
+                $current == $allnr ? $dnext = 'disabled' : '';
+                $current == 1 ? $dprev = 'disabled' : '';
+                /** keep 7 show on page **/
+                //$next === $allnr ? $start = ($start-3) : '';
+                //$prev === 1 ? $stop = ($stop+3)-($current-1) : '';
+                switch($current) {//for right show
+                    case 3: $stop = $stop + 1; break;
+                    case 2: $stop = $stop + 2; break;
+                    case 1: $stop = $stop + 3; break;
+                }
+                switch($current) {//for right show
+                    case $allnr: $start = $start - 3; break;
+                    case $allnr-1: $start = $start - 2; break;
+                    case $allnr-2: $start = $start - 1; break;
+                }
+                //$current < 4 ? $stop = $stop + $prev :'';
+                //echo '<br />next-'.$next.' prev-'.$prev.' start-'.$start.' stop-'.$stop.'<br />';
+                
+                echo '<button class="form-control pagination_start first" '.@$dprev.' value="1">First</button>';
+                echo '<button class="form-control pagination_start" '.@$dprev.' value="'.$prev.'">Prev</button>';
+                echo $current > 4 ? '<span class="p_dots">...</span>' : '';
+                for($i = $start; $i <= $stop; $i++) {
+                    if (@$current == $i) { $a = 'p_active'; } else {$a='';}
+                    echo '<button class="form-control pagination_start '.$a.'" value="'.$i.'">'.$i.'</button>';
+                }
+                echo $stop < $allnr ? '<span class="p_dots">...</span>' : '';
+                echo '<button class="form-control pagination_start" '.@$dnext.' value="'.$next.'">Next</button>';
+                echo '<button class="form-control pagination_start last" '.@$dnext.' value="'.$allnr.'">Last</button>';
+            ?> 
+            <!-- paginacja -->
             <?php
         }
     }
@@ -745,7 +816,7 @@ if(isset($_POST['trigger_update'])) {
     $protect = $_POST['protect'];
     $password = $_POST['password'];
     $home = $_POST['home'];
-    $position = $_POST['position'];
+    $position = '';
     $visibility = $_POST['visibility'];
     $obj_update = new UpdateImages;
     $obj_update -> __setTable($tab_name);

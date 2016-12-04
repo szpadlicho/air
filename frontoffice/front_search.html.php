@@ -20,27 +20,29 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
 //var_dump($_COOKIE);
 //var_dump($success->fetch(PDO::FETCH_ASSOC));
 ?>
-<tr class="tr_pagination">
-    <td class="td_pagination">
-        <?php $obj_ShowImages->showPagination($success[1]); ?>
-    </td>
-</tr>
-<tr id="tr_content">
-    <td id="td_content">
-        <?php foreach($success[0] as $wyn){ ?>
-            <div class="div_front">
-                <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
-                <p class="p_front_info">Autor:<?php echo $wyn['author']; ?><br />Album: <?php echo $wyn['category']; ?></p>
-            </div>
-        <?php } ?> 
-    </td>
-</tr>
-<tr class="tr_pagination">
-    <td class="td_pagination">
-        <?php $obj_ShowImages->showPagination($success[1]); ?>
-    </td>
-</tr>
-
-<?php //var_dump($_COOKIE); ?>
+<div class="row center">
+    <div class="col-md-12 pagination">
+    <?php $obj_ShowImages->showPagination($success[1]); ?>
+    </div>
+</div>
+<div class="row center">
+    <div class="col-md-12">
+    <?php foreach($success[0] as $wyn){ ?>
+        <div class="div_front">
+            <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
+            <p class="p_front_info">Autor:<?php echo $wyn['author']; ?><br />Album: <?php echo $wyn['category']; ?></p>
+        </div>
+    <?php } ?> 
+    </div>
+</div>
+<div class="row center">
+    <div class="col-md-12 pagination">
+    <?php $obj_ShowImages->showPagination($success[1]); ?>
+    </div>
+</div>
+<div id="status_text"></div>
+<div id="php">
+<?php var_dump($_COOKIE); ?>
+</div>
 
                         
