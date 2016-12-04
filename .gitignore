@@ -1,5 +1,4 @@
-.git
-data/
-img/slider/images
-img/slider/thumbnails
-img/slider/tooltips
+/data/
+/img/slider/images
+/img/slider/thumbnails
+/img/slider/tooltips
