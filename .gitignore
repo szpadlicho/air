@@ -1,4 +1,5 @@
-/data/
-/img/slider/images
-/img/slider/thumbnails
-/img/slider/tooltips
+data/*
+data/mini/*
+img/slider/images/*
+img/slider/thumbnails/*
+img/slider/tooltips/*
