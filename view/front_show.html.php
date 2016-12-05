@@ -95,7 +95,8 @@
                 <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>
                     <div class="div_front">
                         <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
-                        <p class="p_front_info" >Autor:<?php echo $wyn['author']; ?><br />Album: <?php echo $wyn['category']; ?></p>
+                        <p class="p_front_data" >#<?php echo $wyn['p_id']; ?> Data: <?php echo $wyn['show_data']; ?></p>
+                        <p class="p_front_info" >Autor: <?php echo $wyn['author']; ?><br />Album: <?php echo $wyn['category']; ?></p>
                     </div>
                 <?php } ?> 
 				</div>

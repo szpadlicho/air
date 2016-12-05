@@ -64,6 +64,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
         <tr name="rows_<?php echo $wyn['p_id']; ?>">
             <td>
                 <?php echo $wyn['p_id']; ?>
+                <input class="form-control check_box" type="checkbox" name="massive_del" value="sss">
             </td>
             <td class="back_img" id="back_img_<?php echo $wyn['p_id']; ?>">
                 <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>

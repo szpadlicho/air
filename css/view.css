@@ -14,6 +14,21 @@ html, body{
     color: #fff;
     font: 1em 'Ubuntu Condensed', Impact, Charcoal, sans-serif;
 }
+/*form moved bg*/
+/* body{
+    background: #000 url(../img/bg/bg.jpg) center 0px no-repeat; 
+    background-attachment:fixed; 
+    background-size: cover;
+}
+body {
+  width: 100%;
+  height: 1000px;
+  #background-image: url(../img/bg/bg.jpg), url(../img/bg/bg.jpg), linear-gradient(to right, rgba(30, 75, 115, 1), rgba(255, 255, 255, 0));
+  background-image: url(../img/bg/bg.jpg), url(../img/bg/bg.jpg), url(../img/bg/bg.jpg);
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: bottom right, left, right;
+  background: -moz-linear-gradient(to right, rgba(30, 75, 115, 1), rgba(255, 255, 255, 0)), -webkit-gradient(to right, rgba(30, 75, 115, 1), rgba(255, 255, 255, 0)), -ms-linear-gradient(to right, rgba(30, 75, 115, 1), rgba(255, 255, 255, 0)), linear-gradient(to right, rgba(30, 75, 115, 1), rgba(255, 255, 255, 0));
+} */
 a{
     color: inherit;
     text-decoration: none;
@@ -55,6 +70,7 @@ a:active{
     /*background: url('img/tr/loading.gif') 50% 50% no-repeat rgb(249,249,249);*/
 }
 /**pagination**/
+.pagination_sort,
 .pagination_limit{
     width: 50px;
     display: inline;
@@ -63,7 +79,22 @@ a:active{
     width: 40px;
     display: inline;
     position:relative;
+    border-radius: 0;
+    #border-left: none;
+    #border-right: none;
 }
+/* .pagination_start:nth-child(2) {border-radius: 4px;} */
+.pagination_start:first-child, .first {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    #border-left: 1px solid grey;
+}
+.pagination_start:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    #border-right: 1px solid grey;
+}
+
 .pagination_hide{
     display: none;
 }
@@ -91,19 +122,29 @@ a:active{
     text-align: center;
 }
 .p_dots {
+    display:none;
     font-size:1.5em;
     position:relative;
     bottom: -0.25em;
 }
 /**photos front**/
+.p_front_data
+{
+    top: 0em; 
+    left: 0em; 
+}
+.p_front_info
+{
+    bottom: -0.6em; 
+    right: 0em;  
+}
+.p_front_data,
 .p_front_info
 {
     opacity: 0;
     position: absolute; 
-    bottom: -0.6em; 
-    right: 0em; 
     color: white; 
-    background: black;
+    background: #46484E;
     text-align: right;
     padding: 0 0.2em;
     -webkit-transition: all 0.8s ease; /* Safari */
@@ -111,6 +152,7 @@ a:active{
     
     /*transition: [transition-property all (the default)] [transition-duration] [transition-timing-function ease linear ease-in ease-out ease-in-out step-start step-end ] [transition-delay];*/
 }
+.div_front:hover > .p_front_data,
 .div_front:hover > .p_front_info
 {
     opacity: 1;    
@@ -132,10 +174,32 @@ a:active{
     width: 100%;
     background: white;
 }
+/** Fancy Box **/
+.fancybox-title-inside-wrap { 
+    padding: 0.2em;
+    background: #46484E;
+    color: white;
+}
 /**back settings**/
 .save_all {
     position:fixed; 
     right:1em; 
+    top:1em;
+    z-index: 101;
+    width: 5%;
+    min-width: 50px;
+}
+.delete_all {
+    position:fixed; 
+    right:8em; 
+    top:1em;
+    z-index: 101;
+    width: 5%;
+    min-width: 50px;
+}
+.select_all {
+    position:fixed; 
+    right:12em; 
     top:1em;
     z-index: 101;
     width: 5%;
@@ -172,11 +236,11 @@ button.copy{
     width: 25px;
     
 }
-button, input, textarea, select {
+button, input, textarea, select, input[type="radio"] {
     background: transparent;
     border: none;
     border: 1px solid grey;
-    min-width: 50px;
+    min-width: 40px;
 }
 option{
     background: rgba(0,0,0,0.5) !important;
@@ -272,8 +336,8 @@ option{
     top: 100px;
     #border: 1px solid red;
     width: 75px;
-    -webkit-transition: right 0.8s ease-in-out; /* Safari */
-    transition: right .8s ease-in-out;
+    -webkit-transition: right 0.5s ease-in-out; /* Safari */
+    transition: right .5s ease-in-out;
     #-webkit-transition-property: top, right; /* Safari */
     #transition-property: top, right;
     #-webkit-transition-duration: 1s; /* Safari */
@@ -326,6 +390,9 @@ option{
 .ws_bulframe > div > div {
     width: 1800% !important;
 }
+.slider_container{
+    
+}
 /**Progress Bar**/
 .progress { 
     position:relative; 
@@ -336,7 +403,7 @@ option{
     height:25px; 
 }
 .progress-bar { 
-    background-color: rgb(239, 216, 38); 
+    background-color: rgb(239, 216, 38); /*#efd826*/
     width:0%; 
     height:25px; 
     border-radius: 4px; 
@@ -346,6 +413,14 @@ option{
     display:inline-block; 
 /*     top:3px; */ 
     left:48%; 
+}
+/** Bootstrap **/
+input[type="radio"]:focus, 
+input[type="checkbox"]:focus{
+  border-color: rgb(239, 216, 38);
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(239, 216, 38, .6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(239, 216, 38, .6);
 }
 /**debuger**/
 #php,
@@ -362,6 +437,19 @@ option{
     #text-align: right;
 }
 .xdebug-var-dump{
+    #display:inline-block;
+    #position: fixed;
+    #bottom:0em;
+    #left: 0;
+    #z-index: 99;
+    #left: 40%;
+    #margin: auto auto;
+    #transform: translateX(-50%);
+    #position: relative;
+    #width: auto;
+}
+/*:last-child > p:last-child{*/
+pre:last-child{
     position: fixed;
     bottom:0;
     left: 0;

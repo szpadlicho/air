@@ -126,7 +126,7 @@
                 $( '.save_button' ).click();
             });
         });
-    });    
+    });   
     $(document).ajaxStart(function () {
         $('html').addClass('busy');
         $('.loader').show();
@@ -202,9 +202,34 @@
             });
         });
     });
+    $(function() {
+        /** zaznaczanie i uswanie wszystkich na stronie **/
+        $('#select_all').change(function(e) {
+            //e.preventDefault();
+            if ( $(this).is(":checked") ) {
+                $('.check_box').prop('checked',true);
+            } else {
+                $('.check_box').prop('checked',false);
+            }
+            
+        });
+        //$('#delete_all').click(function(e) {
+        //$('#delete_all').on('click', function(e) {
+        $(document).on("click", "#delete_all", function(e) {
+            e.preventDefault();
+            //$('.check_box:checked').parent().parent().children(':nth-child(7)').children( '.delete_button' ).hide();//work only base site not on search site
+            $('.check_box:checked').parent().parent().children().next().next().next().next().next().next().children().next().click();
+
+        });
+        $(document).on("click", ".check_box", function() {
+           //alert($(this).val());
+        });
+    }); 
 </script>
 <div class="loader"></div>
 <button class="form-control save_all" id="save_all">Save All</button>
+<button class="form-control delete_all" id="delete_all">Delete All</button>
+<input class="form-control select_all check_box" id ="select_all" type="checkbox" name="" value="">
 
 <div class="container-fluid">
 	<div class="row">
@@ -290,9 +315,10 @@
                             //$('textarea').height(dane-4);
                         });
                     </script>
-					<tr name="rows_<?php echo $wyn['p_id']; ?>">
+					<tr class="rr" name="rows_<?php echo $wyn['p_id']; ?>">
 						<td>
 							<?php echo $wyn['p_id']; ?>
+                            <input class="form-control check_box" type="checkbox" name="massive_del" value="aaa">
 						</td>
                         <td class="back_img" id="back_img_<?php echo $wyn['p_id']; ?>">
 							<?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
@@ -435,7 +461,7 @@
                         <td>
 							<button class="form-control save_button" id="b_save_<?php echo $wyn['p_id']; ?>">Zapisz</button>
                             <br />
-                            <button class="form-control" id="b_delete_<?php echo $wyn['p_id']; ?>">Usuń</button>
+                            <button class="form-control delete_button" id="b_delete_<?php echo $wyn['p_id']; ?>">Usuń</button>
                             <input id="id_hidden" type="hidden" name="id_rec_<?php echo $wyn['p_id']; ?>" value="<?php echo $wyn['p_id']; ?>" />
                             <input id="id_hidden_prefix" type="hidden" name="prefix_<?php echo $wyn['p_id']; ?>" value="p_" />
                             <input id="mime_hidden" type="hidden" name="photo_mime_<?php echo $wyn['p_id']; ?>" value="<?php echo $wyn['photo_mime']; ?>" />
@@ -469,3 +495,27 @@
 		</div>
 	</div>
 </div>
+<script>
+    // $(document).ready(function(){
+        // /** zaznaczanie i uswanie wszystkich na stronie **/
+        // $('#select_all').on('change', function(e) {
+            // //e.preventDefault();
+            // if ( $(this).is(":checked") ) {
+                // $('.check_box').prop('checked',true);
+            // } else {
+                // $('.check_box').prop('checked',false);
+            // }
+            
+        // });
+        // //$('#delete_all').click(function(e) {
+        // $('#delete_all').on('click', function(e) {
+            // //e.preventDefault();
+            // var tt = $('.check_box:checked').val();
+            // alert(tt);
+            // $('.check_box:checked').parent().parent().children(':nth-child(7)').children( '.delete_button' ).hide();
+        // });
+        // $(document).on("click", ".check_box", function() {
+           // alert($(this).val());
+         // });
+    // }); 
+</script>

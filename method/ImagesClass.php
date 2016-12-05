@@ -222,12 +222,24 @@ class DeleteImages extends DefineConnect
 class ShowImages extends DefineConnect
 {
 	private $order = 'DESC';
-	private $default_on = 20;
+	private $default_on = DEFAULT_ON;
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
 	}
+    public function __construct()
+    {
+        if ( isset($_COOKIE['sort']) ) {
+            //des malejaca
+            if ( $_COOKIE['sort'] == 'Up' ) {
+                $this->order = 'ASC';
+            } else {
+                $this->order = 'DESC';
+            }
+
+        }
+    }
     public function countRow()// do category menu
     {
         if ( isset($_GET['back']) ) { //dla zaplecza z ukrytumi
@@ -429,7 +441,7 @@ class ShowImages extends DefineConnect
             //return '<img class="back-all list mini-image" style="height:100px;" src="'.$dir1.$id.'.'.$mime.'" alt="image" />';
             ?>
             <a class="fancybox-button" rel="fancybox-button" href="<?php echo $dir0.$id.'.'.$mime; ?>" title="<?php echo $tag; ?>">
-                <img class="galery_img" src="<?php echo $dir1.$id.'.'.$mime; ?>" alt="<?php echo $tag; ?>" /><!--*-->
+                <img class="galery_img" src="<?php echo $dir1.$id.'.'.$mime; ?>" alt="<?php echo $tag; ?>" target="_blank" /><!--*-->
             </a>
             <?php
         } else {
@@ -464,13 +476,14 @@ class ShowImages extends DefineConnect
     {
         //$default = 20;
         //if ( (isset($cu) && !empty($cu)) || $cu == 0 ) {
-        if ( isset($cu) && !empty($cu)) {
+        if ( (isset($cu) && !empty($cu)) || $cu === 0) { //tu jest problem jesli nic nie wyszuka to daje all
             //var_dump($cu);
             $all = $cu; //dla wyszukiwarki
             //echo 'adasdsada';
         } else {
             $all = $this->countRow();//normalnie dla strony
         }
+        //var_dump($cu);
         $count = floor($all/$this->default_on);
         isset($_COOKIE['limit']) ? '' : $_COOKIE['limit'] = $this->default_on;/* default limit images show per page */
         isset($_COOKIE['start']) ? '' : $_COOKIE['start'] = 0;/* default begin image */
@@ -531,6 +544,7 @@ class ShowImages extends DefineConnect
                         **/
                         location.reload();
                     }
+                    
                 });
                 $( '.pagination_start' ).click(function() {
                     var limit = '<?php echo $_COOKIE['limit']; ?>';
@@ -585,9 +599,54 @@ class ShowImages extends DefineConnect
                     }
                     
                 });
+                $( '.pagination_sort' ).change(function() {
+                    var sort = $(this).val();
+                    $.cookie('sort', sort, { expires: 3600 });//na potrzeby zaznaczania aktywnego
+                    if ( $.cookie('string') ) { 
+                        /**
+                        * for show and work dynamic search pagination
+                        **/
+                        //console.log('coki set');
+                        var string = $.cookie('string');
+                        <?php if ( isset($_GET['cat_id']) ) { ?>
+                            var cat_id = '<?php echo $_GET['cat_id']; ?>';
+                        <?php } ?>
+                        $.ajax({
+                            type: 'POST',
+                            <?php if ( isset($_GET['back']) ) { ?>
+                                url: 'view/back_search.html.php',
+                                <?php if ( isset($_GET['cat_id']) ) { ?>
+                                    data: {string : string, cat_id : cat_id, back : 'back'},
+                                <?php } else { ?>
+                                    data: {string : string, back : 'back'},
+                                <?php } ?>
+                            <?php } ?>
+                            <?php if ( isset($_GET['galery']) ) { ?>
+                                url: 'view/front_search.html.php',
+                                <?php if ( isset($_GET['cat_id']) ) { ?>
+                                    data: {string : string, cat_id : cat_id, galery : 'galery'},
+                                <?php } else { ?>
+                                    data: {string : string, galery : 'galery'},
+                                <?php } ?>
+                            <?php } ?>
+                            //cache: false,
+                            dataType: 'text',
+                            success: function(data){
+                                $('#table_content').html(data);
+                                //$('.tr_pagination').hide();
+                                $('#search').val($.cookie('string'));
+                            }
+                        });
+                    } else {
+                        /**
+                        * for normal pagination without search
+                        **/
+                        location.reload();
+                    }
+                });
                 $('.category.menu').click(function(e) {
                     $.removeCookie('start');
-                    $.removeCookie('limit');
+                    //$.removeCookie('limit');
                     $.removeCookie('pagination');
                     $.removeCookie('string');
                     $.removeCookie('search');
@@ -669,26 +728,48 @@ class ShowImages extends DefineConnect
                 /** hide next prev **/
                 $current == $allnr ? $dnext = 'disabled' : '';
                 $current == 1 ? $dprev = 'disabled' : '';
-                /** keep 7 show on page **/
-                //$next === $allnr ? $start = ($start-3) : '';
-                //$prev === 1 ? $stop = ($stop+3)-($current-1) : '';
                 /**
                 * for show always 7 button
                 **/
-                if ( $stop < $i ) {// for next
-                    //echo 1;
+                //echo 'stop-'.$stop.' < i-'.$i.' allnr-'.$allnr;
+                //stop start
+                //var_dump($all);
+                if ( $stop < $i && $allnr > $stop ) {// for next && $allnr > $i
+                    //echo 'a';
                     if ( !isset($_COOKIE['pagination']) || @$_COOKIE['pagination'] == 1 ) {
-                        //echo ;
-                        $stop = $stop + 3;
+                        //echo 'b';
+                            if ($allnr > $stop){
+                                $stop = $stop + 1;
+                            }
+                            if ($allnr > $stop){
+                                $stop = $stop + 1;
+                            }
+                            if ($allnr > $stop){
+                                $stop = $stop + 1;
+                            }
+                            //$stop = $stop + 3;
+
                     } else if ( $start == 1 && @$_COOKIE['pagination'] < 3 ) {
-                        //echo 3;
-                        $stop = $stop + 2;
+                        //echo 'c';
+                            if ($allnr > $stop){
+                                $stop = $stop + 1;
+                            }
+                            if ($allnr > $stop){
+                                $stop = $stop + 1;
+                            }
+                        //$stop = $stop + 2;
                     } else if ( $start == 1 && @$_COOKIE['pagination'] == 3 ) {
-                        //echo 4;
-                        $stop = $stop + 1;
+                        //echo 'd';
+                        if ($allnr > $stop){
+                            $stop = $stop + 1;
+                        }
+                        //$stop = $stop + 1;
                     }
                 }
-                if ( $stop == $i && $start > 1) {// for prev
+                /**
+                * for show always 7 button
+                **/
+                if ( $stop == $i && $start > 1 ) {// for prev
                     //echo 1;
                     if ( @$_COOKIE['pagination'] == $i ) {
                         $start = $start - 3;
@@ -701,7 +782,8 @@ class ShowImages extends DefineConnect
                         $start = $start - 1;
                     }
                 } 
-                //echo '<br />next-'.$next.' prev-'.$prev.' start-'.$start.' stop-'.$stop.' i-'.$i.' all-'.$all.'<br />';
+                //stop start
+                //echo '<br />next-'.$next.' cur-'.$current.' prev-'.$prev.' start-'.$start.' stop-'.$stop.' i-'.$i.' all-'.$all.' allnr-'.$allnr.'<br />';
                 
                 echo '<button class="form-control pagination_start first" '.@$dprev.' value="1">First</button>';
                 echo '<button class="form-control pagination_start" '.@$dprev.' value="'.$prev.'">Prev</button>';
@@ -714,6 +796,10 @@ class ShowImages extends DefineConnect
                 echo '<button class="form-control pagination_start" '.@$dnext.' value="'.$next.'">Next</button>';
                 echo '<button class="form-control pagination_start last" '.@$dnext.' value="'.$allnr.'">Last</button>';
             ?> 
+            <select class="form-control pagination_sort">
+                    <option <?php echo ( @$_COOKIE['sort'] == 'Up' ) ? 'selected = "selected"' : '' ; ?> >Up</option>
+                    <option <?php echo ( @$_COOKIE['sort'] == 'Down' ) ? 'selected = "selected"' : '' ; ?> >Down</option>
+            </select>
             <!-- paginacja -->
             <?php
         }
