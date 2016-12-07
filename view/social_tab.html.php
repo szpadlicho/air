@@ -11,7 +11,6 @@
             } else if ( pos < 0) {
                 $( '.social' ).css({'right' : '0'});
             }
-            console.log( pos );
         });
     });
 </script>

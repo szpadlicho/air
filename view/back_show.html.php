@@ -23,19 +23,15 @@
         
         var myData = ({trigger_update:trigger_update, tab_name:tab_name, id:id, photo_name:photo_name, category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,home:home,position:position,visibility:visibility});
         
-        console.log('Submitting');
-        
         $.ajax({
             url:  'method/ImagesClass.php',
             type: "POST",
             data:  myData,
             success: function (data) {
                 info('SAVE '+id);
-                //location.reload();
             }
         }).done(function(data) {
             info('SAVE');
-            //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
             console.log(jqXHR.responseText);
@@ -52,15 +48,12 @@
         
         var myData = ({trigger_del:trigger_del, tab_name:tab_name, id:id, photo_mime:photo_mime});
         
-        console.log('Submitting');
-        
         $.ajax({
             url:  'method/ImagesClass.php',
             type: "POST",
             data:  myData,
             success: function (data) {
                 info('DELETE '+id);
-                //location.reload();
             }
         }).done(function(data) {
             info('DELETE');
@@ -90,7 +83,6 @@
     **/
     $(document).ready(function(){
         $('body').on('click', '.copy.tag', function(e) {
-            //console.log('click tag');
             e.preventDefault();
             var $value = $( this ).parents().prev().children().val();
             $( '.back.textarea.tag' ).each(function() {
@@ -98,7 +90,6 @@
             });
         });
         $('body').on('click', '.copy.show_place', function(e) {
-            console.log('click place');
             e.preventDefault();
             var $value = $( this ).parents().prev().children().val();
             $( '.back.input.show_place' ).each(function() {
@@ -151,8 +142,7 @@
     });
     $(function() {
         /** zaznaczanie i uswanie wszystkich na stronie **/
-        $('#select_all').change(function(e) {
-            //e.preventDefault();
+        $('#select_all').change(function() {
             if ( $(this).is(":checked") ) {
                 $('.check_box').prop('checked',true);
             } else {
@@ -165,9 +155,6 @@
             //$('.check_box:checked').parent().parent().children(':nth-child(7)').children( '.delete_button' ).hide();//work only base site not on search site
             $('.check_box:checked').parent().parent().children().next().next().next().next().next().next().children().next().click();
 
-        });
-        $(document).on("click", ".check_box", function() {
-           //alert($(this).val());
         });
     }); 
 </script>
@@ -257,7 +244,6 @@
                             var dane = $('#back_img_'+ide).height();
                             var color = parseInt(dane) ;
                             $('#back_img_'+ide).next().children().css({ 'height': dane });
-                            //$('textarea').height(dane-4);
                         });
                     </script>
 					<tr class="rr" name="rows_<?php echo $wyn['p_id']; ?>">
@@ -412,22 +398,6 @@
                             <input id="mime_hidden" type="hidden" name="photo_mime_<?php echo $wyn['p_id']; ?>" value="<?php echo $wyn['photo_mime']; ?>" />
 						</td>
 					</tr>
-                    <!--
-					<tr class="active">
-						<td>
-							1
-						</td>
-						<td>
-							TB - Monthly
-						</td>
-						<td>
-							01/04/2012
-						</td>
-						<td>
-							Approved
-						</td>
-					</tr>
-                    -->
                 <?php } ?>
 				</tbody>
 			</table>
@@ -440,27 +410,3 @@
 		</div>
 	</div>
 </div>
-<script>
-    // $(document).ready(function(){
-        // /** zaznaczanie i uswanie wszystkich na stronie **/
-        // $('#select_all').on('change', function(e) {
-            // //e.preventDefault();
-            // if ( $(this).is(":checked") ) {
-                // $('.check_box').prop('checked',true);
-            // } else {
-                // $('.check_box').prop('checked',false);
-            // }
-            
-        // });
-        // //$('#delete_all').click(function(e) {
-        // $('#delete_all').on('click', function(e) {
-            // //e.preventDefault();
-            // var tt = $('.check_box:checked').val();
-            // alert(tt);
-            // $('.check_box:checked').parent().parent().children(':nth-child(7)').children( '.delete_button' ).hide();
-        // });
-        // $(document).on("click", ".check_box", function() {
-           // alert($(this).val());
-         // });
-    // }); 
-</script>

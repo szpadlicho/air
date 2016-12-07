@@ -18,19 +18,11 @@
 					<label>
 						<input type="checkbox" name="remember" />&nbsp&nbsp&nbsp Remember Me 
 					</label>
-				
-				<button type="submit" class="btn btn-default" name="login">
-					Login
-				</button>
+                    <button type="submit" class="btn btn-default" name="login">
+                        Login
+                    </button>
                 </div>
             </form>
-            <!--
-            <form role="form" name="logout_form" method="POST">
-                <button type="submit" class="btn btn-default" name="logout">
-					Logout
-				</button>
-			</form>
-            -->
 		</div>
 	</div>
 </div>

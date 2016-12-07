@@ -67,9 +67,17 @@
 		</div>
 	</div>
 	<div class="row center">
-		<div class="col-md-12">
-            <?php echo nl2br($obj_ShowSlider->showDescription()['d_visibility'] == '1' ? '<br />'.$obj_ShowSlider->showDescription()['home_des'].'<br />' : '' ); ?>
+        <div class="col-md-2">
+            <!--<img src="http://graph.facebook.com/1470723598/picture?type=large&w‌​idth=720&height=720"/>-->
+
+            <img class="img-circle img-responsive profile" src="http://graph.facebook.com/1470723598/picture?type=large"/>
+        </div>
+		<div class="col-md-8">
+            <?php echo nl2br($obj_ShowSlider->showDescription()['d_visibility'] == '1' ? ''.$obj_ShowSlider->showDescription()['home_des'].'<br />' : '' ); ?>
 		</div>
+        <div class="col-md-2">
+        &nbsp
+        </div>
 	</div>
 	<div class="row center">
 		<div class="col-md-12">

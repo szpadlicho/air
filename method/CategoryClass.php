@@ -87,7 +87,7 @@ class UpdateCategory extends DefineConnect
         }
     }
 }
-class DeleteImages extends DefineConnect
+class DeleteCategory extends DefineConnect
 {
 	public function __setTable($tab_name)
     {
@@ -121,6 +121,15 @@ class ShowCategory extends DefineConnect
 		unset ($con);
 		return $q;
 	}
+    public function countItemInCategory($id)
+    {
+		$con=$this->connectDb();
+		$q = $con->query("SELECT COUNT(*) FROM `photos` WHERE `category` = '".$id."' ");/*zwraca false jesli tablica nie istnieje*/
+		unset ($con);
+        $q = $q->fetch(PDO::FETCH_ASSOC);
+        //$q = count($q);
+        return $q['COUNT(*)'];
+	}
 }
 /**ADD**/
 if(isset($_POST['i_add'])) { 
@@ -144,7 +153,7 @@ if(isset($_POST['trigger_update'])) {
 if(isset($_POST['trigger_del'])) { 
     $id = $_POST['id'];
     $tab_name = $_POST['tab_name'];
-    $obj_del = new DeleteImages;
+    $obj_del = new DeleteCategory;
     $obj_del->__setTable($tab_name);
     $feedback = $obj_del->deleteREC($id);
 }

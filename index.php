@@ -2,6 +2,7 @@
 ini_set('xdebug.var_display_max_depth', -1);
 ini_set('xdebug.var_display_max_children', -1);
 ini_set('xdebug.var_display_max_data', -1);
+ini_set('session.cookie_lifetime', 1 * 24 * 60 * 60); //jeden dzien
 date_default_timezone_set('Europe/Warsaw');
 header('Content-Type: text/html; charset=utf-8');
 session_start();
@@ -10,13 +11,13 @@ include_once 'method/UserClass.php';
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
-	<title>Index</title>
+	<title>deoc.pl freelance photography</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Opis strony">
     <meta name="author" content="Piotr Szpanelewski Duteraku">
-    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="shortcut icon" href="img/ico/favicon.png">
     <script type="text/javascript" src="js/google/jquery.min.js"></script>
     <link rel="stylesheet" href="js/google/jquery-ui.css">
     <script src="js/google/jquery-ui.min.js"></script>
@@ -88,8 +89,15 @@ include_once 'method/UserClass.php';
             setTimeout(function() {
                 $( '.info' ).fadeOut();
             }, 1000);
-            $('input').blur();
-            $('button').blur();
+            if( $( '#search' ).is(':focus') ){
+                /** search unfocus if is used **/
+                $('input').blur();
+                $('button').blur();
+                $( '#search' ).focus();
+            } else {
+                $('input').blur();
+                $('button').blur();
+            }
         }
         <?php if ( !isset($_GET['galery']) ) { ?>
         $(document).ajaxStart(function () {
@@ -113,11 +121,17 @@ include_once 'method/UserClass.php';
             });
         });
     </script>
+    <!-- Lining -->
+    <script>
+        /**  **/
+        $(function() {
+
+        });
+    </script>
     <!-- Search engine -->
     <script type="text/javascript">
         $(function(){
             $(document).on('keyup', '#search, #search2', function() {
-                //console.log( $( this ).val() );
                 var string = $( this ).val();
                 if (string.length >= 3) { 
                     $.removeCookie('start');//reset paginacji
@@ -141,15 +155,13 @@ include_once 'method/UserClass.php';
                         dataType: 'text',
                         success: function(data){
                             $('#table_content').html(data);
-                            //$('.tr_pagination').hide();
                             $.cookie('string', string, { expires: 3600 });
-                            console.log($.cookie('string'));
                         }
                     });
                 }
                 if (string.length == 0) {
                     $.removeCookie('string');
-                    //$( "#search" ).focus();
+                    $( "#search" ).focus();
                     $.cookie('search', this.id, { expires: 5*1000 });
                     $.removeCookie('start');//reset paginacji
                     $.removeCookie('pagination');//reset paginacji
@@ -159,7 +171,6 @@ include_once 'method/UserClass.php';
             var serach = $.cookie('search');//zeby sie nie foucusowalo non stop na search
             if (serach) {
                 $('#'+serach).focus();
-                console.log(serach);
             }
         });
     </script>

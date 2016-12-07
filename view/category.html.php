@@ -4,15 +4,10 @@
         var tab_name = 'category';
         var id = $("[name='id_rec_"+id+"']").val();
         var category = $("[name='category_"+id+"']").val();
-        //var protect = $("[name='protect_"+id+"']").val();
-        //var password = $("[name='password_"+id+"']").val();
         var visibility = $("[name='visibility_"+id+"']").val();
         var trigger_update = 'update_category';
         
-        //var myData = ({tab_name:tab_name, id:id, category:category, protect:protect, password:password, visibility:visibility});
         var myData = ({trigger_update:trigger_update, tab_name:tab_name, id:id, category:category, visibility:visibility});
-        
-        console.log('Submitting');
         
         $.ajax({
             url:  'method/CategoryClass.php',
@@ -20,11 +15,9 @@
             data:  myData,
             success: function (data) {
                 info('SAVE '+id);
-                //location.reload();
             }
         }).done(function(data) {
             info('SAVE');
-            //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
             console.log(jqXHR.responseText);
@@ -40,19 +33,15 @@
         
         var myData = ({trigger_del:trigger_del, tab_name:tab_name, id:id});
         
-        console.log('Submitting');
-        
         $.ajax({
             url:  'method/CategoryClass.php',
             type: "POST",
             data:  myData,
             success: function (data) {
                 info('DELETE '+id);
-                //location.reload();
             }
         }).done(function(data) {
             info('DELETE');
-            //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
             console.log(jqXHR.responseText);
@@ -69,8 +58,11 @@
             <table class="table table-condensed table-hover table_list">
                 <thead>
                     <tr>
-                        <th>
+                        <th class="center">
                             ID
+                        </th>
+                        <th>
+                            Items
                         </th>
                         <th>
                             Album
@@ -89,23 +81,32 @@
                     <script>
                         $( document ).ready(function() {
                             var idd = '<?php echo $cat['c_id']; ?>';
-                            $('#b_save_'+idd).click(function(e) {
+                            $( '#b_save_'+idd ).click(function(e) {
                                 e.preventDefault();
                                 update_cat(idd);
                             });
                         });
                         $( document ).ready(function() {
                             var idd = '<?php echo $cat['c_id']; ?>';
-                            $('#b_delete_'+idd).click(function(e) {
+                            var ni = $( '.item_'+idd ).text();
+                            $( '#b_delete_'+idd ).click(function(e) {
                                 e.preventDefault();
-                                del_cat(idd);
+                                if ( ni == 0 ) { /** delete only if category is empty **/
+                                    del_cat(idd);
+                                } else {
+                                    info( 'Category must by empty' );
+                                }
                             });
                         });
                     </script>
             <tbody>
                 <tr name="rows_<?php echo $cat['c_id']; ?>">
-                    <td>
+                    <td class="center">
                         <?php echo $cat['c_id']; ?>
+                        <?php //echo $obj_ShowCategory->countItemInCategory($cat['c_id']); ?>
+                    </td>
+                    <td class="items_td">
+                        <a class="items item_<?php echo $cat['c_id']; ?>" href="?back&cat_id=<?php echo $cat['c_id']; ?>" ><?php echo $obj_ShowCategory->countItemInCategory($cat['c_id']); ?></a>
                     </td>
                     <td>
                         <input class="form-control" name="category_<?php echo $cat['c_id']; ?>" type="text" value="<?php echo $cat['category']; ?>" />  
@@ -130,8 +131,11 @@
                     <?php } ?>
                 <?php } ?>
                 <tr>
-                    <td>
+                    <td class="center">
                         x
+                    </td>
+                    <td>
+                        n/a
                     </td>
                     <td>
                         <input class="form-control" name="category" type="text" placeholder="Nowy album" />

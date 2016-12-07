@@ -2,7 +2,6 @@
     $(document).ready(function(){
         $('#save_all').on( "click", function(e) {
             e.preventDefault();
-            //alert('ads');
             $( '.save_button' ).each(function( index ) {
                 $( '.save_button' ).click();
                 info('SAVE ALL');
@@ -15,7 +14,6 @@
     }).ajaxComplete(function () {
         $('html').removeClass('busy');
         $('.loader').hide();
-        //location.reload();
         //$('#slide_con').load(document.URL +  ' #slide_con');//refresh div without outside file
     });
     //http://stackoverflow.com/questions/8805507/change-mouse-pointer-when-ajax-call
@@ -110,20 +108,15 @@
         
         var myData = ({trigger_update:trigger_update, tab_name:tab_name, id:id, slider_href:slider_href, slider_alt:slider_alt, slider_title:slider_title, slider_des:slider_des, visibility:visibility});
         
-        console.log('Submitting');
-        
         $.ajax({
-            //url:  'method/UpdateImagesClass.php',
             url:  'method/SliderClass.php',
             type: "POST",
             data:  myData,
             success: function (data) {
                 info('SAVE '+id);
-                //location.reload();
             }
         }).done(function(data) {
             info('SAVE');
-            //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
             console.log(jqXHR.responseText);
@@ -141,20 +134,15 @@
         
         var myData = ({trigger_des:trigger_des, tab_name:tab_name, id:id, description:description, visibility:visibility});
         
-        console.log('Submitting');
-        
         $.ajax({
-            //url:  'method/UpdateImagesClass.php',
             url:  'method/SliderClass.php',
             type: "POST",
             data:  myData,
             success: function (data) {
                 info('SAVE '+id);
-                //location.reload();
             }
         }).done(function(data) {
             info('SAVE');
-            //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
             console.log(jqXHR.responseText);
@@ -171,20 +159,15 @@
         
         var myData = ({trigger_del:trigger_del, tab_name:tab_name, id:id, slider_mime:slider_mime});
         
-        console.log('Submitting');
-        
         $.ajax({
-            //url:  'method/DeleteImagesClass.php',
             url:  'method/SliderClass.php',
             type: "POST",
             data:  myData,
             success: function (data) {
                 info('DELETE '+id);
-                //location.reload();
             }
         }).done(function(data) {
             info('DELETE');
-            //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
             console.log(jqXHR.responseText);
@@ -240,10 +223,6 @@
                             e.preventDefault();
                             update(idd);
                         });
-                        // $('#b_save_'+idd).click(function(e) {
-                            // e.preventDefault();
-                            // update(idd);
-                        // });
                     });
                     $(function() {
                         var idd = '<?php echo $wyn['s_id']; ?>';

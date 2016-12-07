@@ -499,12 +499,10 @@ class ShowImages extends DefineConnect
             $(document).ready(function(){
                 $( '.pagination_limit' ).change(function() {
                     $.cookie('limit', $(this).val(), { expires: 3600 });
-                    //$.cookie('start', 0, { expires: 3600 });
                     if ( $.cookie('string') ) { 
                         /**
                         * for show and work dynamic search pagination
                         **/
-                        //console.log('coki set');
                         var string = $.cookie('string');
                         <?php if ( isset($_GET['cat_id']) ) { ?>
                             var cat_id = '<?php echo $_GET['cat_id']; ?>';
@@ -531,19 +529,14 @@ class ShowImages extends DefineConnect
                             dataType: 'text',
                             success: function(data){
                                 $('#table_content').html(data);
-                                //$('.tr_pagination').hide();
-                                //$('#search').val($.cookie('string'));
                             }
                         });
                         if ( $.cookie('limit') >= <?php echo $all; ?> ) { 
                             $.cookie('start', 0, { expires: 3600 });
-                            console.log($.cookie('start'));
                         } else {
                             var nr = ($.cookie('limit')*$.cookie('pagination'))-$.cookie('limit');
                             $.cookie('pagination', 1, { expires: 3600 });
                             $.cookie('start', nr, { expires: 3600 });
-                            console.log($.cookie('pagination'));
-                            
                         }
                     } else {
                         /**
@@ -557,17 +550,12 @@ class ShowImages extends DefineConnect
                     var limit = '<?php echo $_COOKIE['limit']; ?>';
                     var pagination = $(this).val();
                     var start = (limit*pagination)-limit;
-                    //parseInt(start);
-                    //console.log(start);
-                    //console.log('Submitting');
                     $.cookie('start', start, { expires: 3600 });
                     $.cookie('pagination', pagination, { expires: 3600 });//na potrzeby zaznaczania aktywnego
-                    //alert(';asdasd');
                     if ( $.cookie('string') ) { 
                         /**
                         * for show and work dynamic search pagination
                         **/
-                        //console.log('coki set');
                         var string = $.cookie('string');
                         <?php if ( isset($_GET['cat_id']) ) { ?>
                             var cat_id = '<?php echo $_GET['cat_id']; ?>';
@@ -594,7 +582,6 @@ class ShowImages extends DefineConnect
                             dataType: 'text',
                             success: function(data){
                                 $('#table_content').html(data);
-                                //$('.tr_pagination').hide();
                                 $('#search').val($.cookie('string'));
                             }
                         });
@@ -613,7 +600,6 @@ class ShowImages extends DefineConnect
                         /**
                         * for show and work dynamic search pagination
                         **/
-                        //console.log('coki set');
                         var string = $.cookie('string');
                         <?php if ( isset($_GET['cat_id']) ) { ?>
                             var cat_id = '<?php echo $_GET['cat_id']; ?>';
@@ -640,7 +626,6 @@ class ShowImages extends DefineConnect
                             dataType: 'text',
                             success: function(data){
                                 $('#table_content').html(data);
-                                //$('.tr_pagination').hide();
                                 $('#search').val($.cookie('string'));
                             }
                         });
@@ -653,7 +638,6 @@ class ShowImages extends DefineConnect
                 });
                 $('.category.menu').click(function(e) {
                     $.removeCookie('start');
-                    //$.removeCookie('limit');
                     $.removeCookie('pagination');
                     $.removeCookie('string');
                     $.removeCookie('search');
@@ -672,18 +656,10 @@ class ShowImages extends DefineConnect
                 if ($.cookie('pagination')) {
                     //alert('yes');
                 } else {
-                    //$('.pagination_start').first().addClass('p_active');
                     $('.pagination_start:nth(2)').addClass('p_active');
-                    //$('.pagination_start:nth(1)').addClass('pagination_hide');
                     $('.pagination_start:nth(1)').attr('disabled', 'disabled');
                     $('.pagination_start:nth(0)').attr('disabled', 'disabled');
-                    
-                    //alert('not');
                 }
-                //$(".pagination_start").slice(0,20);
-                //$(".pagination_start").hide();
-                //alert('dfgv');
-                //$(".pagination_start:lt(1)").hide();
                 $( '.first' ).click(function() {
                     var first = $(this).val();
                     $.cookie('pagination', first, { expires: 3600 });//na potrzeby zaznaczania aktywnego
@@ -710,8 +686,6 @@ class ShowImages extends DefineConnect
             $option[] = 10;
             asort($option);//sortuje dane
             $option = array_unique($option);//wykluczam takie same wartosci z tablicy
-            //$tab = array();
-            //var_dump($option);
             ?>
             <!-- limit na stronie -->
             <select class="form-control pagination_limit">
@@ -793,7 +767,7 @@ class ShowImages extends DefineConnect
                 } 
                 //stop start
                 //echo '<br />next-'.$next.' cur-'.$current.' prev-'.$prev.' start-'.$start.' stop-'.$stop.' i-'.$i.' all-'.$all.' allnr-'.$allnr.'<br />';
-                
+                /** wyswietlanie w php zeby nie bylo bialych znakow miedzy nimi **/
                 echo '<button class="form-control pagination_start first" '.@$dprev.' value="1">First</button>';
                 echo '<button class="form-control pagination_start" '.@$dprev.' value="'.$prev.'">Prev</button>';
                 echo $current > 4 ? '<span class="p_dots">...</span>' : '';
@@ -804,12 +778,6 @@ class ShowImages extends DefineConnect
                 echo $stop < $allnr ? '<span class="p_dots">...</span>' : '';
                 echo '<button class="form-control pagination_start" '.@$dnext.' value="'.$next.'">Next</button>';
                 echo '<button class="form-control pagination_start last" '.@$dnext.' value="'.$allnr.'">Last</button>';
-                
-                // if ( !isset($_COOKIE['sort']) || (@$_COOKIE['sort'] == 'Down') ) {
-                    // $select = 'selected = "selected"';
-                // } else {
-                    // $select = '';
-                // }
             ?> 
             <select class="form-control pagination_sort">
                     <option <?php echo ( @$_COOKIE['sort'] == 'Up' ) ? 'selected = "selected"' : '' ; ?> >Up</option>
@@ -845,7 +813,6 @@ if(isset($_POST['trigger_update'])) {
     $obj_update -> __setTable($tab_name);
     $obj_update -> updateImg($id, $photo_name, $category, $show_data, $show_place, 
                                     $tag, $author, $protect, $password, $home, $position, $visibility);
-                                    //var_dump($_POST);
 }
 /**DELETE**/
 if(isset($_POST['trigger_del'])) { 

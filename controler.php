@@ -58,5 +58,6 @@ if ( empty($_GET) ) {
 }
 if ( empty($_GET) || isset($_GET['galery']) || isset($_GET['last']) ){
     include_once 'view/social_tab.html.php';// facebook instagram
+    include_once 'view/footer.html.php';
 }
 ?>
