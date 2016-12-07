@@ -1,9 +1,11 @@
 <script>
     $(document).ready(function(){
-        $('#save_all').click(function(e) {
-            e.preventDefault();      
+        $('#save_all').on( "click", function(e) {
+            e.preventDefault();
+            //alert('ads');
             $( '.save_button' ).each(function( index ) {
                 $( '.save_button' ).click();
+                info('SAVE ALL');
             });
         });
     });
@@ -13,10 +15,11 @@
     }).ajaxComplete(function () {
         $('html').removeClass('busy');
         $('.loader').hide();
+        //location.reload();
+        //$('#slide_con').load(document.URL +  ' #slide_con');//refresh div without outside file
     });
     //http://stackoverflow.com/questions/8805507/change-mouse-pointer-when-ajax-call
 </script>
-<div class="loader"></div>
 <button class="form-control save_all" id="save_all">Save All</button>
 <!--Upload-->
 <div class="container">
@@ -115,10 +118,11 @@
             type: "POST",
             data:  myData,
             success: function (data) {
-                $("#debugger").html(data);
-                location.reload();
+                info('SAVE '+id);
+                //location.reload();
             }
         }).done(function(data) {
+            info('SAVE');
             //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
@@ -145,10 +149,11 @@
             type: "POST",
             data:  myData,
             success: function (data) {
-                $("#debugger").html(data);
-                location.reload();
+                info('SAVE '+id);
+                //location.reload();
             }
         }).done(function(data) {
+            info('SAVE');
             //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
@@ -174,11 +179,12 @@
             type: "POST",
             data:  myData,
             success: function (data) {
-                $("#debugger").html(data);
+                info('DELETE '+id);
                 //location.reload();
             }
         }).done(function(data) {
-            console.log(data);
+            info('DELETE');
+            //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
             console.log(jqXHR.responseText);
@@ -188,7 +194,7 @@
         $( "[name='rows_"+id+"']" ).hide( 'slow' );
     }
 </script>
-<div class="container">
+<div id="slide_con" class="container">
     <div class="row">
         <div class="col-md-12">
             Update
@@ -228,16 +234,20 @@
                 <?php foreach ($obj_ShowSlider->showAll() as $wyn) { ?>
                 <?php //var_dump($wyn); ?>
                     <script>
-                    $( document ).ready(function() {
+                    $(function() {
                         var idd = '<?php echo $wyn['s_id']; ?>';
-                        $('#b_save_'+idd).click(function(e) {
+                        $( '#b_save_'+idd ).on( 'click', function(e) {
                             e.preventDefault();
                             update(idd);
                         });
+                        // $('#b_save_'+idd).click(function(e) {
+                            // e.preventDefault();
+                            // update(idd);
+                        // });
                     });
-                    $( document ).ready(function() {
+                    $(function() {
                         var idd = '<?php echo $wyn['s_id']; ?>';
-                        $('#b_delete_'+idd).click(function(e) {
+                        $( '#b_delete_'+idd ).on( 'click', function(e) {
                             e.preventDefault();
                             del(idd);
                         });
@@ -285,7 +295,7 @@
 <br />
 <script>
     $( document ).ready(function() {
-        $("[name='save_des']").click(function(e) {
+        $("[name='save_des']").on( 'click', function(e) {
             e.preventDefault();
             update_des();
         });
@@ -315,7 +325,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <textarea class="form-control back textarea description" name="description_des" rows="4" cols="100"><?php echo $des['home_des']; ?></textarea>
+                            <textarea class="form-control back textarea description" name="description_des" rows="15" cols="100"><?php echo $des['home_des']; ?></textarea>
                         </td>
                         <td>
                             <select class="form-control back select visibility" name="visibility_des">

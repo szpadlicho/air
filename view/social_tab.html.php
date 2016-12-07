@@ -1,7 +1,7 @@
 <script>
     $(function() {
         /**
-        * for social tab on smartphone
+        * for social tab on smartphone function click add
         **/
         $( '.lab' ).on( 'click', function() {
             var pos = $( '.social' ).css('right');

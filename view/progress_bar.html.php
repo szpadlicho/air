@@ -8,7 +8,6 @@ $(function() {
     var bar = $('.progress-bar');
     var percent = $('.percent');
     //var status = $('#status');
-
     $('form').ajaxForm({
         beforeSend: function() {
             //$('#status').empty();
@@ -25,7 +24,11 @@ $(function() {
         },
         complete: function(xhr) {
             //$('#status').html(xhr.responseText);
-        }
+            info('UPLAD COMPLETE');
+            setTimeout(function() {
+                    location.reload();
+                    }, 1500);
+            }
     });
 }); 
 </script>

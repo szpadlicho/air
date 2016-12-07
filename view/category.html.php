@@ -19,11 +19,12 @@
             type: "POST",
             data:  myData,
             success: function (data) {
-                $("#debugger").html(data);
+                info('SAVE '+id);
                 //location.reload();
             }
         }).done(function(data) {
-            console.log(data);
+            info('SAVE');
+            //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
             console.log(jqXHR.responseText);
@@ -46,11 +47,12 @@
             type: "POST",
             data:  myData,
             success: function (data) {
-                $("#debugger").html(data);
+                info('DELETE '+id);
                 //location.reload();
             }
         }).done(function(data) {
-            console.log(data);
+            info('DELETE');
+            //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
             console.log(jqXHR.responseText);

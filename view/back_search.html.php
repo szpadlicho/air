@@ -1,8 +1,7 @@
 <?php
 include_once '../method/ImagesClass.php';
-//var_dump($_POST['string']);
 @$_GET['cat_id'] = $_POST['cat_id'];
-$_POST['back'] ? $_GET['back'] = $_POST['back'] : null ;
+$_GET['back'] = '';
 $success = $obj_ShowImages->showAllByTag($_POST['string']);
 ?>
 <div class="row center">

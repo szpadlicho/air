@@ -1,9 +1,0 @@
-#wowslider-container1 { 
-    display: table;
-}
-#wowslider-container1,
-#wowslider-container1 .ws_images,
-#wowslider-container1 .ws_images ul a,
-#wowslider-container1 .ws_images > div > img {
-    max-height:768px;
-}

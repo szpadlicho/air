@@ -26,15 +26,15 @@
         console.log('Submitting');
         
         $.ajax({
-            //url:  'method/UpdateImagesClass.php',
             url:  'method/ImagesClass.php',
             type: "POST",
             data:  myData,
             success: function (data) {
-                $("#debugger").html(data);
+                info('SAVE '+id);
                 //location.reload();
             }
         }).done(function(data) {
+            info('SAVE');
             //console.log(data);
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
@@ -55,16 +55,15 @@
         console.log('Submitting');
         
         $.ajax({
-            //url:  'method/DeleteImagesClass.php',
             url:  'method/ImagesClass.php',
             type: "POST",
             data:  myData,
             success: function (data) {
-                $("#debugger").html(data);
+                info('DELETE '+id);
                 //location.reload();
             }
         }).done(function(data) {
-            console.log(data);
+            info('DELETE');
         }).fail(function(jqXHR,status, errorThrown) {
             console.log(errorThrown);
             console.log(jqXHR.responseText);
@@ -74,50 +73,6 @@
         $( "[name='rows_"+id+"']" ).hide( 'slow' );
     }
 </script>
-<script type="text/javascript">
-    $(function(){
-        $(document).on('keyup', '#search, #search2', function() {
-            //console.log( $( this ).val() );
-            var string = $( this ).val();
-            if (string.length >= 3) { 
-                $.removeCookie('start');//reset paginacji
-                $.removeCookie('pagination');//reset paginacji
-                <?php if ( isset($_GET['cat_id']) ) { ?>
-                    var cat_id = '<?php echo $_GET['cat_id']; ?>';
-                <?php } ?>
-                $.ajax({
-                    type: 'POST',
-                    url: 'view/back_search.html.php',
-                    <?php if ( isset($_GET['cat_id']) ) { ?>
-                        data: {string : string, cat_id : cat_id, back : 'back'},
-                    <?php } else { ?>
-                        data: {string : string, back : 'back'},
-                    <?php } ?>
-                    //cache: false,
-                    dataType: 'text',
-                    success: function(data){
-                        $('#table_content').html(data);
-                        //$('.tr_pagination').hide();
-                        $.cookie('string', string, { expires: 3600 });
-                        console.log($.cookie('string'));
-                    }
-                });
-            }
-            if (string.length == 0) {
-                $.removeCookie('string');
-                $.cookie('search', this.id, { expires: 5*1000 });
-                $.removeCookie('start');//reset paginacji
-                $.removeCookie('pagination');//reset paginacji
-                location.reload();
-            }
-        });
-        var serach = $.cookie('search');//zeby sie nie foucusowalo non stop na search
-        if (serach) {
-            $('#'+serach).focus();
-            console.log(serach);
-        }
-    });
-</script>
 <script>
     $(document).ready(function(){
         $('#save_all').click(function(e) {
@@ -126,13 +81,6 @@
                 $( '.save_button' ).click();
             });
         });
-    });   
-    $(document).ajaxStart(function () {
-        $('html').addClass('busy');
-        $('.loader').show();
-    }).ajaxComplete(function () {
-        $('html').removeClass('busy');
-        $('.loader').hide();
     });
     //http://stackoverflow.com/questions/8805507/change-mouse-pointer-when-ajax-call
 </script>
@@ -187,7 +135,6 @@
             });
         });
         $('body').on('click', '.copy.home', function(e) {
-            console.log('click home');
             e.preventDefault();
             var $value = $( this ).parents().prev().children().val();
             $( '.back.select.home' ).each(function() {
@@ -213,8 +160,6 @@
             }
             
         });
-        //$('#delete_all').click(function(e) {
-        //$('#delete_all').on('click', function(e) {
         $(document).on("click", "#delete_all", function(e) {
             e.preventDefault();
             //$('.check_box:checked').parent().parent().children(':nth-child(7)').children( '.delete_button' ).hide();//work only base site not on search site
@@ -226,7 +171,6 @@
         });
     }); 
 </script>
-<div class="loader"></div>
 <button class="form-control save_all" id="save_all">Save All</button>
 <button class="form-control delete_all" id="delete_all">Delete All</button>
 <input class="form-control select_all check_box" id ="select_all" type="checkbox" name="" value="">
@@ -311,7 +255,8 @@
                             **/
                             var ide = '<?php echo $wyn['p_id']; ?>';
                             var dane = $('#back_img_'+ide).height();
-                            $('#back_img_'+ide).next().children().css('height', dane);
+                            var color = parseInt(dane) ;
+                            $('#back_img_'+ide).next().children().css({ 'height': dane });
                             //$('textarea').height(dane-4);
                         });
                     </script>

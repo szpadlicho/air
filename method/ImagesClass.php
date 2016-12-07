@@ -385,6 +385,13 @@ class ShowImages extends DefineConnect
             }
         }
         $input = $ress1;
+        //var_dump($input);
+
+        if ( !isset($_COOKIE['start']) || $_COOKIE['start'] == 0 ) {// bo jakis blad wyskakiwal kiedy po wyszukiwaniu zmniejszalem do 5 na strone
+            $_COOKIE['start'] = '0';
+        }
+        //var_dump($_COOKIE['start']);
+        //var_dump($_COOKIE['limit']);
         $output = array_slice($input, $_COOKIE['start'], $_COOKIE['limit']);
         return array($output, $cu);
     }
@@ -441,7 +448,7 @@ class ShowImages extends DefineConnect
             //return '<img class="back-all list mini-image" style="height:100px;" src="'.$dir1.$id.'.'.$mime.'" alt="image" />';
             ?>
             <a class="fancybox-button" rel="fancybox-button" href="<?php echo $dir0.$id.'.'.$mime; ?>" title="<?php echo $tag; ?>">
-                <img class="galery_img" src="<?php echo $dir1.$id.'.'.$mime; ?>" alt="<?php echo $tag; ?>" target="_blank" /><!--*-->
+                <img class="galery_img lazy" data-original="<?php echo $dir1.$id.'.'.$mime; ?>" src="<?php echo $dir1.$id.'.'.$mime; ?>" alt="<?php echo $tag; ?>" target="_blank"  /><!--*-->
             </a>
             <?php
         } else {
@@ -699,6 +706,8 @@ class ShowImages extends DefineConnect
                 $option[] = (int)$_COOKIE['limit'];
             }
             $option[] = (int)$all;
+            $option[] = 5;
+            $option[] = 10;
             asort($option);//sortuje dane
             $option = array_unique($option);//wykluczam takie same wartosci z tablicy
             //$tab = array();
@@ -795,11 +804,17 @@ class ShowImages extends DefineConnect
                 echo $stop < $allnr ? '<span class="p_dots">...</span>' : '';
                 echo '<button class="form-control pagination_start" '.@$dnext.' value="'.$next.'">Next</button>';
                 echo '<button class="form-control pagination_start last" '.@$dnext.' value="'.$allnr.'">Last</button>';
+                
+                // if ( !isset($_COOKIE['sort']) || (@$_COOKIE['sort'] == 'Down') ) {
+                    // $select = 'selected = "selected"';
+                // } else {
+                    // $select = '';
+                // }
             ?> 
             <select class="form-control pagination_sort">
                     <option <?php echo ( @$_COOKIE['sort'] == 'Up' ) ? 'selected = "selected"' : '' ; ?> >Up</option>
-                    <option <?php echo ( @$_COOKIE['sort'] == 'Down' ) ? 'selected = "selected"' : '' ; ?> >Down</option>
-            </select>
+                    <option <?php echo ( @$_COOKIE['sort'] == 'Down' ) || !isset($_COOKIE['sort']) ? 'selected = "selected"' : '' ; ?> >Down</option>
+            </select> 
             <!-- paginacja -->
             <?php
         }

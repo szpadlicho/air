@@ -1,14 +1,3 @@
-<script>
-    $(document).ajaxStart(function () {
-        $('html').addClass('busy');
-        $('.loader').show();
-    }).ajaxComplete(function () {
-        $('html').removeClass('busy');
-        $('.loader').hide();
-    });
-</script>
-<div class="loader"></div>
-
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">

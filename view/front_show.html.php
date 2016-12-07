@@ -1,62 +1,3 @@
-<?php
-//http://stackoverflow.com/questions/14649645/resize-image-in-php
-?>
-<script type="text/javascript">
-    $(function(){
-        $(document).on('keyup', '#search, #search2', function() {
-            //console.log( $( this ).val() );
-            var string = $( this ).val();
-            if (string.length >= 3) { 
-                $.removeCookie('start');//reset paginacji
-                $.removeCookie('pagination');//reset paginacji
-                <?php if ( isset($_GET['cat_id']) ) { ?>
-                    var cat_id = '<?php echo $_GET['cat_id']; ?>';
-                <?php } ?>
-                $.ajax({
-                    type: 'POST',
-                    url: 'view/front_search.html.php',
-                    <?php if ( isset($_GET['cat_id']) ) { ?>
-                        data: {string : string, cat_id : cat_id, galery : 'galery'},
-                    <?php } else { ?>
-                        data: {string : string, galery : 'galery'},
-                    <?php } ?>
-                    //cache: false,
-                    dataType: 'text',
-                    success: function(data){
-                        $('#table_content').html(data);
-                        //$('.tr_pagination').hide();
-                        $.cookie('string', string, { expires: 3600 });
-                        console.log($.cookie('string'));
-                    }
-                });
-            }
-            if (string.length == 0) {
-                $.removeCookie('string');
-                //$( "#search" ).focus();
-                $.cookie('search', this.id, { expires: 5*1000 });
-                $.removeCookie('start');//reset paginacji
-                $.removeCookie('pagination');//reset paginacji
-                location.reload();
-            }
-        });
-        var serach = $.cookie('search');//zeby sie nie foucusowalo non stop na search
-        if (serach) {
-            $('#'+serach).focus();
-            console.log(serach);
-        }
-    });
-</script>
-<script>
-    $(document).ajaxStart(function () {
-        $('html').addClass('busy');
-        $('.loader').show();
-    }).ajaxComplete(function () {
-        $('html').removeClass('busy');
-        $('.loader').hide();
-    });
-</script>
-<div class="loader"></div>
-
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12 search">
@@ -91,7 +32,7 @@
 				</div>
 			</div>
 			<div class="row center">
-				<div class="col-md-12">
+				<div id="way" class="col-md-12">
                 <?php foreach ($obj_ShowImages->showAll() as $wyn) { ?>
                     <div class="div_front">
                         <?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>

@@ -2,6 +2,7 @@
     $(document).ready(function(){
         $('body').on('click', '.menu.top', function(e) {
             var value = $(this).attr("href").substring(1);
+            value = value.replace('&logout','');
             //console.log(value);
             //alert(value);
             //$.removeCookie('string');
@@ -49,6 +50,7 @@
                             <a class="menu top" href="?category">Category</a>
                             <a class="menu top" href="?upload">Upload</a>
                             <a class="menu top" href="?slider">Slider</a>
+                            <a class="menu top" href="?<?php echo $_SERVER['QUERY_STRING']; ?>&logout" id="logout">Logout</a><!-- zmienic na -->
                             <?php if ( isset($_GET['install']) ) { ?>
                                 <a class="menu top" href="?install_2016">Install</a>
                             <?php } ?>

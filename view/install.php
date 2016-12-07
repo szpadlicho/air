@@ -185,7 +185,9 @@ class DataBaseInstall
         unset($con);
     }
 }
-
+/**
+* Data Base created 
+**/
 $obj_install = new DatabaseInstall;
 if (isset($_POST['crt'])) {
     $obj_install->createDb();
@@ -245,7 +247,6 @@ if (isset($_POST['crt'])) {
     // $return['category'] = $obj_install->addRec($arr_val);
     var_dump($return);
 }
-
 if (isset($_POST['del'])) {
 	$obj_install->deleteDb();
 }
@@ -287,6 +288,7 @@ if (isset($_POST['del_slider'])) {
     $obj_install->rrmdir('img/slider/images/');
     $obj_install->rrmdir('img/slider/tooltips/');
 }
+/** Update data **/
 if (isset($_POST['updat_row'])) {
 	$obj_install->__setTable('photos');
     for ($i = $_POST['start_id']; $i < $_POST['stop_id']; $i++) {
@@ -294,17 +296,50 @@ if (isset($_POST['updat_row'])) {
         //var_dump($return);
     }
 }
+/** 
+* User install
+**/
+if (isset($_POST['crt_user']) && $_POST['user_pass1'] == $_POST['user_pass2']) {
+    $obj_install->createDb();
+    $return = array();// array initiate
+    $obj_install->__setTable('user');
+    $arr_row = array(
+        'user_name'                 =>'TEXT',
+        'user_pass'                 =>'TEXT',
+        's_visibility'              =>'INTEGER(1) UNSIGNED'
+        );
+    $arr_val = array(
+        'user_name'                 =>$_POST['user_name'],
+        'user_pass'                 =>md5($_POST['user_pass1']),
+        's_visibility'              =>1
+        );
+    $return['user'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
+    var_dump($return);
+
+}
+if (isset($_POST['del_user'])) {
+	$obj_install->deleteTb('user');
+}
 ?>
 <div class="center">
     Zarządzanie Bazą Danych
     <form name="install" enctype="multipart/form-data" action="" method="POST">
             <input class="input_cls" type="submit" name="del" value="Delete DB" />
             <input class="input_cls" type="submit" name="crt" value="Create DB" />
+            <br />
             <input class="input_cls" type="submit" name="del_slider" value="Delete Slider" />
             <input class="input_cls" type="submit" name="crt_slider" value="Create Slider" />
-            <input class="input_cls" type="submit" name="updat_row" value="Update" />
+            <br />
+            <input class="input_cls" type="submit" name="del_user" value="Delete User" />
+            <input class="input_cls" type="submit" name="crt_user" value="Create User" />
+            <input class="input_cls" type="text" name="user_name" placeholder="User Name" value="deoc" />
+            <input class="input_cls" type="text" name="user_pass1" placeholder="Password" value="pio" />
+            <input class="input_cls" type="text" name="user_pass2" placeholder="Password retry" value="pio" />
+            <br />
             <input class="input_cls" type="text" name="updat_value" placeholder="updat_value" value="2016-11-01 00:00:00" />
             <input class="input_cls" type="text" name="start_id" placeholder="start_id" value="0" />
-            <input class="input_cls" type="text" name="stop_id" placeholder="stop_id" value="96" />            
+            <input class="input_cls" type="text" name="stop_id" placeholder="stop_id" value="96" />
+            <input class="input_cls" type="submit" name="updat_row" value="Update" />
+        
     </form>
 </div>

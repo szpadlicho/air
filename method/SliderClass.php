@@ -230,7 +230,7 @@ class ShowSlider extends DefineConnect
         if (@opendir($dir1) || @opendir($dir2)) {//sprawdzam czy sciezka istnieje
             //return '<img class="back-all list mini-image" style="height:100px;" src="'.$dir1.$id.'.'.$mime.'" alt="image" />';
             ?>
-            <li><a href="?<?php echo $href; ?>" target="_self"><img src="<?php echo $dir0.$id.'.'.$mime; ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>" id="wows1_<?php echo $id; ?>"/></a><?php echo $des; ?></li>
+            <li><a href="?<?php echo $href; ?>" target="_self"><img class="" data-original="<?php echo $dir1.$id.'.'.$mime; ?>" src="<?php echo $dir0.$id.'.'.$mime; ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>" id="wows1_<?php echo $id; ?>"/></a><?php echo $des; ?></li>
             <?php
         } else {
             return 'Upss..coś poszło nie tak';
