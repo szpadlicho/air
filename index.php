@@ -125,7 +125,17 @@ include_once 'method/UserClass.php';
     <script>
         /**  **/
         $(function() {
-
+            // $(".left ul li").hover(function(event) {
+                // $( this ).children().next().css({top: event.clientY, left: event.clientX}).show();
+            // }, function() {
+                // $( this ).children().next().hide();
+            // });
+        });
+        $(document).on('mousemove', '.left ul li', function(e){
+            $('.item_nr').css({
+               left:  e.pageX+5+'px',
+               top:   e.pageY-100+'px'
+            }).fadeIn();
         });
     </script>
     <!-- Search engine -->
@@ -191,9 +201,11 @@ include_once 'method/UserClass.php';
 <?php //echo @$cu; ?>
 <?php //echo @$success[1]; ?>
 <?php //var_dump($_COOKIE); ?>
+<?php //var_dump($cat_id); ?>
 <?php //var_dump($_SESSION); ?>
 <?php //var_dump($_POST); ?>
 <?php //var_dump($_SERVER['HTTP_HOST']); ?>
 <?php //var_dump($_SERVER['PHP_SELF']); ?>
 <?php //var_dump($_SERVER['REQUEST_URI']); ?>
 <?php //var_dump($_SERVER); ?>
+<?php echo '';?>

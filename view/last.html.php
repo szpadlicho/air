@@ -13,12 +13,10 @@
 			</div>
 			<ul>
                 <li><a class="category menu" href="?last" >Wszystkie</a></li>
-                <?php
+                <?php 
+                /** for show category only if has last add image **/
                 $obj_show_cat = new ShowImages;
-                $obj_show_cat->__setTable('category');
-                $obj_show_cat->showCategory();
-                $ret = $obj_show_cat->showCategory();
-                $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
+                $ret = $obj_show_cat->showCategoryById();
                 ?>
                 <?php foreach ($ret as $cat_menu){ ?>
                     <li class="<?php echo @$_GET['cat_id'] == @$cat_menu['c_id'] ? 'active' : ''; ?>"><a class="category menu" href="?last&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
@@ -40,7 +38,7 @@
                         <p class="p_front_data" >#<?php echo $wyn['p_id']; ?> Data: <?php echo $wyn['show_data']; ?></p>
                         <p class="p_front_info" >Autor:<?php echo $wyn['author']; ?><br />Album: <?php echo $wyn['category']; ?></p>
                     </div>
-                <?php } ?> 
+                <?php } ?>
 				</div>
 			</div>
 			<div class="row">

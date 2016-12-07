@@ -15,6 +15,15 @@ html, body{
     font: 1em 'Ubuntu Condensed', Impact, Charcoal, sans-serif;
     text-shadow: 2px 1px 3px #000; 
 }
+html {
+  height: 100%;
+}
+
+body {
+  position: relative;
+  min-height: 100%;
+  padding-bottom: 3em; /*for footer*/
+}
 /*form moved bg*/
 /* body{
     background: #000 url(../img/bg/bg.jpg) center 0px no-repeat; 
@@ -317,13 +326,9 @@ option{
 #top_menu .menu.top.active:before{
     visibility: visible;
 }
-.menu.left ul li a,
-#top_menu a{
-
-}
 /**menu left**/
 .menu.left ul li:before{
-    left: -27px;
+    left: -25px;
 }
 .menu.left{
     text-align: left;
@@ -334,7 +339,6 @@ option{
     position:relative;
 }
 .menu.left ul li{
-    #border-bottom: 1px solid yellow;
     padding: 0.1em 0;
     #white-space: nowrap;
 }
@@ -350,7 +354,7 @@ option{
     padding-left: 125px;
 } */
 .menu.left ul li a{
-    margin-left: -25px;
+    margin-left: -27px;
 }
 .menu.left ul li a{
     #white-space: nowrap;
@@ -470,6 +474,7 @@ input[type="checkbox"]{
               box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
     padding:0.5em;
     border-radius: 4px;
+    text-shadow: 0px 0px 0px #000; 
 }
 /**debuger**/
 #php,
@@ -484,6 +489,7 @@ input[type="checkbox"]{
     padding: 0em;
     z-index: 99;
     text-align: right;
+    text-shadow: 0px 0px 0px #000; 
 }
 .xdebug-var-dump{
     #display:inline-block;
@@ -496,6 +502,7 @@ input[type="checkbox"]{
     #transform: translateX(-50%);
     #position: relative;
     #width: auto;
+    text-shadow: 0px 0px 0px #000; 
 }
 /*:last-child > p:last-child{*/
 .xdebug-var-dump:last-child{
@@ -530,19 +537,30 @@ input[type="checkbox"]{
             box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(239, 216, 38, .6);
 }
 footer{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
     margin-top: 0.5em;
     padding: 1em 2em;
     vertical-align: bottom;
     border-top: 2px solid #ddd;
+    height: 3em;
 }
 .deoc{
     float: left;
-    #text-align: left;
 }
 .author{
     float: right;
-    #text-align: right;
 }
 .items_td{
     width: 3em;
+}
+.left ul li:hover .item_nr{
+    visibility: visible;
+}
+.item_nr{
+    visibility: hidden;
+    position: absolute;
+    //color: rgb(239, 216, 38);
 }

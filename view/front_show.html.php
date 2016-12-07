@@ -12,16 +12,21 @@
 				</div>
 			</div>
 			<ul>
-                <li><a class="category menu" href="?galery" >Wszystkie</a></li>
+                <li>
+                    <a class="category menu" href="?galery" >Wszystkie</a>
+                    <span class="item_nr"></span>
+                </li>
                 <?php
                 $obj_show_cat = new ShowImages;
                 $obj_show_cat->__setTable('category');
-                $obj_show_cat->showCategory();
                 $ret = $obj_show_cat->showCategory();
                 $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
                 ?>
                 <?php foreach ($ret as $cat_menu){ ?>
-                    <li class="<?php echo @$_GET['cat_id'] == @$cat_menu['c_id'] ? 'active' : ''; ?>" ><a class="category menu" href="?galery&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
+                    <li class="<?php echo @$_GET['cat_id'] == @$cat_menu['c_id'] ? 'active' : ''; ?>" >
+                        <a class="category menu" href="?galery&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a>
+                        <span class="item_nr"><?php echo $obj_show_cat->countItemInCategory(@$cat_menu['c_id']); ?></span>
+                    </li>
                 <?php } ?>
             </ul>
 		</div>

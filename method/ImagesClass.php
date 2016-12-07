@@ -404,7 +404,6 @@ class ShowImages extends DefineConnect
         
         
         $con = $this->connectDb();
-        $order = $this->order;
         //$default = 20;
         $all = $this->countRow();
         $count = floor($all/$this->default_on);
@@ -414,11 +413,11 @@ class ShowImages extends DefineConnect
         $ress1 = array();
               
         if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND photos.`add_data` > DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND photos.`add_data` > DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH) ORDER BY photos.`p_id` ".$this->order." ");/*zwraca false jesli tablica nie istnieje*/
             $q = $q->fetchAll(PDO::FETCH_ASSOC);
             $ress0[] = $q;
         } else {//pokazuje fotki ze wszystkich kategorii
-            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND DATE(photos.`add_data`) > DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+            $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND DATE(photos.`add_data`) > DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH) ORDER BY photos.`p_id` ".$this->order." ");/*zwraca false jesli tablica nie istnieje*/
             $q = $q->fetchAll(PDO::FETCH_ASSOC);
             $ress0[] = $q;
         }
@@ -436,6 +435,15 @@ class ShowImages extends DefineConnect
         return array($output, $cu);
 		//unset ($con);
 		//return $q;
+	}
+    public function showLastByDateForLastCategory()//pokazuje wszystkie fotki sprzed miesiaca
+    {
+        /**mona ja okroic i to sporo potzebuje tylko liste c_id z ostanich zdjec**/
+        $con = $this->connectDb();
+        //pokazuje fotki ze wszystkich kategorii
+        $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND DATE(photos.`add_data`) > DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH) ORDER BY photos.`p_id` ".$this->order." ");/*zwraca false jesli tablica nie istnieje*/
+        $q = $q->fetchAll(PDO::FETCH_ASSOC);
+        return $q;
 	}
     public function showImg($id, $mime, $tag)
     {                                        
@@ -455,7 +463,7 @@ class ShowImages extends DefineConnect
             return 'Upss..coś poszło nie tak';
         }
     }
-    public function showCategory()// do category menu
+    public function showCategory()// do category menu tego po lewej stronie
     {
 		$con=$this->connectDb();
         if ( isset($_GET['back']) ) {//co ma pokazac jesli jestes na zapleczu (czyli razem z ukrytymi)
@@ -466,12 +474,43 @@ class ShowImages extends DefineConnect
 		unset ($con);
 		return $q;
 	}
-    public function showCategoryAll()//metoda dla mozliwosci wybrania odpowiedniej kategorii back_search.php, back_show.php, back_category_show.php, upload.php
+    public function showCategoryByID()// do category menu tego po lewej stronie na last
+    {
+        $cat_id = array();
+        $this->__setTable('photos');
+        $get_id = $this->showLastByDateForLastCategory();
+        //var_dump($get_id);
+        foreach ($get_id as $wyn) {
+            $cat_id[] = $wyn['c_id'];
+        }
+        $cat_id = array_unique($cat_id);
+        sort($cat_id);
+        //var_dump($cat_id);
+        $this->__setTable('category');
+		$con = $this->connectDb();
+        $q = array();
+        foreach ($cat_id as $id) {
+            $e = $con->query("SELECT `".$this->table."`, `".$this->prefix."id` FROM `".$this->table."` WHERE `c_visibility` = '1' AND `".$this->prefix."id` = '".$id."' ");
+            $q[] = $e->fetch(PDO::FETCH_ASSOC);
+        }
+		unset ($con);
+		return $q;
+	}
+    public function showCategoryAll()//metoda dla mozliwosci wybrania odpowiedniej kategorii back_search.html.php, back_show.html.php, category.html.php, upload.html.php
     {
 		$con=$this->connectDb();
 		$q = $con->query("SELECT * FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
 		return $q;
+	}
+    public function countItemInCategory($id)
+    {
+		$con=$this->connectDb();
+		$q = $con->query("SELECT COUNT(*) FROM `photos` WHERE `category` = '".$id."' ");/*zwraca false jesli tablica nie istnieje*/
+		unset ($con);
+        $q = $q->fetch(PDO::FETCH_ASSOC);
+        //$q = count($q);
+        return $q['COUNT(*)'];
 	}
     public function copyButton($name)
     {
