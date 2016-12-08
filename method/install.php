@@ -1,18 +1,14 @@
 <?php
-class DataBaseInstall
+include_once 'DefineConnect.php';
+class DataBaseInstall extends DefineConnect
 {
-	private $host='sql.bdl.pl';
-	private $port='';
-	private $dbname='szpadlic_air';
-	//private $dbname_sh='information_schema';
-	private $charset='utf8';
-	private $user='szpadlic_baza';
-	private $pass='haslo';
-	private $table;
-    private $prefix;
-	//private $table_sh='SCHEMATA';
-	//private $admin;
-	//private $autor;
+    private $host       = DB_HOST;
+    private $port       = DB_PORT;
+    private $dbname     = DB_NAME;
+    private $dbname_sh  = DB_SCHEMA;
+    private $charset    = DB_CHARSET;
+    private $user       = DB_USER;
+    private $pass       = DB_PASSWORD;  
 	public function __setTable($tab_name)
     {
 		$this->table = $tab_name;

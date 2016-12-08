@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12 search">
-            <input class="form-control hidden" id="search" type="text" placeholder="Szukaj" />
+            <input class="form-control disabled" disabled id="search" type="text" placeholder="Szukaj" />
 		</div>
 	</div>
 	<div class="row">
@@ -12,14 +12,19 @@
 				</div>
 			</div>
 			<ul>
-                <li><a class="category menu" href="?last" >Wszystkie</a></li>
+                <li>
+                    <a class="category menu" href="?last" >Wszystkie</a>
+                </li>
                 <?php 
                 /** for show category only if has last add image **/
                 $obj_show_cat = new ShowImages;
                 $ret = $obj_show_cat->showCategoryById();
                 ?>
                 <?php foreach ($ret as $cat_menu){ ?>
-                    <li class="<?php echo @$_GET['cat_id'] == @$cat_menu['c_id'] ? 'active' : ''; ?>"><a class="category menu" href="?last&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a></li>
+                    <li class="<?php echo @$_GET['cat_id'] == @$cat_menu['c_id'] ? 'active' : ''; ?>">
+                        <a class="category menu" href="?last&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a>
+                        <span class="item_nr"><?php echo $obj_show_cat->countItemInCategoryOnlyLastAdd(@$cat_menu['c_id']); ?></span>
+                    </li>
                 <?php } ?>
             </ul>
 		</div>

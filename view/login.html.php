@@ -6,13 +6,13 @@
 					<label for="exampleInputEmail1">
 						User
 					</label>
-					<input class="form-control" id="user" name="user" type="text" value="deoc" />
+					<input class="form-control" id="user" name="user" type="text" value="" />
 				</div>
 				<div class="form-group">
 					<label for="exampleInputPassword1">
 						Password
 					</label>
-					<input class="form-control" id="pass" name="pass" type="password" value="pio" />
+					<input class="form-control" id="pass" name="pass" type="password" value="" />
 				</div>
 				<div class="checkbox">
 					<label>

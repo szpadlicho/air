@@ -14,7 +14,6 @@
 			<ul>
                 <li>
                     <a class="category menu" href="?galery" >Wszystkie</a>
-                    <span class="item_nr"></span>
                 </li>
                 <?php
                 $obj_show_cat = new ShowImages;

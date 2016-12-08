@@ -61,6 +61,7 @@ include_once 'method/UserClass.php';
     <link href="css/bootstrap.css" rel="stylesheet">
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <!-- Default -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap_fix.css" />
     <link rel="stylesheet" type="text/css" href="css/view.css.php" />
     <link rel="stylesheet" type="text/css" href="css/view.css" />
     <script>
@@ -75,9 +76,23 @@ include_once 'method/UserClass.php';
         });
         $(window).scroll(function() {
             /** for move background image **/
-            var pos2=($(this).scrollTop()/3);
-            $('body').css('background-position', 'center -'+pos2+'px');
-            $('.image-bg').css('background-position', 'center -'+pos2+'px');
+            var pos2=($(this).scrollTop()/2);
+            $('#cover_bg').prev().css('background-position', 'center -'+pos2+'px');
+            /** Live set pseudo element style **/
+            var addRule = (function (style) {
+                var sheet = document.head.appendChild(style).sheet;
+                return function (selector, css) {
+                    var propText = typeof css === "string" ? css : Object.keys(css).map(function (p) {
+                        return p + ":" + (p === "content" ? "'" + css[p] + "'" : css[p]);
+                    }).join(";");
+                    sheet.insertRule(selector + "{" + propText + "}", sheet.cssRules.length);
+                };
+            })(document.createElement("style"));
+
+            addRule("#cover_bg:after", {
+                "background-position": "center -"+pos2+"px",
+                content: "''"
+            });
         });
         $(document).ready(function(){
             /** Scroll top after reload **/
@@ -121,7 +136,6 @@ include_once 'method/UserClass.php';
             });
         });
     </script>
-    <!-- Lining -->
     <script>
         /**  **/
         $(function() {
@@ -133,9 +147,9 @@ include_once 'method/UserClass.php';
         });
         $(document).on('mousemove', '.left ul li', function(e){
             $('.item_nr').css({
-               left:  e.pageX+5+'px',
+               left:  e.pageX+5+'px', //e.clientX
                top:   e.pageY-100+'px'
-            }).fadeIn();
+            });
         });
     </script>
     <!-- Search engine -->
@@ -186,9 +200,11 @@ include_once 'method/UserClass.php';
     </script>
 </head>
 <body>
-<?php include_once 'controler.php'; ?>
-<div class="loader"></div>
-<div class="info"></div>
+<div id="cover_bg">
+    <?php include_once 'controler.php'; ?>
+    <div class="loader"></div>
+    <div class="info"></div>
+</div>
 </body>
 </html>
 <pre id="debugger" dir="ltr"></pre>
@@ -208,4 +224,4 @@ include_once 'method/UserClass.php';
 <?php //var_dump($_SERVER['PHP_SELF']); ?>
 <?php //var_dump($_SERVER['REQUEST_URI']); ?>
 <?php //var_dump($_SERVER); ?>
-<?php echo '';?>
+<?php //echo '';?>

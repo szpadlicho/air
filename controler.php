@@ -39,7 +39,7 @@ if ( isset($_GET['user']) ){ //tylko do testow
 }
 
 if ( isset($_GET['install_2016']) ){
-    include 'view/install.php';
+    include 'method/install.php';
 }
 
 
