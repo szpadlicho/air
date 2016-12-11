@@ -29,6 +29,13 @@ a:active{
 .p_active{
     background-color: <?php echo $color0; ?>;
 }
+.p_active,
+.p_active:hover,
+.pagination_start:hover,
+.menu.left ul li.active a,
+#top_menu .menu.top.active{
+    color: <?php echo $color6; ?>;
+}
 .pagination_start:hover{
     color: <?php echo $color3; ?>;
     background-color: <?php echo $color0; ?>;
@@ -37,6 +44,7 @@ a:active{
 .p_front_info,
 .fancybox-title-inside-wrap,
 .item_nr { 
+    color: <?php echo $color1; ?>;
     background-color: <?php echo $color8; ?>;    
 }
 .back_img .galery_img {
@@ -55,7 +63,8 @@ button.copy, button, input, textarea, select, input[type="radio"] {
 option{
     background-color: <?php echo $color10; ?> !important;
 }
-#top_menu {
+#top_menu,
+footer {
     background-color: <?php echo $color10; ?>;
 }
 #top_menu .menu.top{
@@ -73,4 +82,10 @@ option{
 }
 .progress-bar { 
     background-color: <?php echo $color6; ?>;
+}
+.cookies{
+    background-color: <?php echo $color10; ?>;
+}
+.cookies_ok{
+    color: <?php echo $color6; ?>;
 }

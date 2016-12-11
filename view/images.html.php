@@ -6,7 +6,7 @@
                     <thead>
                         <tr>
                             <th>
-                                Zdjęcie
+                                Zdjęcie/Film(mp4 ogv webm)
                             </th>
                             <th>
                                 Tagi

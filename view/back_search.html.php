@@ -98,7 +98,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                         <td>
                             <?php echo $obj_ShowImages->copyButton('category'); ?>
                         </td>
-                    <tr>
+                    </tr>
                     <tr>
                         <td>
                             Miejsce:
@@ -109,7 +109,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                         <td>
                             <?php echo $obj_ShowImages->copyButton('show_place'); ?>
                         </td>
-                    <tr>
+                    </tr>
                     <tr>
                         <td>
                             Autor:
@@ -120,7 +120,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                         <td>
                             <?php echo $obj_ShowImages->copyButton('author'); ?>
                         </td>
-                    <tr>
+                    </tr>
                 </table>
             </td>
             <td>
@@ -164,7 +164,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                         <td>
                             <?php echo $obj_ShowImages->copyButton('show_data'); ?>
                         </td>
-                    <tr>
+                    </tr>
                     <tr>
                         <td>
                             Start:
@@ -182,7 +182,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                         <td>
                             <?php echo $obj_ShowImages->copyButton('home'); ?>
                         </td>
-                    <tr>
+                    </tr>
                     <tr>
                         <td>
                             Widoczny:
@@ -200,7 +200,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                         <td>
                             <?php echo $obj_ShowImages->copyButton('visibility'); ?>
                         </td>
-                    <tr>
+                    </tr>
                 </table>
             </td>
             <td>

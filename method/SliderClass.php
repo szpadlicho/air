@@ -91,7 +91,7 @@ class UploadSlider extends DefineConnect
         
 		//$allowed = array ('txt', 'php', 'html', 'htm', 'js', 'css', 'zip');/*pliki które są nie do przyjęcia*/
         //if (! in_array($file_type, $allowed)) {
-		$allowed = array ('jpg', 'jpeg', 'avi', '3gp', '4gp', 'mov', 'png', 'gif');/*pliki które mozna uploadowac */
+		$allowed = array ('jpg', 'jpeg', 'png', 'gif');/*pliki które mozna uploadowac */
 		if ( in_array($file_type, $allowed)) {		
 			echo '<span class="catch_span">plik zaladowany: -'.$i.'- '.$_FILES['img']['name'][$i].'</span>- '.$next_id.'- <br />';
 			move_uploaded_file($_FILES['img']['tmp_name'][$i], $file_id);
@@ -230,7 +230,7 @@ class ShowSlider extends DefineConnect
         if (@opendir($dir1) || @opendir($dir2)) {//sprawdzam czy sciezka istnieje
             //return '<img class="back-all list mini-image" style="height:100px;" src="'.$dir1.$id.'.'.$mime.'" alt="image" />';
             ?>
-            <li><a href="?<?php echo $href; ?>" target="_self"><img class="" data-original="<?php echo $dir1.$id.'.'.$mime; ?>" src="<?php echo $dir0.$id.'.'.$mime; ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>" id="wows1_<?php echo $id; ?>"/></a><?php echo $des; ?></li>
+            <li><a href="?<?php echo $href; ?>&sl" target="_self"><img class="" data-original="<?php echo $dir1.$id.'.'.$mime; ?>" src="<?php echo $dir0.$id.'.'.$mime; ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>" id="wows1_<?php echo $id; ?>"/></a><?php echo $des; ?></li>
             <?php
         } else {
             return 'Upss..coś poszło nie tak';

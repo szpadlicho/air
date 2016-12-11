@@ -31,7 +31,7 @@
                     <thead>
                         <tr>
                             <th>
-                                Zdjęcie 1024x768 optymalnie
+                                Zdjęcie 1600x900 optymalnie
                             </th>
                             <th>
                                 Link

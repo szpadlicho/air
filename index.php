@@ -3,8 +3,11 @@ ini_set('xdebug.var_display_max_depth', -1);
 ini_set('xdebug.var_display_max_children', -1);
 ini_set('xdebug.var_display_max_data', -1);
 ini_set('session.cookie_lifetime', 1 * 24 * 60 * 60); //jeden dzien
+ini_set('default_charset','utf-8');
+ini_set('character_set_server', 'utf8');
 date_default_timezone_set('Europe/Warsaw');
 header('Content-Type: text/html; charset=utf-8');
+session_set_cookie_params(8*3600); //8 hours
 session_start();
 include_once 'method/UserClass.php';
 ?>
@@ -58,7 +61,7 @@ include_once 'method/UserClass.php';
     <!-- Progress bar -->
     <script type="text/javascript" src="js/progress/jquery.form.js"></script>
     <!-- Bootstrap -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" >
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <!-- Default -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap_fix.css" />
@@ -72,11 +75,14 @@ include_once 'method/UserClass.php';
             var wiw = $(window).width();
             if (wiw < 640) {
                 $( '.galery_img' ).css({'max-width': wiw-20});
+                $( 'video' ).css({'max-width': wiw-20});
+                $( '.save_all, .delete_all, .select_all' ).css({'display':'none'});
             }
+            $( 'video' ).parent().css('box-shadow', 'none');
         });
         $(window).scroll(function() {
             /** for move background image **/
-            var pos2=($(this).scrollTop()/2);
+            var pos2=($(this).scrollTop()/3);
             $('#cover_bg').prev().css('background-position', 'center -'+pos2+'px');
             /** Live set pseudo element style **/
             var addRule = (function (style) {
@@ -137,24 +143,33 @@ include_once 'method/UserClass.php';
         });
     </script>
     <script>
-        /**  **/
+        /** Tooltio animation **/
         $(function() {
-            // $(".left ul li").hover(function(event) {
-                // $( this ).children().next().css({top: event.clientY, left: event.clientX}).show();
-            // }, function() {
-                // $( this ).children().next().hide();
-            // });
+            $( '.left ul li a' ).mouseenter(function(e) {
+                $( this ).next( '.item_nr' ).css({ 
+                left:  e.pageX+1+'px',
+                top:   e.pageY-158+'px',
+                'opacity': '1' 
+                });
+            }).mouseleave(function(e) {
+                $( this ).next( '.item_nr' ).css({ 
+                left:  e.pageX+1+'px',
+                top:   e.pageY-158+'px',
+                'opacity': '0' 
+                });
+            });
         });
-        $(document).on('mousemove', '.left ul li', function(e){
-            $('.item_nr').css({
-               left:  e.pageX+5+'px', //e.clientX
-               top:   e.pageY-100+'px'
+        $(document).on('mousemove', '.left ul li a', function(e){
+            $( this ).next( '.item_nr' ).css({
+               left:  e.pageX+1+'px', //e.clientX
+               top:   e.pageY-158+'px'
             });
         });
     </script>
     <!-- Search engine -->
     <script type="text/javascript">
         $(function(){
+            /** search engine **/
             $(document).on('keyup', '#search, #search2', function() {
                 var string = $( this ).val();
                 if (string.length >= 3) { 
@@ -197,6 +212,22 @@ include_once 'method/UserClass.php';
                 $('#'+serach).focus();
             }
         });
+        $(function(){
+            /** 
+            * for pagination reset when redirect from slider
+            * when pagination is set different than default
+            * function is very optional
+            **/
+            var slfind = window.location.href;
+            var slget = slfind.substring(slfind.lastIndexOf("&sl"));
+            if ( slget == '&sl' && $.cookie('pagination') && $.cookie('start') != 0 ){
+                var slspli = slfind.split('&sl');
+                $.removeCookie('start');//reset paginacji
+                $.removeCookie('pagination');//reset paginacji
+                window.location.replace(slspli[0]);
+                console.log('redirect sl');
+            }
+        });
     </script>
 </head>
 <body>
@@ -205,9 +236,29 @@ include_once 'method/UserClass.php';
     <div class="loader"></div>
     <div class="info"></div>
 </div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88750029-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88763028-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<pre id="debugger" dir="ltr"></pre>
 </body>
 </html>
-<pre id="debugger" dir="ltr"></pre>
 <?php //echo phpinfo(INFO_GENERAL); ?>
 <?php //echo phpinfo(); ?>
 <?php //var_dump($_COOKIE); ?>

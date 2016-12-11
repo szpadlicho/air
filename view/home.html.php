@@ -29,10 +29,14 @@
                     var wiw = $(window).width();
                     var scw = $(window).width();
                     var play;
+                    var resnr;
                     if (scw < 640) {
-                        play = false; //for smarphone;
+                        $('head').append('<link rel="stylesheet" type="text/css" href="js/slider/style_fw_fix.css" />');//style_fw_fix.css
+                        play = false; //for full width smarphone;
+                        resnr = 2;
                     } else {
-                        play = true; //for screen
+                        play = true; //for full screen
+                        resnr = 3;
                     }
                     var options = {
                         effect:"louvers,glass_parallax,parallax,kenburns,blinds",
@@ -40,11 +44,11 @@
                         next:"", // next button text
                         duration:20*100, // duration of switching  images
                         delay:20*100, // delay between slides
-                        width:1024, // slider width (need for some effect only)
-                        height:768, // slider height (need for some effect only)
-                        keyboardControl:false, // use keyboard to control slides (â† left arrow, â†’ right arrow, space - play/pause)
+                        width:1600, // slider width (need for some effect only)
+                        height:900, // slider height (need for some effect only)
+                        keyboardControl:false, // use keyboard to control slides (left arrow, right arrow, space - play/pause)
                         scrollControl:false, // use mouse ccroll to control slides
-                        autoPlay:play, // auto play slides
+                        autoPlay: play, // auto play slides
                         autoPlayVideo:false, // autoplay youtube/vimeo video
                         playPause:true, // - show play/pause controll
                         stopOnHover:false, // stop slideshow on mouse over
@@ -54,7 +58,7 @@
                         captionEffect:"move", //parallax, move, slide
                         controls:true, // show controls button (prev/next)
                         controlsThumb:false,
-                        responsive:2, // responsive 0 - no responsive 1 - resposive only; 2 - full width slider; 3 - full width and height 
+                        responsive: resnr, // responsive 0 - no responsive 1 - resposive only; 2 - full width slider; 3 - full width and height 
                         fullScreen: false,
                         gestures:2, // gestures support (swipe slides on touch or click) 0 - none 1 - devices 2 - all
                         onBeforeStep:0,
@@ -69,14 +73,17 @@
 	<div class="row center">
         <div class="col-md-2">
             <!--<img src="http://graph.facebook.com/1470723598/picture?type=large&w‌​idth=720&height=720"/>-->
-
-            <img class="img-circle img-responsive profile" src="http://graph.facebook.com/1470723598/picture?type=large"/>
+            <a class="fb" href="https://www.facebook.com/deocPL" target="_blank" title="Facebook Tomasz 'deoc' Szczech">
+                <img class="img-circle img-responsive profile" alt="Facebook profile foto" src="http://graph.facebook.com/1470723598/picture?type=large"/>
+            </a>
         </div>
 		<div class="col-md-8">
             <?php echo nl2br($obj_ShowSlider->showDescription()['d_visibility'] == '1' ? ''.$obj_ShowSlider->showDescription()['home_des'].'<br />' : '' ); ?>
 		</div>
         <div class="col-md-2">
-        &nbsp
+            <a href="?" >
+                <img class="img-responsive logo" alt="Logo deoc" title="Logo deoc" src="img/logoB.png"/>
+            </a>
         </div>
 	</div>
 	<div class="row center">

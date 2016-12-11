@@ -1,27 +1,33 @@
 <script>
     $(document).ready(function(){
+        /** Top menu setting active class and cookie **/
+        /** when page is load **/
+        var get = window.location.href;
+        var menu = get.substring(get.lastIndexOf("?")+1);
+        var place =  menu.split('&');
+        $.cookie('top_active', place[0], { expires: 60*3600 });
+        /** when top menu is clicked **/
         $('body').on('click', '.menu.top', function(e) {
             var value = $(this).attr("href").substring(1);
             value = value.replace('&logout','');
             $.cookie('top_active', value, { expires: 60*3600 });  
         });
-        <?php if (isset($_GET['back'])) { ?>
-            $.cookie('top_active', 'back', { expires: 60*3600 });
-        <?php } ?>
         <?php if (isset($_GET['cat_id'])) { ?>
+            /** remove cookie when page is reload clicked left menu**/
             var url = window.location.href;
             var params = url.substring(url.lastIndexOf("?")+1,url.lastIndexOf("&"));
             if ( $.cookie('top_active') != params) {
                 $.removeCookie('top_active');
             }
         <?php } else { ?>
+            /** remove cookie when page is reload **/
             var url = window.location.href;
             var params = url.split('?');
             if ( $.cookie('top_active') != params[1]) {
                 $.removeCookie('top_active');
             }
         <?php } ?>
-
+        /** adding class when cookie is set or get is empty**/
         if ($.cookie('top_active')) {
             $('a[href="?'+$.cookie('top_active')+'"]').addClass('active');
         } else {

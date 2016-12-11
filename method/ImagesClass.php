@@ -109,7 +109,7 @@ class UploadImage extends DefineConnect
         
 		//$allowed = array ('txt', 'php', 'html', 'htm', 'js', 'css', 'zip');/*pliki które są nie do przyjęcia*/
         //if (! in_array($file_type, $allowed)) {
-		$allowed = array ('jpg', 'jpeg', 'avi', '3gp', '4gp', 'mov', 'png', 'gif');/*pliki które mozna uploadowac */
+		$allowed = array ('jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'mp3', 'mp4', 'webm', 'ogg', 'ogv');/*pliki które mozna uploadowac */
 		if ( in_array($file_type, $allowed)) {		
 			//echo '<span class="catch_span">plik zaladowany: -'.$i.'- '.$_FILES['img']['name'][$i].'</span><br />';
 			move_uploaded_file($_FILES['img']['tmp_name'][$i], $file_id);
@@ -446,7 +446,7 @@ class ShowImages extends DefineConnect
         $q = $q->fetchAll(PDO::FETCH_ASSOC);
         return $q;
 	}
-    public function showImg($id, $mime, $tag)
+    public function showImg($id, $mime, $tag)// po mime moge rozpoznac
     {                                        
         $dir0 = 'data/';
         $dir1 = 'data/mini/';                                       
@@ -455,11 +455,25 @@ class ShowImages extends DefineConnect
             //$dir = 'data/mini/';
             //echo 'ok';
             //return '<img class="back-all list mini-image" style="height:100px;" src="'.$dir1.$id.'.'.$mime.'" alt="image" />';
+            if ( $mime != 'mp4' && $mime != 'ogg' && $mime != 'ogv' && $mime != 'webm' && $mime != 'mp3' ) {
             ?>
             <a class="fancybox-button" rel="fancybox-button" href="<?php echo $dir0.$id.'.'.$mime; ?>" title="<?php echo $tag; ?>">
-                <img class="galery_img lazy" data-original="<?php echo $dir1.$id.'.'.$mime; ?>" src="<?php echo $dir1.$id.'.'.$mime; ?>" alt="<?php echo $tag; ?>" target="_blank"  /><!--*-->
+                <img class="galery_img lazy" data-original="<?php echo $dir1.$id.'.'.$mime; ?>" src="<?php echo $dir1.$id.'.'.$mime; ?>" alt="<?php echo $tag; ?>" /><!--*-->
             </a>
             <?php
+            } else { //320 x200
+                ?>
+                <video controls="controls" preload="none" 
+                <?php echo $mime == 'mp3' ? 'poster="img/ico/mp3.png"' : 'poster="img/ico/mp4.png"'; ?> >
+                    <source src="<?php echo $dir0.$id.'.'.$mime; ?>" type="video/mp4">
+                    <source src="<?php echo $dir0.$id.'.'.$mime; ?>" type="video/webm">
+                    <source src="<?php echo $dir0.$id.'.'.$mime; ?>" type="video/ogg">
+                    Twoja przeglądarka nie obsługuje wideo.
+                </video>
+                <?php
+            }
+            //echo mime_content_type ( $dir0.$id.'.'.$mime ); //video/mp4
+            //var_dump($mime);
         } else {
             return 'Upss..coś poszło nie tak';
         }
@@ -869,7 +883,7 @@ if(isset($_POST['trigger_del'])) {
     $obj_del = new DeleteImages;
     $obj_del->__setTable($tab_name);
     $feedback = $obj_del->deleteREC($id, $photo_mime);
-    var_dump($feedback);
+    //var_dump($feedback);
 }
 /**SHOW**/
 $obj_ShowImages = new ShowImages();    

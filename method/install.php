@@ -37,7 +37,8 @@ class DataBaseInstall extends DefineConnect
     {
 		if ($this->checkDb()=== false) {
 			$con=$this->connect();		
-			$con->exec("CREATE DATABASE IF NOT EXISTS ".$this->dbname." charset=".$this->charset);
+			//$con->exec("CREATE DATABASE IF NOT EXISTS ".$this->dbname." charset=".$this->charset);
+			$con->exec("CREATE DATABASE IF NOT EXISTS ".$this->dbname." charset=".$this->charset." COLLATE=utf8_general_ci" );
 			unset ($con);
 			return true;
 		} elseif ($this->checkDb()=== true) {
@@ -273,7 +274,7 @@ if (isset($_POST['crt_slider'])) {
         'd_visibility'              =>'INTEGER(1) UNSIGNED'
         );
     $arr_val = array(
-        'home_des'                  =>'About Me',
+        'home_des'                  =>'<h2>O mnie </h2>',
         'd_visibility'              =>'1'    
         );
     $return['description'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);

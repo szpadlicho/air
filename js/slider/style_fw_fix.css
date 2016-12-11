@@ -1,0 +1,13 @@
+#wowslider-container1 { 
+	display: table; /*block fs*/
+	max-height:900px; /*none fs*/
+}
+#wowslider-container1 .ws_images{
+	max-height:900px;
+}
+#wowslider-container1 .ws_images ul a{
+	max-height:900px;
+}
+#wowslider-container1 .ws_images > div > img {
+	max-height:900px;
+}

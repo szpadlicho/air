@@ -29,7 +29,28 @@ class DefineConnect
 	public function connectDb()
     {
         if ($this->checkDb()=== true) {
-            $con = new PDO("mysql:host=".DB_HOST."; port=".DB_PORT."; dbname=".DB_NAME."; charset=".DB_CHARSET, DB_USER, DB_PASSWORD);
+            $con = new PDO("mysql:host=".DB_HOST."; port=".DB_PORT."; dbname=".DB_NAME."; charset=".DB_CHARSET, DB_USER, DB_PASSWORD,
+            array(
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, 
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET character_set_server = '".DB_CHARSET."', 
+                                                 character_set_results = 'utf8', 
+                                                 character_set_client = 'utf8', 
+                                                 character_set_connection = 'utf8', 
+                                                 character_set_database = 'utf8', 
+                                                 collation_server = 'utf8_polish_ci',
+                                             NAMES ".DB_CHARSET." COLLATE utf8_polish_ci"
+            )
+            );
+            //$con->character_set_server('utf8');
+            //$con->query("SET NAMES utf8 COLLATE utf8_polish_ci");
+            //$con->query("SHOW VARIABLES LIKE '%char%'");
+            //$con->query("SET COLLATE utf8_polish_ci");
+            //collation_server=utf8_unicode_ci 
+            //character_set_server=utf8
+            //"SET lc_time_names='de_DE',NAMES utf8"
+            //var_dump($con);
+            //SHOW VARIABLES LIKE 'collation%';
+            //SHOW VARIABLES LIKE '%char%';
             return $con;
             unset ($con);
         }

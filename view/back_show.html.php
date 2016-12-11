@@ -254,7 +254,7 @@
 					<tr class="rr" name="rows_<?php echo $wyn['p_id']; ?>">
 						<td>
 							<?php echo $wyn['p_id']; ?>
-                            <input class="form-control check_box" type="checkbox" name="massive_del" value="aaa">
+                            <input class="form-control check_box" type="checkbox" name="massive_del">
 						</td>
                         <td class="back_img" id="back_img_<?php echo $wyn['p_id']; ?>">
 							<?php echo $obj_ShowImages->showImg($wyn['p_id'], $wyn['photo_mime'], $wyn['tag']);?>
@@ -289,7 +289,7 @@
                                     <td>
                                         <?php echo $obj_ShowImages->copyButton('category'); ?>
                                     </td>
-                                <tr>
+                                </tr>
                                 <tr>
                                     <td>
                                         Miejsce:
@@ -300,7 +300,7 @@
                                     <td>
                                         <?php echo $obj_ShowImages->copyButton('show_place'); ?>
                                     </td>
-                                <tr>
+                                </tr>
                                 <tr>
                                     <td>
                                         Autor:
@@ -311,7 +311,7 @@
                                     <td>
                                         <?php echo $obj_ShowImages->copyButton('author'); ?>
                                     </td>
-                                <tr>
+                                </tr>
                             </table>
 						</td>
                         <td>
@@ -355,7 +355,7 @@
                                     <td>
                                         <?php echo $obj_ShowImages->copyButton('show_data'); ?>
                                     </td>
-                                <tr>
+                                </tr>
                                 <tr>
                                     <td>
                                         Start:
@@ -373,7 +373,7 @@
                                     <td>
                                         <?php echo $obj_ShowImages->copyButton('home'); ?>
                                     </td>
-                                <tr>
+                                </tr>
                                 <tr>
                                     <td>
                                         Widoczny:
@@ -391,7 +391,7 @@
                                     <td>
                                         <?php echo $obj_ShowImages->copyButton('visibility'); ?>
                                     </td>
-                                <tr>
+                                </tr>
                             </table>
 						</td>
                         <td>

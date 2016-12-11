@@ -21,7 +21,7 @@ class UserClass extends DefineConnect
         if ( $user ) {
             if ( $remember == 'on' ) {
             setcookie('air', 'allowed');
-            var_dump($_COOKIE);
+            //var_dump($_COOKIE);
             Header('Location: '.$_SERVER['PHP_SELF'].'?back');
             return true;
             } else {
@@ -42,7 +42,7 @@ class UserClass extends DefineConnect
         unset($_SESSION['air']);
         //unset($_COOKIE['air']);
         setcookie('air', null, time()-3600);
-        var_dump($_COOKIE);
+        //var_dump($_COOKIE);
         //$_SERVER['SERVER_NAME'] $_SERVER['REQUEST_URI']       'back&logout' 'localhost'
         $link = str_replace("&logout","",$_SERVER['REQUEST_URI']);
         Header('Location: '.$link);

@@ -8,7 +8,9 @@
 		<div class="col-md-2 menu left">
 			<div class="row">
 				<div class="col-md-12">
-                <!--empty-->&nbsp
+                    <a href="?" >
+                        <img class="img-responsive logo" alt="Logo deoc" title="Logo deoc" src="img/logoB.png"/>
+                    </a>
 				</div>
 			</div>
 			<ul>
