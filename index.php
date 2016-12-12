@@ -143,7 +143,7 @@ include_once 'method/UserClass.php';
         });
     </script>
     <script>
-        /** Tooltio animation **/
+        /** Tooltip animation **/
         $(function() {
             $( '.left ul li a' ).mouseenter(function(e) {
                 $( this ).next( '.item_nr' ).css({ 

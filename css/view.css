@@ -379,6 +379,7 @@ video ~ .p_front_info
 .user_form_center{
     width: 16em;
     margin : auto;
+    padding-top: 5em;
 }
 .user_form{
     max-width: 15em;

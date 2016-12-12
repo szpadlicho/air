@@ -42,7 +42,7 @@ class DefineConnect
             )
             );
             //$con->character_set_server('utf8');
-            //$con->query("SET NAMES utf8 COLLATE utf8_polish_ci");
+            //$con->query("SET NAMES utf8");
             //$con->query("SHOW VARIABLES LIKE '%char%'");
             //$con->query("SET COLLATE utf8_polish_ci");
             //collation_server=utf8_unicode_ci 
