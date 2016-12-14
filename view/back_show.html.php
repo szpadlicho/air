@@ -158,6 +158,7 @@
         });
     }); 
 </script>
+<div class="keep"></div>
 <button class="form-control save_all" id="save_all">Save All</button>
 <button class="form-control delete_all" id="delete_all">Delete All</button>
 <input class="form-control select_all check_box" id ="select_all" type="checkbox" name="" value="">

@@ -18,6 +18,7 @@
     });
     //http://stackoverflow.com/questions/8805507/change-mouse-pointer-when-ajax-call
 </script>
+<div class="keep"></div>
 <button class="form-control save_all" id="save_all">Save All</button>
 <!--Upload-->
 <div class="container">

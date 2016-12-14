@@ -1,6 +1,5 @@
 <?php
 include_once 'view/technics_menu.html.php';
-   
 if ( isset($_GET['back']) ){
     if ( @$_COOKIE['air'] == 'allowed' || @$_SESSION['air'] == 'allowed' ) {
         include_once 'method/ImagesClass.php';
