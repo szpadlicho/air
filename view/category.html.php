@@ -51,7 +51,6 @@
         $( "[name='rows_"+id+"']" ).hide( 'slow' );
     }
 </script>
-<div class="keep"></div>
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">

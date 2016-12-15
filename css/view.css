@@ -22,11 +22,15 @@ body
     position: relative;
 }
 body {
-/*     background: rgba(0, 0, 0, 0) url(../img/bg/bg.jpg) center center no-repeat; 
+    background: rgba(0, 0, 0, 0) url(../img/bg/bg.jpg); 
+    background-position: center;
+    background-repeat: no-repeat;
     background-attachment: fixed; 
     background-size: cover;
     z-index: -3;
-    padding-bottom: 2em; */
+}
+body {
+    padding-bottom: 2em;
 }
 /* Moved background when scroll*/
 #cover_bg {
@@ -39,7 +43,7 @@ body {
     content: "";
     background-image: url('../img/bg/IehB7.png');
     background-position: center center;
-    opacity: .9; /*0.6*/
+    opacity: .5; /*0.6*/
     top: 0;
     left: 0;
     bottom: 0;
@@ -258,9 +262,12 @@ footer{
     position: relative; 
     display: inline-block;
     margin-left: -0.22em;
-    box-shadow: 2px 1px 3px #000; 
+    box-shadow: 2px 1px 3px #000;
+    #vertical-align: top;
 }
-
+.div_front img {
+    
+}
 video{
     vertical-align: middle !important;
     height: 200px; /*musi byc takie takie jak w ustawieniach miniaturek w ImageClass */
@@ -529,7 +536,7 @@ video ~ .p_front_info
 }
 /**debuger**/
 #debugger{
-    display: none;
+    #display: none;
     position: fixed;
     bottom: 0;
     right: 0;

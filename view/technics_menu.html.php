@@ -40,19 +40,19 @@
         <div class="col-md-12 nopadding">
             <div id="top_menu_placeholder">
                 <nav id="top_menu">
-                        <a class="menu top" href="?">Start</a>
-                        <a class="menu top" href="?last">Nowe</a>
-                        <a class="menu top" href="?galery">Galeria</a>
-                        <?php if ( isset($_GET['back']) || isset($_GET['category']) || isset($_GET['upload']) || isset($_GET['slider']) ) { ?>
-                            <a class="menu top" href="?back">Back</a>
-                            <a class="menu top" href="?category">Category</a>
-                            <a class="menu top" href="?upload">Upload</a>
-                            <a class="menu top" href="?slider">Slider</a>
-                            <a class="menu top" href="?<?php echo $_SERVER['QUERY_STRING']; ?>&logout" id="logout">Logout</a><!-- zmienic na -->
-                            <?php if ( isset($_GET['install']) ) { ?>
-                                <a class="menu top" href="?install_2016">Install</a>
-                            <?php } ?>
+                    <a class="menu top" href="?">Start</a>
+                    <a class="menu top" href="?last">Nowe</a>
+                    <a class="menu top" href="?galery">Galeria</a>
+                    <?php if ( isset($_GET['back']) || isset($_GET['category']) || isset($_GET['upload']) || isset($_GET['slider']) ) { ?>
+                        <a class="menu top" href="?back">Back</a>
+                        <a class="menu top" href="?category">Category</a>
+                        <a class="menu top" href="?upload">Upload</a>
+                        <a class="menu top" href="?slider">Slider</a>
+                        <a class="menu top" href="?<?php echo $_SERVER['QUERY_STRING']; ?>&logout" id="logout">Logout</a><!-- zmienic na -->
+                        <?php if ( isset($_GET['install']) ) { ?>
+                            <a class="menu top" href="?install_2016">Install</a>
                         <?php } ?>
+                    <?php } ?>
                 </nav>
             </div>
         </div>

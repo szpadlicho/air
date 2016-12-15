@@ -73,12 +73,19 @@ include_once 'method/UserClass.php';
             * for front .galery_img images size on smartphone
             **/
             var wiw = $(window).width();
+            var tmh = $( '#top_menu' ).height();
             if (wiw < 640) {
                 $( '.galery_img' ).css({'max-width': wiw-20});
                 $( 'video' ).css({'max-width': wiw-20});
                 $( '.save_all, .delete_all, .select_all' ).css({'display':'none'});
+                <?php if ( isset($_GET['back']) || isset($_GET['category']) || isset($_GET['upload']) || isset($_GET['slider']) ) { ?>
+                    $( 'body' ).css({'background': 'none'}); // fix for smartphone
+                    //$( 'body' ).css({'background-repeat:': 'repeat'}); // fix for smartphone
+                <?php } ?> 
             }
             $( 'video' ).parent().css('box-shadow', 'none');
+            $( '.container-fluid:eq(1)' ).css({'padding-top': tmh-30}); // fix for smartphone 
+            //$( '#debugger' ).text(tmh);
         });
         $(window).scroll(function() {
             /** for move background image **/
