@@ -20,6 +20,7 @@ body
     min-height: 100%;
     z-index: -4;
     position: relative;
+    background-color: black;
 }
 body {
     background: rgba(0, 0, 0, 0) url(../img/bg/bg.jpg); 
