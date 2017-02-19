@@ -6,6 +6,7 @@
         //var photo_name = $("[name='photo_name_"+id+"']").val();
         var photo_name = '';
         var category = $("[name='category_"+id+"']").val();
+        var subcategory = $("[name='subcategory_"+id+"']").val();
         var show_data_year = $("[name='show_data_year_"+id+"']").val();
         var show_data_month = $("[name='show_data_month_"+id+"']").val();
         var show_data_day = $("[name='show_data_day_"+id+"']").val();
@@ -18,10 +19,11 @@
         var password = '';
         var home = $("[name='home_"+id+"']").val();
         var position = $("[name='position_"+id+"']").val();
-        var visibility = $("[name='visibility_"+id+"']").val();
+        //var visibility = $("[name='visibility_"+id+"']").val();
+        var visibility = '1';
         var trigger_update = 'update_images';
         
-        var myData = ({trigger_update:trigger_update, tab_name:tab_name, id:id, photo_name:photo_name, category:category,show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,home:home,position:position,visibility:visibility});
+        var myData = ({trigger_update:trigger_update, tab_name:tab_name, id:id, photo_name:photo_name, category:category, subcategory:subcategory, show_data:show_data_year+'-'+show_data_month+'-'+show_data_day,show_place:show_place,tag:tag,author:author,protect:protect,password:password,home:home,position:position,visibility:visibility});
         
         $.ajax({
             url:  'method/ImagesClass.php',
@@ -29,6 +31,7 @@
             data:  myData,
             success: function (data) {
                 info('SAVE '+id);
+                console.log(data);
             }
         }).done(function(data) {
             info('SAVE');
@@ -38,6 +41,7 @@
             console.log(jqXHR.status);
             $("#debugger").text('POST fail');
         });
+        //console.log(subcategory);
     };
     var del = function(id) {
         //get the form values
@@ -118,6 +122,13 @@
                 $( this ).val($value);
             });
         });
+        $('body').on('click', '.copy.subcategory', function(e) {
+            e.preventDefault();
+            var $value = $( this ).parents().prev().children().val();
+            $( '.back.select.subcategory' ).each(function() {
+                $( this ).val($value);
+            });
+        });
         $('body').on('click', '.copy.author', function(e) {
             e.preventDefault();
             var $value = $( this ).parents().prev().children().val();
@@ -171,6 +182,7 @@
                 <!--empty-->&nbsp
 				</div>
 			</div>
+            <!--
 			<ul>
                 <li>
                     <a class="category menu" href="?back" >Wszystkie</a>
@@ -189,6 +201,43 @@
                     </li>
                 <?php } ?>
             </ul>
+            -->
+            <?php 
+                $obj_show_sub_cat = new ShowImages;
+                $obj_show_sub_cat->__setTable('photos');
+                $res = $obj_show_sub_cat->__getSubAndCat();
+                $res = $res->fetchAll(PDO::FETCH_ASSOC);
+                $cat = array();
+                $sub = array();
+                //var_dump($ret);
+                foreach ($res as $sub_cat_menu){
+                    $cat[$sub_cat_menu['c_id']] = $sub_cat_menu['category'];
+                    //$cat[] = ;
+                    $sub[$sub_cat_menu['s_id']] = $sub_cat_menu['subcategory'];
+                    //$sub[] = ;
+                }
+                $cat = array_unique($cat);
+                $sub = array_unique($sub);
+                //var_dump($cat);
+                //var_dump($sub);
+                foreach ($cat as $c => $ck){
+                ?>
+                    <ul>
+                        <li>
+                            <a class="category menu" href="?back&cat_id=<?php echo $c; ?>"><?php echo $ck; ?></a>
+                            <ul>
+                                <?php foreach ($sub as $s => $sk){ ?>
+                                    <?php if( $sk != '' ){ ?>
+                                        <li><a class="category menu" href="?back&cat_id=<?php echo $c; ?>&sub_id=<?php echo $s; ?>" ><?php echo $sk; ?></a></li>
+                                    <?php } ?>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                    </ul>
+                <?php
+                }
+                var_dump('');
+            ?>
 		</div>
 		<div id="table_content" class="col-md-10">
 			<div class="row center">
@@ -281,10 +330,47 @@
                                                 <?php } ?>
                                             <?php } ?>
                                         </select>
+                                        <?php //echo $wyn['p_id'].'-'.$cat['c_id'].'-'.$wyn['category'].'-'.$cat['category']; ?>
                                     </td>
                                     <td>
                                         <?php echo $obj_ShowImages->copyButton('category'); ?>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Kategoria:
+                                    </td>
+                                    <td>
+                                        <select class="form-control back select subcategory" name="subcategory_<?php echo $wyn['p_id']; ?>">
+                                            <?php $obj_ShowSubCategory = new ShowImages(); ?>
+                                            <?php $obj_ShowSubCategory->__setTable('subcategory'); ?>
+                                            <?php if ($obj_ShowSubCategory->showCategoryAll()) { ?>
+                                                <?php foreach ($obj_ShowSubCategory->showCategoryAll() as $sub) {?>
+                                                    <option value="<?php echo $sub['s_id']; ?>"
+                                                        <?php if( $sub['subcategory'] == $wyn['subcategory'] ){ ?>
+                                                            selected = "selected" 
+                                                        <?php } ?>  > <?php echo $sub['subcategory']; ?>
+                                                    </option>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </select>
+                                        <?php //var_dump($wyn); ?>
+                                        <?php //echo $wyn['p_id'].'-'.$sub['s_id'].'-'.$wyn['subcategory'].'-'.$sub['subcategory']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $obj_ShowImages->copyButton('subcategory'); ?>
+                                    </td>
+                                    <!--
+                                    <td>
+                                        Miejsce:
+                                    </td>
+                                    <td>
+                                        <input class="form-control back input show_place" name="show_place_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['show_place']; ?>" />
+                                    </td>
+                                    <td>
+                                        <?php echo $obj_ShowImages->copyButton('show_place'); ?>
+                                    </td>
+                                    -->
                                 </tr>
                                 <tr>
                                     <td>
@@ -296,8 +382,7 @@
                                     <td>
                                         <?php echo $obj_ShowImages->copyButton('show_place'); ?>
                                     </td>
-                                </tr>
-                                <tr>
+                                    <!--
                                     <td>
                                         Autor:
                                     </td>
@@ -307,6 +392,7 @@
                                     <td>
                                         <?php echo $obj_ShowImages->copyButton('author'); ?>
                                     </td>
+                                    -->
                                 </tr>
                             </table>
 						</td>
@@ -372,6 +458,16 @@
                                 </tr>
                                 <tr>
                                     <td>
+                                        Autor:
+                                    </td>
+                                    <td>
+                                        <input class="form-control back input author" name="author_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['author']; ?>" />
+                                    </td>
+                                    <td>
+                                        <?php echo $obj_ShowImages->copyButton('author'); ?>
+                                    </td>
+                                    <!--
+                                    <td>
                                         Widoczny:
                                     </td>
                                     <td>
@@ -387,6 +483,7 @@
                                     <td>
                                         <?php echo $obj_ShowImages->copyButton('visibility'); ?>
                                     </td>
+                                    -->
                                 </tr>
                             </table>
 						</td>

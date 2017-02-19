@@ -21,13 +21,13 @@ class AddCategory extends DefineConnect
         $next_id = $next_id->fetch(PDO::FETCH_ASSOC);
         return $next_id['Auto_increment'];
     }
-    public function addRec()
+    public function addRec($category, $visibility)
     {
         $con = $this->connectDb();
-        $category = $_POST['category'];
-        $visibility = $_POST['visibility'];
+        //$category = $_POST['category'];
+        //$visibility = $_POST['visibility'];
         $feedback = $con->exec("INSERT INTO `".$this->table."`(
-        `category`,
+        `".$this->table."`,
         `protect`,
         `password`,      
         `".$this->prefix."visibility`
@@ -72,7 +72,7 @@ class UpdateCategory extends DefineConnect
             UPDATE 
             `".$this->table."`   
             SET 
-            `category` = '".$category."',
+            `".$this->table."` = '".$category."',
             `protect` = '".$protect."',
             `password` = '".$password."',      
             `".$this->prefix."visibility` = '".$visibility."'
@@ -124,7 +124,7 @@ class ShowCategory extends DefineConnect
     public function countItemInCategory($id)
     {
 		$con=$this->connectDb();
-		$q = $con->query("SELECT COUNT(*) FROM `photos` WHERE `category` = '".$id."' ");/*zwraca false jesli tablica nie istnieje*/
+		$q = $con->query("SELECT COUNT(*) FROM `photos` WHERE `".$this->table."` = '".$id."' ");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
         $q = $q->fetch(PDO::FETCH_ASSOC);
         //$q = count($q);
@@ -135,7 +135,7 @@ class ShowCategory extends DefineConnect
 if(isset($_POST['i_add'])) { 
     $obj_add = new AddCategory;
     $obj_add->__setTable('category');
-    $res = $obj_add->addRec();
+    $res = $obj_add->addRec($_POST['category'], $_POST['visibility']);
 }
 /**UPDATE**/
 if(isset($_POST['trigger_update'])) { 
@@ -157,6 +157,33 @@ if(isset($_POST['trigger_del'])) {
     $obj_del->__setTable($tab_name);
     $feedback = $obj_del->deleteREC($id);
 }
+/**SUBADD**/
+if(isset($_POST['i_subadd'])) { 
+    $obj_add = new AddCategory;
+    $obj_add->__setTable('subcategory');
+    $res = $obj_add->addRec($_POST['subcategory'], $_POST['visibility']);
+}
+/**SUBUPDATE**/
+if(isset($_POST['trigger_subupdate'])) { 
+    $tab_name = $_POST['tab_name'];
+    $id = $_POST['id'];
+    $category = $_POST['category'];
+    $protect = '';
+    $password = '';
+    $visibility = $_POST['visibility'];
+    $obj_update = new UpdateCategory;
+    $obj_update -> __setTable($tab_name);
+    $obj_update -> updateCat($id, $category, $protect, $password, $visibility);
+
+}
+/**SUBDELETE**/
+if(isset($_POST['trigger_subdel'])) { 
+    $id = $_POST['id'];
+    $tab_name = $_POST['tab_name'];
+    $obj_del = new DeleteCategory;
+    $obj_del->__setTable($tab_name);
+    $feedback = $obj_del->deleteREC($id);
+}
 /**SHOW**/
 $obj_ShowCategory = new ShowCategory;
-$obj_ShowCategory -> __setTable('category');
+//$obj_ShowCategory -> __setTable('category');

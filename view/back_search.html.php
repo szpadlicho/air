@@ -101,6 +101,29 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                     </tr>
                     <tr>
                         <td>
+                            Kategoria:
+                        </td>
+                        <td>
+                            <select class="form-control back select subcategory" name="subcategory_<?php echo $wyn['p_id']; ?>">
+                                <?php $obj_ShowSubCategory = new ShowImages(); ?>
+                                <?php $obj_ShowSubCategory->__setTable('subcategory'); ?>
+                                <?php if ($obj_ShowSubCategory->showCategoryAll()) { ?>
+                                    <?php foreach ($obj_ShowSubCategory->showCategoryAll() as $sub) {?>
+                                        <option value="<?php echo $sub['s_id']; ?>"
+                                            <?php if( $sub['subcategory'] == $wyn['subcategory'] ){ // cos jest zle bo sie rozni od category w tym samym miejscu?>
+                                                selected = "selected" 
+                                            <?php } ?>  > <?php echo $sub['subcategory']; ?>
+                                        </option>
+                                    <?php } ?>
+                                <?php } ?>
+                            </select>
+                            <?php //echo $wyn['p_id'].'-'.$sub['s_id'].'-'.$wyn['subcategory'].'-'.$sub['subcategory']; ?>
+                        </td>
+                        <td>
+                            <?php echo $obj_ShowImages->copyButton('subcategory'); ?>
+                        </td>
+                        <!--
+                        <td>
                             Miejsce:
                         </td>
                         <td>
@@ -109,8 +132,19 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                         <td>
                             <?php echo $obj_ShowImages->copyButton('show_place'); ?>
                         </td>
+                        -->
                     </tr>
                     <tr>
+                        <td>
+                            Miejsce:
+                        </td>
+                        <td>
+                            <input class="form-control back input show_place" name="show_place_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['show_place']; ?>" />
+                        </td>
+                        <td>
+                            <?php echo $obj_ShowImages->copyButton('show_place'); ?>
+                        </td>
+                        <!--
                         <td>
                             Autor:
                         </td>
@@ -120,6 +154,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                         <td>
                             <?php echo $obj_ShowImages->copyButton('author'); ?>
                         </td>
+                        -->
                     </tr>
                 </table>
             </td>
@@ -185,6 +220,16 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                     </tr>
                     <tr>
                         <td>
+                            Autor:
+                        </td>
+                        <td>
+                            <input class="form-control back input author" name="author_<?php echo $wyn['p_id']; ?>" type="text" value="<?php echo $wyn['author']; ?>" />
+                        </td>
+                        <td>
+                            <?php echo $obj_ShowImages->copyButton('author'); ?>
+                        </td>
+                        <!--
+                        <td>
                             Widoczny:
                         </td>
                         <td>
@@ -200,6 +245,7 @@ $success = $obj_ShowImages->showAllByTag($_POST['string']);
                         <td>
                             <?php echo $obj_ShowImages->copyButton('visibility'); ?>
                         </td>
+                        -->
                     </tr>
                 </table>
             </td>

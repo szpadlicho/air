@@ -20,20 +20,21 @@ class UploadImage extends DefineConnect
         $data = date('Y-m-d H:i:s');
         $data_short = date('Y-m-d');
         $category = $_POST['category'];
+        $subcategory = $_POST['subcategory'];
         $show_data = $_POST['show_data_year'].'-'.$_POST['show_data_month'].'-'.$_POST['show_data_day'];
         $show_place = $_POST['show_place'];
         $tag = $_POST['tag'];
         $author = $_POST['author'];
         $home = $_POST['home'];
         $position = '';
-        $visibility = $_POST['visibility'];
+        $visibility = 1;
         $none = NULL;
         $feedback = $con->exec("INSERT INTO `".$this->table."`(
         `photo_name`,
         `photo_mime`,
         `photo_size`,
         `category`,
-        `sub_category`,
+        `subcategory`,
         `add_data`,
         `update_data`,
         `show_data`,
@@ -50,7 +51,7 @@ class UploadImage extends DefineConnect
         '".$file_type."',
         '".$file_size."',
         '".$category."',
-        '".$none."',
+        '".$subcategory."',
         '".$data."',
         '".$data."',
         '".$show_data."',
@@ -82,15 +83,45 @@ class UploadImage extends DefineConnect
         $new_height = 200;//wysokosc miniaturki domyslna
         $ratio = $org_inf[1] / $new_height;//obliczam dzielnik
         $new_width = $org_inf[0] / $ratio;// obliczam nowa szerokosc
-        $src = imagecreatefromjpeg($file_to_resize);//wczytuje oryginalny obrazek
-        $dst = imagecreatetruecolor($new_width, $new_height);//tworze obrazek z nowymi wymiarami
-        imagecopyresampled($dst, $src, 0, 0, 0, 0, $new_width, $new_height, $org_width, $org_height);//skaluje oryginalny obrazek do nowych rozmiarow
-        // imageconvolution($dst, array( // Sharpen image - wyostrzenie
-                            // array(-1, -1, -1),
-                            // array(-1, 16, -1),
-                            // array(-1, -1, -1)
-                        // ), 8, 0);
-        imagejpeg($dst, $mini_des.$next_id.'.'.$file_type, 100);// co, gdzie, jakosc // izapisuje do pliku
+        if ( $file_type == 'jpg' || $file_type == 'jpeg' ) {
+            $src = imagecreatefromjpeg($file_to_resize);//wczytuje oryginalny obrazek
+            $dst = imagecreatetruecolor($new_width, $new_height);//tworze obrazek z nowymi wymiarami
+            imagecopyresampled($dst, $src, 0, 0, 0, 0, $new_width, $new_height, $org_width, $org_height);//skaluje oryginalny obrazek do nowych rozmiarow
+            // imageconvolution($dst, array( // Sharpen image - wyostrzenie
+                                // array(-1, -1, -1),
+                                // array(-1, 16, -1),
+                                // array(-1, -1, -1)
+                            // ), 8, 0);
+            imagejpeg($dst, $mini_des.$next_id.'.'.$file_type, 100);// co, gdzie, jakosc // izapisuje do pliku
+        }
+        if ( $file_type == 'gif' ) {
+            $src = imagecreatefromgif($file_to_resize);//wczytuje oryginalny obrazek
+            $dst = imagecreatetruecolor($new_width, $new_height);//tworze obrazek z nowymi wymiarami
+            imagecopyresampled($dst, $src, 0, 0, 0, 0, $new_width, $new_height, $org_width, $org_height);//skaluje oryginalny obrazek do nowych rozmiarow
+            // imageconvolution($dst, array( // Sharpen image - wyostrzenie
+                                // array(-1, -1, -1),
+                                // array(-1, 16, -1),
+                                // array(-1, -1, -1)
+                            // ), 8, 0);
+            imagegif($dst, $mini_des.$next_id.'.'.$file_type, 100);// co, gdzie, jakosc // izapisuje do pliku
+        }
+        if ( $file_type == 'png' ) {
+            $src = imagecreatefrompng($file_to_resize);//wczytuje oryginalny obrazek
+            $dst = imagecreatetruecolor($new_width, $new_height);//tworze obrazek z nowymi wymiarami
+            
+            // imagealphablending($dst, false);
+            // imagesavealpha($dst, true);
+            // $transparent = imagecolorallocatealpha($dst, 255, 255, 255, 127);
+            // imagefilledrectangle($dst, 0, 0, $new_width, $new_height, $transparent);
+            
+            imagecopyresampled($dst, $src, 0, 0, 0, 0, $new_width, $new_height, $org_width, $org_height);//skaluje oryginalny obrazek do nowych rozmiarow
+            // imageconvolution($dst, array( // Sharpen image - wyostrzenie
+                                // array(-1, -1, -1),
+                                // array(-1, 16, -1),
+                                // array(-1, -1, -1)
+                            // ), 8, 0);
+            imagejpeg($dst, $mini_des.$next_id.'.'.$file_type, 100);// co, gdzie, jakosc // izapisuje do pliku
+        }
         unset($src);//czyszcze pamiec
         unset($dst);//czyszcze pamiec
         return true;
@@ -155,7 +186,7 @@ class UpdateImages extends DefineConnect
 		unset ($con);
 	
 	}
-    public function updateImg($id, $photo_name, $category, $show_data, $show_place, 
+    public function updateImg($id, $photo_name, $category, $subcategory, $show_data, $show_place, 
                                 $tag, $author, $protect, $password, $home, $position, $visibility){
         $date = date('Y-m-d H:i:s');
         $con = $this->connectDb();        
@@ -165,6 +196,7 @@ class UpdateImages extends DefineConnect
             SET 
             `photo_name` = '".$photo_name."',
             `category` = '".$category."',
+            `subcategory` = '".$subcategory."',
             `update_data` = '".$date."',
             `show_data` = '".$show_data." 00:00:00',
             `show_place` = '".$show_place."',
@@ -283,15 +315,15 @@ class ShowImages extends DefineConnect
         $order = $this->order;
         if ( isset($_GET['back']) ) {//co ma pokazac jesli jestes na zapleczu (czyli razem z ukrytymi)
             if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+                $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` LEFT JOIN `subcategory` ON photos.`subcategory` = subcategory.`s_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
             } else {//pokazuje fotki ze wszystkich kategorii
-                $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+                $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` LEFT JOIN `subcategory` ON photos.`subcategory` = subcategory.`s_id` ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
             }
         } else { //co ma pokazac jesli jestes na galery page (czyli bez ukrytych)
             if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_id` = ".$_GET['cat_id']." AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+                $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` LEFT JOIN `subcategory` ON photos.`subcategory` = subcategory.`s_id` WHERE category.`c_id` = ".$_GET['cat_id']." AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
             } else {//pokazuje fotki ze wszystkich kategorii
-                $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+                $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` LEFT JOIN `subcategory` ON photos.`subcategory` = subcategory.`s_id` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
             }
         }
 		unset ($con);
@@ -327,11 +359,11 @@ class ShowImages extends DefineConnect
                 if (preg_match('@[ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]@', $s)) {// są polskie znaki
                     //try{ 
                     if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*///unicode
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR subcategory.`subcategory` utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*///unicode
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     } else { //szuka we wszystkich kategoriach
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR subcategory.`subcategory` utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     }
@@ -341,11 +373,11 @@ class ShowImages extends DefineConnect
                     //}
                 } else { // brak polskich znaków
                     if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     } else { //szuka we wszystkich kategoriach
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR subcategory.`subcategory` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     }
@@ -355,21 +387,21 @@ class ShowImages extends DefineConnect
             foreach($string as $s){
                 if (preg_match('@[ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]@', $s)) {// są polskie znaki
                     if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND category.`c_visibility` = '1' AND subcategory.`s_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR subcategory.`subcategory` utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     } else {  //szuka we wszystkich kategoriach
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_visibility` = '1' AND subcategory.`s_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR subcategory.`subcategory` utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     }
                 } else { // brak polskich znaków
                     if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_id` = '".$_GET['cat_id']."' AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND category.`c_visibility` = '1' AND subcategory.`s_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR subcategory.`subcategory` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     } else {  //szuka we wszystkich kategoriach
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_visibility` = '1' AND subcategory.`s_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR subcategory.`subcategory` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     }
@@ -480,7 +512,7 @@ class ShowImages extends DefineConnect
     }
     public function showCategory()// do category menu tego po lewej stronie
     {
-		$con=$this->connectDb();
+		$con = $this->connectDb();
         if ( isset($_GET['back']) ) {//co ma pokazac jesli jestes na zapleczu (czyli razem z ukrytymi)
             $q = $con->query("SELECT `".$this->table."`, `".$this->prefix."id`, `".$this->prefix."visibility` FROM `".$this->table."`");/*zwraca false jesli tablica nie istnieje*/
         } else {
@@ -489,6 +521,14 @@ class ShowImages extends DefineConnect
 		unset ($con);
 		return $q;
 	}
+    public function __getSubAndCat()
+    {
+        $con = $this->connectDb();
+        //$q = $con->query("SELECT `category`, `subcategory` FROM `".$this->table."` WHERE `c_visibility` = '1'");
+        $q = $con->query("SELECT * FROM `".$this->table."` LEFT JOIN `category` ON photos.`category` = category.`c_id` LEFT JOIN `subcategory` ON photos.`subcategory` = subcategory.`s_id` ");
+        unset ($con);
+		return $q;
+    }
     public function showCategoryByID()// do category menu tego po lewej stronie na last
     {
         $cat_id = array();
@@ -861,6 +901,7 @@ if(isset($_POST['trigger_update'])) {
     $id = $_POST['id'];
     $photo_name = $_POST['photo_name'];
     $category = $_POST['category'];
+    $subcategory = $_POST['subcategory'];
     $show_data = $_POST['show_data'];
     $show_place = $_POST['show_place'];
     $tag = $_POST['tag'];
@@ -872,7 +913,7 @@ if(isset($_POST['trigger_update'])) {
     $visibility = $_POST['visibility'];
     $obj_update = new UpdateImages;
     $obj_update -> __setTable($tab_name);
-    $obj_update -> updateImg($id, $photo_name, $category, $show_data, $show_place, 
+    $obj_update -> updateImg($id, $photo_name, $category, $subcategory, $show_data, $show_place, 
                                     $tag, $author, $protect, $password, $home, $position, $visibility);
 }
 /**DELETE**/

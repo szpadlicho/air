@@ -51,19 +51,36 @@
                                     <tr>
                                     <tr>
                                         <td>
+                                            Kategoria:
+                                        </td>
+                                        <td>
+                                            <select class="form-control" name="subcategory">
+                                                <?php $obj_subupload = new UploadImage; ?>
+                                                <?php $obj_subupload->__setTable('subcategory'); ?>
+                                                <?php if ($obj_subupload->showCategoryAll()) { ?>
+                                                    <?php foreach ($obj_subupload->showCategoryAll() as $sub) { ?>
+                                                        <option value="<?php echo $sub['s_id']; ?>"> <?php echo $sub['subcategory']; ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </select>
+                                        </td>
+                                    <tr>
+                                    <tr>
+                                        <td>
                                             Miejsce:
                                         </td>
                                         <td>
                                             <input class="form-control" name="show_place" type="text" placeholder="Miejsce wykonania" />
                                         </td>
-                                    <tr>
-                                    <tr>
+                                        <!--
                                         <td>
                                             Autor:
                                         </td>
                                         <td>
                                             <input class="form-control" name="author" type="text" placeholder="Autor" />
                                         </td>
+                                        -->
                                     <tr>
                                 </table>
                             </td>
@@ -120,6 +137,13 @@
                                     <tr>
                                     <tr>
                                         <td>
+                                            Autor:
+                                        </td>
+                                        <td>
+                                            <input class="form-control" name="author" type="text" placeholder="Autor" />
+                                        </td>
+                                        <!--
+                                        <td>
                                             Widoczny:
                                         </td>
                                         <td>
@@ -128,6 +152,7 @@
                                                 <option value="0">Off</option>
                                             </select> 
                                         </td>
+                                        -->
                                     <tr>
                                 </table>
                             </td>

@@ -196,7 +196,7 @@ if (isset($_POST['crt'])) {
         'photo_mime'                =>'VARCHAR(20)',
         'photo_size'                =>'VARCHAR(40)',
         'category'                  =>'VARCHAR(20)',
-        'sub_category'              =>'VARCHAR(20)',
+        'subcategory'              =>'VARCHAR(20)',
         'add_data'                  =>'DATETIME',
         'update_data'               =>'DATETIME',
         'show_data'                 =>'DATE',
@@ -317,6 +317,26 @@ if (isset($_POST['crt_user']) && $_POST['user_pass1'] == $_POST['user_pass2']) {
 if (isset($_POST['del_user'])) {
 	$obj_install->deleteTb('user');
 }
+/**
+* Subcategory Add
+**/
+if (isset($_POST['crt_subcategory'])) {
+    $obj_install->__setTable('subcategory');
+    $arr_row = array(
+        'subcategory'               =>'TEXT',
+        'protect'                   =>'VARCHAR(20)', 
+        'password'                  =>'VARCHAR(20)', 
+        's_visibility'              =>'INTEGER(1) UNSIGNED'
+        );
+    $arr_val = array(
+        'subcategory'               =>null,
+        's_visibility'              =>1
+        );
+    $return['subcategory'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
+}
+if (isset($_POST['del_subcategory'])) {
+	$obj_install->deleteTb('subcategory');
+}
 ?>
 <div class="center">
     Zarządzanie Bazą Danych
@@ -326,6 +346,9 @@ if (isset($_POST['del_user'])) {
             <br />
             <input class="input_cls" type="submit" name="del_slider" value="Delete Slider" />
             <input class="input_cls" type="submit" name="crt_slider" value="Create Slider" />
+            <br />
+            <input class="input_cls" type="submit" name="del_subcategory" value="Delete Sub" />
+            <input class="input_cls" type="submit" name="crt_subcategory" value="Create Sub" />
             <br />
             <input class="input_cls" type="submit" name="del_user" value="Delete User" />
             <input class="input_cls" type="submit" name="crt_user" value="Create User" />

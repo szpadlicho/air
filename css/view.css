@@ -2,6 +2,19 @@
     font-family: 'Ubuntu Condensed';
     src: url(../fonts/ubuntu/Ubuntu-R.ttf);
 }
+html{
+    --tr: transparent;
+    --wh: white; /*html,body, .p_active, .p_active:hover, .p_front_data, .p_front_info, back_img .galery_img, .fancybox-title-inside-wrap, .item_nr*/
+    --bl: black; /*.item_nr*/
+    --lg: lightgrey;
+    --gg: #ccc;
+    --dg: darkgrey;
+    --yl: rgb(239, 216, 38); /*Yellow #efd826*/
+    --bl: rgb(102, 175, 233); /*Blue #66afe9 lighter than FB*/
+    --vd: rgb(70, 72, 78); /* very dark grey #46484e */
+    --fb: rgb(66, 103, 178); /* FB Blue #4267b2 */
+    --tm: rgba(0, 0, 0, 0.5); /* top menu bg */
+}
 html.busy, 
 html.busy * {  
     cursor: wait !important;
@@ -20,7 +33,8 @@ body
     min-height: 100%;
     z-index: -4;
     position: relative;
-    background-color: black;
+    color: var(--wh);
+    background-color: var(--bl);
 }
 body {
     background: rgba(0, 0, 0, 0) url(../img/bg/bg.jpg); 
@@ -63,9 +77,17 @@ a{
 a,
 a:visited,
 a:hover,
-a:active
-{
+a:active{
     text-decoration: none;
+}
+a:visited{
+    color: var(--dg);
+}
+a:hover{
+    color: var(--gg);
+}
+a:active{
+    color: var(--yl);
 }
 textarea{
     padding-left: 2px;
@@ -86,9 +108,18 @@ input[type="checkbox"]
     min-width: 40px;
     text-shadow: 2px 1px 3px #000;
 }
+button.copy, 
+button, 
+input, 
+textarea, 
+select, 
+input[type="radio"] {
+   background-color:  var(--tr);
+}
 option{
     border: none;
     text-shadow: 2px 1px 3px #000;
+    background-color: var(--tm) !important;
 }
 input[type="checkbox"]{
     border-color: rgb(239, 216, 38);
@@ -113,6 +144,7 @@ footer{
     vertical-align: bottom;
     height: 3em;
     font-size: 12px;
+    background-color: var(--tm);
 }
 .deoc{
     text-align: left;
@@ -166,6 +198,7 @@ footer{
     text-align: center;
     z-index: 99;
     padding: 0.80em 0em;
+    background-color: var(--tm);
 }
 #top_menu .menu.top:first-child{
     padding-left: 0em;
@@ -175,6 +208,7 @@ footer{
     font-size: 1.5em;
     padding: 0.0em;
     padding-left: 1em;
+    background-color:  var(--tr);
 }
 /* .menu.left ul li:before,
 #top_menu .menu.top:before{
@@ -218,10 +252,14 @@ footer{
     padding: 0.4em 0;
 }
 .menu.left ul li.active a,
-#top_menu .menu.top.active
-{
+#top_menu .menu.top.active{
     font-weight: bold;
     outline: 0;
+    color: var(--yl);
+}
+.menu.left ul li:before,
+#top_menu .menu.top:before{
+    background-color:  var(--tr);
 }
 .nowrap{
     white-space: nowrap;
@@ -243,14 +281,15 @@ footer{
     right: 0em;  
 }
 .p_front_data,
-.p_front_info 
-{
+.p_front_info {
     opacity: 0;
     position: absolute; 
     text-align: right;
     padding: 0 0.2em;
     -webkit-transition: opacity 0.8s ease; /* Safari */
     transition: opacity .8s ease;
+    color: var(--wh);
+    background-color: var(--vd);    
     
     /*transition: [transition-property all (the default)] [transition-duration] [transition-timing-function ease linear ease-in ease-out ease-in-out step-start step-end ] [transition-delay];*/
 }
@@ -289,11 +328,14 @@ video ~ .p_front_info
 }
 .back_img .galery_img {
     width: 100%;
+    background-color: var(--wh);
 }
 /** Fancy Box **/
 .fancybox-title-inside-wrap {
     padding: 0.2em 0.4em;
     text-shadow: 2px 1px 3px #000;
+    color: var(--wh);
+    background-color: var(--vd);   
 }
 /**back settings**/
 .copy{
@@ -367,7 +409,8 @@ video ~ .p_front_info
 .progress-bar {  
     width:0%; 
     height:25px; 
-    border-radius: 4px; 
+    border-radius: 4px;
+    background-color: var(--yl);
 }
 .percent { 
     position:absolute; 
@@ -387,6 +430,8 @@ video ~ .p_front_info
     border-radius: 4px;
     -webkit-transition: opacity 0.8s ease-in-out; /* Safari */
     transition: opacity .8s ease-in-out;
+    color: var(--wh);
+    background-color: var(--vd);  
     
 }
 /** User Form **/
@@ -430,13 +475,17 @@ video ~ .p_front_info
 }
 .p_active,
 .p_active:hover,
-.pagination_start:hover 
-{
+.pagination_start:hover {
     font-weight: bold;
     background-size: 24px 24px;
     background-repeat: no-repeat;
     background-position: center center;
     cursor: pointer;
+    color: var(--yl);
+    background-color:  var(--tr);
+}
+.pagination_start:hover{
+    #color: var(--lg);
 }
 .form-control[disabled]{
   cursor: not-allowed;
@@ -472,6 +521,7 @@ video ~ .p_front_info
     transition: right .5s ease-in-out;
     z-index: 100;
     border-radius: 4px 0px 0px 4px;
+    background-color: var(--fb);
 }
 .social:hover{
     right: 0px;
@@ -487,6 +537,7 @@ video ~ .p_front_info
    height: 105px;
    border-radius: 4px 0px 0px 4px;
    cursor: pointer;
+   background-color: var(--fb);
 }
 .lab > div {
     clear:both;
@@ -521,6 +572,8 @@ video ~ .p_front_info
     padding:0.5em;
     border-radius: 4px;
     text-shadow: 0px 0px 0px #000; 
+    color: var(--bl);
+    background-color: var(--wh);
 }
 /** cookie **/
 .cookies{
@@ -528,12 +581,14 @@ video ~ .p_front_info
     bottom: 0em;
     padding: 0.5em 1em;
     z-index: 91;
+    background-color: var(--tm);
 }
 .cookies_ok{
     cursor: pointer;
     padding-left: 1em;
     font-size: 1.2em;
     font-weight: bold;
+    color: var(--yl);
 }
 /**debuger**/
 #debugger{

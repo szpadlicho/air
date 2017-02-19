@@ -65,8 +65,9 @@ include_once 'method/UserClass.php';
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <!-- Default -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap_fix.css" />
-    <link rel="stylesheet" type="text/css" href="css/view.css.php" />
+    <!--<link rel="stylesheet" type="text/css" href="css/view.css.php" />-->
     <link rel="stylesheet" type="text/css" href="css/view.css" />
+    <!--<link rel="stylesheet" type="text/css" href="css/style.css" />-->
     <script>
         $(function() {
             /**
