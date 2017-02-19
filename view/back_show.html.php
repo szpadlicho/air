@@ -209,7 +209,8 @@
                 $res = $res->fetchAll(PDO::FETCH_ASSOC);
                 $cat = array();
                 $sub = array();
-                //var_dump($ret);
+                $chk = array();
+                var_dump($res);
                 foreach ($res as $sub_cat_menu){
                     $cat[$sub_cat_menu['c_id']] = $sub_cat_menu['category'];
                     //$cat[] = ;
