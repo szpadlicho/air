@@ -227,7 +227,7 @@
                             <a class="category menu" href="?back&cat_id=<?php echo $c; ?>"><?php echo $ck; ?></a>
                             <ul>
                                 <?php foreach ($sub as $s => $sk){ ?>
-                                    <?php if( $sk != '' ){ ?>
+                                    <?php if( !empty($sk) ){ ?>
                                         <li><a class="category menu" href="?back&cat_id=<?php echo $c; ?>&sub_id=<?php echo $s; ?>" ><?php echo $sk; ?></a></li>
                                     <?php } ?>
                                 <?php } ?>

@@ -313,15 +313,19 @@ class ShowImages extends DefineConnect
         $start = isset( $_COOKIE['start'] ) ? (int)$_COOKIE['start'] : (int)'0';//numer id od ktorego ma zaczac
         $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'20';//ilość elementów na stronie
         $order = $this->order;
-        if ( isset($_GET['back']) ) {//co ma pokazac jesli jestes na zapleczu (czyli razem z ukrytymi)
+        if ( isset($_GET['back']) && !isset($_GET['sub_id']) ) {//co ma pokazac jesli jestes na zapleczu (czyli razem z ukrytymi)
             if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
                 $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` LEFT JOIN `subcategory` ON photos.`subcategory` = subcategory.`s_id` WHERE category.`c_id` = ".$_GET['cat_id']." ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+            } elseif ( isset($_GET['cat_id']) && isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` LEFT JOIN `subcategory` ON photos.`subcategory` = subcategory.`s_id` WHERE (category.`c_id` = ".$_GET['cat_id']." AND subcategory.`s_id` = '".$_GET['sub_id']."') ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
             } else {//pokazuje fotki ze wszystkich kategorii
                 $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` LEFT JOIN `subcategory` ON photos.`subcategory` = subcategory.`s_id` ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
             }
         } else { //co ma pokazac jesli jestes na galery page (czyli bez ukrytych)
-            if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+            if ( isset($_GET['cat_id']) && !isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
                 $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` LEFT JOIN `subcategory` ON photos.`subcategory` = subcategory.`s_id` WHERE category.`c_id` = ".$_GET['cat_id']." AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
+            } elseif ( isset($_GET['cat_id']) && isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` LEFT JOIN `subcategory` ON photos.`subcategory` = subcategory.`s_id` WHERE (category.`c_id` = ".$_GET['cat_id']." AND subcategory.`s_id` = '".$_GET['sub_id']."') AND category.`c_visibility` = '1' AND photos.`p_visibility` = '1' ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
             } else {//pokazuje fotki ze wszystkich kategorii
                 $q = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON photos.`category` = category.`c_id` LEFT JOIN `subcategory` ON photos.`subcategory` = subcategory.`s_id` WHERE category.`c_visibility` = '1' AND photos.`p_visibility` = '1' ORDER BY photos.`p_id` ".$order." LIMIT ".$start.",".$limit."");/*zwraca false jesli tablica nie istnieje*/
             }
@@ -358,10 +362,15 @@ class ShowImages extends DefineConnect
             foreach($string as $s){
                 if (preg_match('@[ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]@', $s)) {// są polskie znaki
                     //try{ 
-                    if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                    if ( isset($_GET['cat_id']) && !isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
                         $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR subcategory.`subcategory` utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*///unicode
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
+                    } elseif ( isset($_GET['cat_id']) && isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE (category.`c_id` = '".$_GET['cat_id']."' AND subcategory.`s_id` = '".$_GET['sub_id']."') AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR subcategory.`subcategory` utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*///unicode
+                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
+                        $ress0[] = $ress;
+                    
                     } else { //szuka we wszystkich kategoriach
                         $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR subcategory.`subcategory` utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
@@ -372,8 +381,12 @@ class ShowImages extends DefineConnect
                        //return $exception->getMessage(); 
                     //}
                 } else { // brak polskich znaków
-                    if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                    if ( isset($_GET['cat_id']) && !isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
                         $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
+                        $ress0[] = $ress;
+                    } elseif ( isset($_GET['cat_id']) && isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE (category.`c_id` = '".$_GET['cat_id']."' AND subcategory.`s_id` = '".$_GET['sub_id']."') AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     } else { //szuka we wszystkich kategoriach
@@ -386,8 +399,12 @@ class ShowImages extends DefineConnect
         } else { //co ma pokazac jesli jestes w galerii (czyli bez ukrytych)
             foreach($string as $s){
                 if (preg_match('@[ęóąśłżźćńĘÓĄŚŁŻŹĆŃ]@', $s)) {// są polskie znaki
-                    if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                    if ( isset($_GET['cat_id']) && !isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
                         $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND category.`c_visibility` = '1' AND subcategory.`s_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR subcategory.`subcategory` utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
+                        $ress0[] = $ress;
+                    } elseif ( isset($_GET['cat_id']) && isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE (category.`c_id` = '".$_GET['cat_id']."' AND subcategory.`s_id` = '".$_GET['sub_id']."') AND category.`c_visibility` = '1' AND subcategory.`s_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR subcategory.`subcategory` utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     } else {  //szuka we wszystkich kategoriach
@@ -396,8 +413,12 @@ class ShowImages extends DefineConnect
                         $ress0[] = $ress;
                     }
                 } else { // brak polskich znaków
-                    if ( isset($_GET['cat_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                    if ( isset($_GET['cat_id']) && !isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
                         $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND category.`c_visibility` = '1' AND subcategory.`s_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR subcategory.`subcategory` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
+                        $ress0[] = $ress;
+                    } elseif ( isset($_GET['cat_id']) && isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE (category.`c_id` = '".$_GET['cat_id']."' AND subcategory.`s_id` = '".$_GET['sub_id']."') AND category.`c_visibility` = '1' AND subcategory.`s_visibility` = '1' AND photos.`p_visibility` = '1' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR subcategory.`subcategory` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     } else {  //szuka we wszystkich kategoriach
