@@ -264,6 +264,9 @@ footer{
 .nowrap{
     white-space: nowrap;
 }
+.menu.left ul li ul {
+    padding-left: 15px;
+}
 /**Slider correction**/
 .ws_bulframe > div > div {
     width: 1800% !important;

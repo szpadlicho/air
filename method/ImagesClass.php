@@ -550,6 +550,21 @@ class ShowImages extends DefineConnect
         unset ($con);
 		return $q;
     }
+    public function checkSub($ck, $sk, $s)// 1,2
+    {
+        $con = $this->connectDb();
+        //$f = array();
+        //foreach ($sub as $sk) {
+            $e = $con->query("SELECT `subcategory` FROM `".$this->table."` WHERE `category` = '".$ck."' AND `subcategory` = '".$sk."' ");
+            $f = $e->fetch(PDO::FETCH_ASSOC);
+        //}
+        //return $f['subcategory'];
+        if ($f['subcategory'] == $sk) {
+            return array($f['subcategory'], $s);
+        }else{
+            return false;
+        }
+    }
     public function showCategoryByID()// do category menu tego po lewej stronie na last
     {
         $cat_id = array();
@@ -580,7 +595,7 @@ class ShowImages extends DefineConnect
     public function countItemInCategory($id)
     {
 		$con=$this->connectDb();
-		$q = $con->query("SELECT COUNT(*) FROM `photos` WHERE `category` = '".$id."' ");/*zwraca false jesli tablica nie istnieje*/
+		$q = $con->query("SELECT COUNT(*) FROM `photos` WHERE `".$this->table."` = '".$id."' ");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
         $q = $q->fetch(PDO::FETCH_ASSOC);
         //$q = count($q);

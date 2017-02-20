@@ -188,57 +188,64 @@
                     <a class="category menu" href="?back" >Wszystkie</a>
                 </li>
                 <?php
-                $obj_show_cat = new ShowImages;
-                $obj_show_cat->__setTable('category');
-                $obj_show_cat->showCategory();
-                $ret = $obj_show_cat->showCategory();
-                $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
+                
+
+
+
                 ?>
                 <?php foreach ($ret as $cat_menu){ ?>
                     <li class="<?php echo @$_GET['cat_id'] == @$cat_menu['c_id'] ? 'active' : ''; ?>" >
                         <a class="category menu" href="?back&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a>
-                        <span class="item_nr"><?php echo $obj_show_cat->countItemInCategory(@$cat_menu['c_id']); ?></span>
+                        <span class="item_nr"><?php echo $obj_count_cat->countItemInCategory(@$cat_menu['c_id']); ?></span>
                     </li>
                 <?php } ?>
             </ul>
             -->
-            <?php 
+            <?php
+                $obj_count_cat = new ShowImages;
+                $obj_count_cat->__setTable('category');
+                $obj_count_sub = new ShowImages;
+                $obj_count_sub->__setTable('subcategory');
                 $obj_show_sub_cat = new ShowImages;
                 $obj_show_sub_cat->__setTable('photos');
                 $res = $obj_show_sub_cat->__getSubAndCat();
                 $res = $res->fetchAll(PDO::FETCH_ASSOC);
                 $cat = array();
                 $sub = array();
-                $chk = array();
-                var_dump($res);
                 foreach ($res as $sub_cat_menu){
                     $cat[$sub_cat_menu['c_id']] = $sub_cat_menu['category'];
-                    //$cat[] = ;
                     $sub[$sub_cat_menu['s_id']] = $sub_cat_menu['subcategory'];
-                    //$sub[] = ;
                 }
                 $cat = array_unique($cat);
                 $sub = array_unique($sub);
-                //var_dump($cat);
-                //var_dump($sub);
-                foreach ($cat as $c => $ck){
-                ?>
-                    <ul>
-                        <li>
-                            <a class="category menu" href="?back&cat_id=<?php echo $c; ?>"><?php echo $ck; ?></a>
-                            <ul>
-                                <?php foreach ($sub as $s => $sk){ ?>
-                                    <?php if( !empty($sk) ){ ?>
-                                        <li><a class="category menu" href="?back&cat_id=<?php echo $c; ?>&sub_id=<?php echo $s; ?>" ><?php echo $sk; ?></a></li>
-                                    <?php } ?>
-                                <?php } ?>
-                            </ul>
-                        </li>
-                    </ul>
-                <?php
-                }
-                var_dump('');
+                $sub = array_filter($sub);// usuwam puste wyniki
             ?>
+            <ul>
+                <li>
+                    <a class="category menu" href="?back" >Wszystkie</a>
+                </li>
+                <?php foreach ($cat as $ck => $c){ ?>
+                <li>
+                    <a class="category menu" href="?back&cat_id=<?php echo $ck; ?>"><?php echo $c; ?></a>
+                    <span class="item_nr"><?php echo $obj_count_cat->countItemInCategory(@$ck); ?></span>
+                    <ul>
+                        <?php 
+                        foreach ($sub as $sk => $s){ 
+                            $f = $obj_show_sub_cat->checkSub($ck, $sk, $s);// 1, 2
+                            if ($f != false) {
+                                ?>
+                                <li>
+                                    <a class="category menu" href="?back&cat_id=<?php echo $ck; ?>&sub_id=<?php echo $f[0]; ?>" ><?php echo $f[1]; ?></a>
+                                    <span class="item_nr"><?php echo $obj_count_sub->countItemInCategory($f[0]); ?></span>
+                                </li>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </ul>
+                </li>
+                <?php } ?>
+            </ul>
 		</div>
 		<div id="table_content" class="col-md-10">
 			<div class="row center">
