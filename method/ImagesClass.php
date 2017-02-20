@@ -592,10 +592,19 @@ class ShowImages extends DefineConnect
 		unset ($con);
 		return $q;
 	}
-    public function countItemInCategory($id)
+    public function countItemInCategory($id)// probably to delete (check first)
     {
 		$con=$this->connectDb();
 		$q = $con->query("SELECT COUNT(*) FROM `photos` WHERE `".$this->table."` = '".$id."' ");/*zwraca false jesli tablica nie istnieje*/
+		unset ($con);
+        $q = $q->fetch(PDO::FETCH_ASSOC);
+        //$q = count($q);
+        return $q['COUNT(*)'];
+	}
+    public function countItemInPhotos($id, $row)
+    {
+		$con=$this->connectDb();
+		$q = $con->query("SELECT COUNT(*) FROM `photos` WHERE `".$row."` = '".$id."' ");/*zwraca false jesli tablica nie istnieje*/
 		unset ($con);
         $q = $q->fetch(PDO::FETCH_ASSOC);
         //$q = count($q);
@@ -610,6 +619,50 @@ class ShowImages extends DefineConnect
         //$q = count($q);
         return $q['COUNT(*)'];
 	}
+    public function leftMenu()
+    {
+
+                $this->__setTable('photos');
+                $res = $this->__getSubAndCat();
+                $res = $res->fetchAll(PDO::FETCH_ASSOC);
+                $cat = array();
+                $sub = array();
+                foreach ($res as $sub_cat_menu){
+                    $cat[$sub_cat_menu['c_id']] = $sub_cat_menu['category'];
+                    $sub[$sub_cat_menu['s_id']] = $sub_cat_menu['subcategory'];
+                }
+                $cat = array_unique($cat);
+                $sub = array_unique($sub);
+                $sub = array_filter($sub);// usuwam puste wyniki
+            ?>
+            <ul>
+                <li>
+                    <a class="category menu" href="?back" >Wszystkie</a>
+                </li>
+                <?php foreach ($cat as $ck => $c){ ?>
+                <li>
+                    <a class="category menu" href="?back&cat_id=<?php echo $ck; ?>"><?php echo $c; ?></a>
+                    <span class="item_nr"><?php echo $this->countItemInPhotos(@$ck, 'category'); ?></span>
+                    <ul>
+                        <?php 
+                        foreach ($sub as $sk => $s){ 
+                            $f = $this->checkSub($ck, $sk, $s);// 1, 2
+                            if ($f != false) {
+                                ?>
+                                <li>
+                                    <a class="category menu" href="?back&cat_id=<?php echo $ck; ?>&sub_id=<?php echo $f[0]; ?>" ><?php echo $f[1]; ?></a>
+                                    <span class="item_nr"><?php echo $this->countItemInPhotos($f[0], 'subcategory'); ?></span>
+                                </li>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </ul>
+                </li>
+                <?php } ?>
+            </ul>
+            <?php
+    }
     public function copyButton($name)
     {
         ?>

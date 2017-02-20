@@ -183,29 +183,7 @@
 				</div>
 			</div>
             <!--
-			<ul>
-                <li>
-                    <a class="category menu" href="?back" >Wszystkie</a>
-                </li>
-                <?php
-                
-
-
-
-                ?>
-                <?php foreach ($ret as $cat_menu){ ?>
-                    <li class="<?php echo @$_GET['cat_id'] == @$cat_menu['c_id'] ? 'active' : ''; ?>" >
-                        <a class="category menu" href="?back&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a>
-                        <span class="item_nr"><?php echo $obj_count_cat->countItemInCategory(@$cat_menu['c_id']); ?></span>
-                    </li>
-                <?php } ?>
-            </ul>
-            -->
             <?php
-                $obj_count_cat = new ShowImages;
-                $obj_count_cat->__setTable('category');
-                $obj_count_sub = new ShowImages;
-                $obj_count_sub->__setTable('subcategory');
                 $obj_show_sub_cat = new ShowImages;
                 $obj_show_sub_cat->__setTable('photos');
                 $res = $obj_show_sub_cat->__getSubAndCat();
@@ -227,7 +205,7 @@
                 <?php foreach ($cat as $ck => $c){ ?>
                 <li>
                     <a class="category menu" href="?back&cat_id=<?php echo $ck; ?>"><?php echo $c; ?></a>
-                    <span class="item_nr"><?php echo $obj_count_cat->countItemInCategory(@$ck); ?></span>
+                    <span class="item_nr"><?php echo $obj_show_sub_cat->countItemInPhotos(@$ck, 'category'); ?></span>
                     <ul>
                         <?php 
                         foreach ($sub as $sk => $s){ 
@@ -236,7 +214,7 @@
                                 ?>
                                 <li>
                                     <a class="category menu" href="?back&cat_id=<?php echo $ck; ?>&sub_id=<?php echo $f[0]; ?>" ><?php echo $f[1]; ?></a>
-                                    <span class="item_nr"><?php echo $obj_count_sub->countItemInCategory($f[0]); ?></span>
+                                    <span class="item_nr"><?php echo $obj_show_sub_cat->countItemInPhotos($f[0], 'subcategory'); ?></span>
                                 </li>
                                 <?php
                             }
@@ -246,6 +224,8 @@
                 </li>
                 <?php } ?>
             </ul>
+            -->
+            <?php $obj = new ShowImages; echo $obj->leftMenu(); ?>
 		</div>
 		<div id="table_content" class="col-md-10">
 			<div class="row center">
