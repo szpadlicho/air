@@ -13,6 +13,7 @@
                     </a>
 				</div>
 			</div>
+            <!-- to delete
 			<ul>
                 <li>
                     <a class="category menu" href="?galery" >Wszystkie</a>
@@ -30,6 +31,8 @@
                     </li>
                 <?php } ?>
             </ul>
+            to delete-->
+            <?php $obj = new ShowImages; echo $obj->leftMenu(); ?>
 		</div>
 		<div id="table_content" class="col-md-10">
 			<div class="row center">

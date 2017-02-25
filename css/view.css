@@ -240,22 +240,25 @@ footer{
     left: -25px;
 } */
 /**menu left**/
+ul{
+    list-style-type: none;
+}
 .menu.left{
     text-align: left;
 }
-.menu.left ul{
-    list-style-type: none;
+.menu.left > ul{ 
     padding-left: 0px;
     position:relative;
 }
 .menu.left ul li{
     padding: 0.4em 0;
 }
+.suactive,
 .menu.left ul li.active a,
 #top_menu .menu.top.active{
     font-weight: bold;
     outline: 0;
-    color: var(--yl);
+    color: var(--yl) !important;
 }
 .menu.left ul li:before,
 #top_menu .menu.top:before{
@@ -267,6 +270,19 @@ footer{
 .menu.left ul li ul {
     padding-left: 15px;
 }
+/**/
+.menu.left ul li ul {
+    padding-left: 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .9s ease;
+}
+.subuactive,
+.menu.left ul li:hover ul {
+    max-height: 500px !important;
+    overflow: visible;
+}
+/**/
 /**Slider correction**/
 .ws_bulframe > div > div {
     width: 1800% !important;

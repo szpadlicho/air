@@ -179,52 +179,12 @@
 		<div class="col-md-2 menu left">
 			<div class="row">
 				<div class="col-md-12">
-                <!--empty-->&nbsp
+                <!--empty &nbsp-->
+                    <a href="?" >
+                        <img class="img-responsive logo" alt="Logo deoc" title="Logo deoc" src="img/logoB.png"/>
+                    </a>
 				</div>
 			</div>
-            <!--
-            <?php
-                $obj_show_sub_cat = new ShowImages;
-                $obj_show_sub_cat->__setTable('photos');
-                $res = $obj_show_sub_cat->__getSubAndCat();
-                $res = $res->fetchAll(PDO::FETCH_ASSOC);
-                $cat = array();
-                $sub = array();
-                foreach ($res as $sub_cat_menu){
-                    $cat[$sub_cat_menu['c_id']] = $sub_cat_menu['category'];
-                    $sub[$sub_cat_menu['s_id']] = $sub_cat_menu['subcategory'];
-                }
-                $cat = array_unique($cat);
-                $sub = array_unique($sub);
-                $sub = array_filter($sub);// usuwam puste wyniki
-            ?>
-            <ul>
-                <li>
-                    <a class="category menu" href="?back" >Wszystkie</a>
-                </li>
-                <?php foreach ($cat as $ck => $c){ ?>
-                <li>
-                    <a class="category menu" href="?back&cat_id=<?php echo $ck; ?>"><?php echo $c; ?></a>
-                    <span class="item_nr"><?php echo $obj_show_sub_cat->countItemInPhotos(@$ck, 'category'); ?></span>
-                    <ul>
-                        <?php 
-                        foreach ($sub as $sk => $s){ 
-                            $f = $obj_show_sub_cat->checkSub($ck, $sk, $s);// 1, 2
-                            if ($f != false) {
-                                ?>
-                                <li>
-                                    <a class="category menu" href="?back&cat_id=<?php echo $ck; ?>&sub_id=<?php echo $f[0]; ?>" ><?php echo $f[1]; ?></a>
-                                    <span class="item_nr"><?php echo $obj_show_sub_cat->countItemInPhotos($f[0], 'subcategory'); ?></span>
-                                </li>
-                                <?php
-                            }
-                        }
-                        ?>
-                    </ul>
-                </li>
-                <?php } ?>
-            </ul>
-            -->
             <?php $obj = new ShowImages; echo $obj->leftMenu(); ?>
 		</div>
 		<div id="table_content" class="col-md-10">

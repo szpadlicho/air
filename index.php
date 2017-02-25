@@ -151,7 +151,7 @@ include_once 'method/UserClass.php';
         });
     </script>
     <script>
-        /** Tooltip animation **/
+        /** Tooltip animation category**/
         $(function() {
             $( '.left ul li a' ).mouseenter(function(e) {
                 $( this ).next( '.item_nr' ).css({ 
@@ -172,6 +172,7 @@ include_once 'method/UserClass.php';
                left:  e.pageX+1+'px', //e.clientX
                top:   e.pageY-158+'px'
             });
+            //console.log(e.pageY);
         });
     </script>
     <!-- Search engine -->

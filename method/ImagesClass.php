@@ -276,11 +276,14 @@ class ShowImages extends DefineConnect
     public function countRow()// do category menu
     {
         if ( isset($_GET['back']) ) { //dla zaplecza z ukrytumi
-            if ( isset($_GET['cat_id']) ) {
-                //$q = count($this->showAll()->fetchAll(PDO::FETCH_ASSOC));
-                //$q = $this->showAll()->fetchAll(PDO::FETCH_ASSOC);
+            if ( isset($_GET['cat_id']) && !isset($_GET['sub_id']) ) {
                 $con=$this->connectDb();
                 $q = $con->query("SELECT COUNT(*) FROM `".$this->table."` WHERE `category` = '".$_GET['cat_id']."'");/*zwraca false jesli tablica nie istnieje*/
+                $q = $q->fetch(PDO::FETCH_ASSOC);
+                $q = $q['COUNT(*)'];
+            } else if( isset($_GET['cat_id']) && isset($_GET['sub_id']) ) {
+                $con=$this->connectDb();
+                $q = $con->query("SELECT COUNT(*) FROM `".$this->table."` WHERE `category` = '".$_GET['cat_id']."' AND `subcategory` = '".$_GET['sub_id']."' ");/*zwraca false jesli tablica nie istnieje*/
                 $q = $q->fetch(PDO::FETCH_ASSOC);
                 $q = $q['COUNT(*)'];
             } else {
@@ -290,11 +293,14 @@ class ShowImages extends DefineConnect
                 $q = $q['COUNT(*)'];
             }
         } else { //dla galerii bez ukrytych
-            if ( isset($_GET['cat_id']) ) {
-                //$q = count($this->showAll()->fetchAll(PDO::FETCH_ASSOC));
-                //$q = $this->showAll()->fetchAll(PDO::FETCH_ASSOC);
+            if ( isset($_GET['cat_id']) && !isset($_GET['sub_id']) ) {
                 $con=$this->connectDb();
                 $q = $con->query("SELECT COUNT(*) FROM `".$this->table."` WHERE `category` = '".$_GET['cat_id']."' AND `p_visibility` = '1' ");/*zwraca false jesli tablica nie istnieje*/
+                $q = $q->fetch(PDO::FETCH_ASSOC);
+                $q = $q['COUNT(*)'];
+            } else if( isset($_GET['cat_id']) && isset($_GET['sub_id']) ) {
+                $con=$this->connectDb();
+                $q = $con->query("SELECT COUNT(*) FROM `".$this->table."` WHERE `category` = '".$_GET['cat_id']."' AND `p_visibility` = '1' AND `subcategory` = '".$_GET['sub_id']."' ");/*zwraca false jesli tablica nie istnieje*/
                 $q = $q->fetch(PDO::FETCH_ASSOC);
                 $q = $q['COUNT(*)'];
             } else {
@@ -367,7 +373,7 @@ class ShowImages extends DefineConnect
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     } elseif ( isset($_GET['cat_id']) && isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE (category.`c_id` = '".$_GET['cat_id']."' AND subcategory.`s_id` = '".$_GET['sub_id']."') AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR subcategory.`subcategory` utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*///unicode
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND subcategory.`s_id` = '".$_GET['sub_id']."' AND ( photos.`p_id` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`tag` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`author` COLLATE utf8_polish_ci LIKE '%".$s."%' OR category.`category` COLLATE utf8_polish_ci LIKE '%".$s."%' OR subcategory.`subcategory` utf8_polish_ci LIKE '%".$s."%' OR photos.`show_place` COLLATE utf8_polish_ci LIKE '%".$s."%' OR photos.`show_data` COLLATE utf8_polish_ci LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*///unicode
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     
@@ -382,11 +388,11 @@ class ShowImages extends DefineConnect
                     //}
                 } else { // brak polskich znaków
                     if ( isset($_GET['cat_id']) && !isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR subcategory.`subcategory` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     } elseif ( isset($_GET['cat_id']) && isset($_GET['sub_id']) ) {//jesli ma szukac w danej kategorii jak wybrana
-                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE (category.`c_id` = '".$_GET['cat_id']."' AND subcategory.`s_id` = '".$_GET['sub_id']."') AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
+                        $ress = $con->query("SELECT * FROM `photos` LEFT JOIN `category` ON category.`c_id` = photos.`category` LEFT JOIN `subcategory` ON subcategory.`s_id` = photos.`subcategory` WHERE category.`c_id` = '".$_GET['cat_id']."' AND subcategory.`s_id` = '".$_GET['sub_id']."' AND ( photos.`p_id` LIKE '%".$s."%' OR photos.`tag` LIKE '%".$s."%' OR photos.`author` LIKE '%".$s."%' OR category.`category` LIKE '%".$s."%' OR subcategory.`subcategory` LIKE '%".$s."%' OR photos.`show_place` LIKE '%".$s."%' OR photos.`show_data` LIKE '%".$s."%' ) ORDER BY photos.`p_id` ".$order." ");/*zwraca false jesli tablica nie istnieje*/
                         $ress = $ress->fetchAll(PDO::FETCH_ASSOC);
                         $ress0[] = $ress;
                     } else { //szuka we wszystkich kategoriach
@@ -635,6 +641,38 @@ class ShowImages extends DefineConnect
                 $sub = array_unique($sub);
                 $sub = array_filter($sub);// usuwam puste wyniki
             ?>
+            <script>
+            $(function(){
+                $( "ul li" ).on( "mouseenter mouseleave", function( event ) {
+                  //$( this ).toggleClass( "active" );
+                  //$(this).find('ul').first().toggleClass( "subactive" );
+                });
+                /**
+                * Left menu setting active class without cookie
+                * and when page is load
+                **/
+                var get = window.location.href;
+                var menu = get.substring(get.lastIndexOf("?")+1);
+                var place =  menu.split('&');
+                //console.log(place[0],place[1],place[2])
+                var b = $('a[href$="'+place[1]+'"]');
+                b.toggleClass( 'suactive' );
+                var c = $('a[href$="'+place[1]+'&'+place[2]+'"]');
+                c.toggleClass( 'suactive' );
+                
+                var u = $( 'a.suactive' ).parent( 'li' ).parent( 'ul' );
+                //var u = $( 'ul:has( > a.suactive)' )​;
+                u.toggleClass( 'subuactive' );
+                
+                if ( place[0] == '' ) { //dla zaznaczenia start kiedy GET "?" jest puste
+                    //$('.menu.top:first').toggleClass( 'active' );
+                }
+                if( place[0].match('http') ) { //dla zaznaczenia start kiedy brak "?"
+                    //console.log('bingo');
+                    //$('.menu.top:first').toggleClass( 'active' );
+                }   
+            });
+            </script>
             <ul>
                 <li>
                     <a class="category menu" href="?back" >Wszystkie</a>

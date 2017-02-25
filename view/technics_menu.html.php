@@ -1,38 +1,55 @@
 <script>
     $(document).ready(function(){
-        /** Top menu setting active class and cookie **/
-        /** when page is load **/
+        // /** Top menu setting active class and cookie **/
+        // /** when page is load **/
+        // var get = window.location.href;
+        // var menu = get.substring(get.lastIndexOf("?")+1);
+        // var place =  menu.split('&');
+        // $.cookie('top_active', place[0], { expires: 60*3600 });
+        // /** when top menu is clicked **/
+        // $('body').on('click', '.menu.top', function(e) {
+            // var value = $(this).attr("href").substring(1);
+            // value = value.replace('&logout','');
+            // $.cookie('top_active', value, { expires: 60*3600 });  
+        // });
+        // <?php if (isset($_GET['cat_id'])) { ?>
+            // /** remove cookie when page is reload clicked left menu**/
+            // var url = window.location.href;
+            // var params = url.substring(url.lastIndexOf("?")+1,url.lastIndexOf("&"));
+            // if ( $.cookie('top_active') != params) {
+                // //$.removeCookie('top_active');
+            // }
+        // <?php } else { ?>
+            // /** remove cookie when page is reload **/
+            // var url = window.location.href;
+            // var params = url.split('?');
+            // if ( $.cookie('top_active') != params[1]) {
+                // $.removeCookie('top_active');
+            // }
+        // <?php } ?>
+        // /** adding class when cookie is set or get is empty**/
+        // if ($.cookie('top_active')) {
+            // $('a[href="?'+$.cookie('top_active')+'"]').addClass('active');
+        // } else {
+            // $('a[href="?"]').addClass('active');
+        // }
+        /**
+        * Top menu setting active class without cookie
+        * and when page is load
+        **/
         var get = window.location.href;
         var menu = get.substring(get.lastIndexOf("?")+1);
         var place =  menu.split('&');
-        $.cookie('top_active', place[0], { expires: 60*3600 });
-        /** when top menu is clicked **/
-        $('body').on('click', '.menu.top', function(e) {
-            var value = $(this).attr("href").substring(1);
-            value = value.replace('&logout','');
-            $.cookie('top_active', value, { expires: 60*3600 });  
-        });
-        <?php if (isset($_GET['cat_id'])) { ?>
-            /** remove cookie when page is reload clicked left menu**/
-            var url = window.location.href;
-            var params = url.substring(url.lastIndexOf("?")+1,url.lastIndexOf("&"));
-            if ( $.cookie('top_active') != params) {
-                $.removeCookie('top_active');
-            }
-        <?php } else { ?>
-            /** remove cookie when page is reload **/
-            var url = window.location.href;
-            var params = url.split('?');
-            if ( $.cookie('top_active') != params[1]) {
-                $.removeCookie('top_active');
-            }
-        <?php } ?>
-        /** adding class when cookie is set or get is empty**/
-        if ($.cookie('top_active')) {
-            $('a[href="?'+$.cookie('top_active')+'"]').addClass('active');
-        } else {
-            $('a[href="?"]').addClass('active');
+        //console.log(place[0],place[1],place[2])
+        var a = $('a[href*="'+place[0]+'"]:first');
+        a.toggleClass( 'active' );
+        if ( place[0] == '' ) { //dla zaznaczenia start kiedy GET "?" jest puste
+            $('.menu.top:first').toggleClass( 'active' );
         }
+        if( place[0].match('http') ) { //dla zaznaczenia start kiedy brak "?"
+            //console.log('bingo');
+            $('.menu.top:first').toggleClass( 'active' );
+        }      
     });
 </script>
 <div class="container-fluid">
