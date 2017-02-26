@@ -44,6 +44,7 @@ if ( isset($_GET['install_2016']) ){
 
 if ( isset($_GET['galery']) ){
     include_once 'method/ImagesClass.php';
+    //include_once 'method/ImagesClassDynamic.php';
     include_once 'view/front_show.html.php';
 }
 if ( isset($_GET['last']) ){

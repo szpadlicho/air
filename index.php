@@ -3,6 +3,8 @@
 ** Gify mini zeby sie ruszaly tez to trzeba by ich nie skalowac w php tylko normalnie wrzucic i tu i tu albo dodac do zrobionej miniaturki napis ze to gif
 ** Lastby date ???? z menu lewym badz bez. "Nowe" w top menu moze by sie nie pojawialo jesli nie ma nic do wyswietlenia
 ** Wyszukiwanie z polskimi znakami + -
+** Dynamicznie ladowany content podczas scrolowania
+** bootstrap back office
 **/
 ini_set('xdebug.var_display_max_depth', -1);
 ini_set('xdebug.var_display_max_children', -1);
