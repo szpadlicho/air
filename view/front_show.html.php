@@ -10,31 +10,31 @@
             cache: false,
             data:{ cat_id:cat_id, sub_id:sub_id },
             success:function(data){
-                var substr = data[0];
-                    for(var i=0; i< substr.length; i++) {
+                var da = data[0];
+                    for(var i=0; i< da.length; i++) {
                         var media = [ 'mp4', 'ogg', 'ogv', 'webm', 'mp3' ];
-                        if ( $.inArray( substr[i]['photo_mime'], media) !== -1 ) {
+                        if ( $.inArray( da[i]['photo_mime'], media) !== -1 ) {
                             $("#way").append(
                                 '<div class="div_front">'+
                                     '<video controls="controls" preload="none"'+
-                                    'poster="img/ico/'+substr[i]['photo_mime']+'.png">'+
-                                    '<source src="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" type="video/mp4">'+
-                                    '<source src="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" type="video/webm">'+
-                                    '<source src="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" type="video/ogg">'+
+                                    'poster="img/ico/'+da[i]['photo_mime']+'.png">'+
+                                    '<source src="data/'+da[i]['p_id']+'.'+da[i]['photo_mime']+'" type="video/mp4">'+
+                                    '<source src="data/'+da[i]['p_id']+'.'+da[i]['photo_mime']+'" type="video/webm">'+
+                                    '<source src="data/'+da[i]['p_id']+'.'+da[i]['photo_mime']+'" type="video/ogg">'+
                                     'Twoja przeglądarka nie obsługuje wideo.'+
                                     '</video>'+
-                                    '<p class="p_front_data" >#'+substr[i]['p_id']+' Data: '+substr[i]['show_data']+'</p>'+
-                                    '<p class="p_front_info" >Autor: '+substr[i]['author']+'<br />Album: '+substr[i]['category']+'</p>'+
+                                    '<p class="p_front_data" >#'+da[i]['p_id']+' Data: '+da[i]['show_data']+'</p>'+
+                                    '<p class="p_front_info" >Autor: '+da[i]['author']+'<br />Album: '+da[i]['category']+'</p>'+
                                 '</div>'
                             );
                         } else {
                             $("#way").append(
                                 '<div class="div_front">'+
-                                    '<a class="fancybox-button" rel="fancybox-button" href="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" title="'+substr[i]['tag']+'">'+
-                                        '<img class="galery_img lazy" data-original="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" src="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" alt="'+substr[i]['tag']+'" />'+
+                                    '<a class="fancybox-button" rel="fancybox-button" href="data/'+da[i]['p_id']+'.'+da[i]['photo_mime']+'" title="'+da[i]['tag']+'">'+
+                                        '<img class="galery_img lazy" data-original="data/'+da[i]['p_id']+'.'+da[i]['photo_mime']+'" src="data/'+da[i]['p_id']+'.'+da[i]['photo_mime']+'" alt="'+da[i]['tag']+'" />'+
                                     '</a>'+
-                                    '<p class="p_front_data" >#'+substr[i]['p_id']+' Data: '+substr[i]['show_data']+'</p>'+
-                                    '<p class="p_front_info" >Autor: '+substr[i]['author']+'<br />Album: '+substr[i]['category']+'</p>'+
+                                    '<p class="p_front_data" >#'+da[i]['p_id']+' Data: '+da[i]['show_data']+'</p>'+
+                                    '<p class="p_front_info" >Autor: '+da[i]['author']+'<br />Album: '+da[i]['category']+'</p>'+
                                 '</div>'
                             );
                        }
@@ -54,14 +54,19 @@
         });
     }
     $(function(){
+        //var h1 = $( '#way' ).css('height');
+        //console.log('h1-'+h1);
         $.cookie('start', 0)
         load();
+        //var h2 = $( '#way' ).css('height');
+        //console.log('h2-'+h2);
     });
     $(window).scroll(function() {
         if($(window).scrollTop() == $(document).height() - $(window).height()) {
            load();
         }
     });
+    //$(document).ready(function(){});
 </script>
 <div class="container-fluid">
 	<div class="row">
