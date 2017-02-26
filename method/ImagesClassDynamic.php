@@ -53,6 +53,26 @@ class ShowImagesDynamic extends DefineConnect
 		return $ress0;
 	}
 }
+if ( $_POST['cat_id'] != '') {
+    $_GET['cat_id'] = $_POST['cat_id'];
+    $cat = $_POST['cat_id'];//debug
+} else {
+    $cat = 'cat_none';//debug
+}
+if ( $_POST['sub_id'] != '' ) {
+    $_GET['sub_id'] = $_POST['sub_id'];
+    $sub = $_POST['sub_id'];//debug
+} else {
+    $sub = 'sub_none';//debug
+}
+
+/**
+** zeby sprawdzac jakie zmienne dostał skrypt bez kombinowania zbednego :D
+**/
+$myfile = fopen("newfile.txt", "w") or die("Unable to open file!");//debug
+fwrite($myfile, $cat.$sub);//debug
+fclose($myfile);//debug
+
 $class = new ShowImagesDynamic();
 $dynamic = $class->showAllDynamic();
 //$dynamic = array(1,2,3,4);

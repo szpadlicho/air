@@ -1,30 +1,37 @@
 <script>
     var load = function() {
+        var cat_id = '<?php echo @$_GET['cat_id']; ?>';
+        var sub_id = '<?php echo @$_GET['sub_id']; ?>';
+        //console.log(cat_id+'_'+sub_id);
         $.ajax({
             type: 'POST',
             url: 'method/ImagesClassDynamic.php',
             dataType: 'json',
             cache: false,
-            data:{ action:"showroom" },
+            data:{ cat_id:cat_id, sub_id:sub_id },
             success:function(data){
                 var substr = data[0];
                     for(var i=0; i< substr.length; i++) {
                         var media = [ 'mp4', 'ogg', 'ogv', 'webm', 'mp3' ];
-                        if ( $.inArray( substr[i]['photo_mime'], media) !== -1 ) {//'poster="img/ico/mp3.png"' : 'poster="img/ico/mp4.png"'; >
+                        if ( $.inArray( substr[i]['photo_mime'], media) !== -1 ) {
                             $("#way").append(
-                                '<video controls="controls" preload="none"'+
-                                'poster="img/ico/'+substr[i]['photo_mime']+'.png">'+
-                                '<source src="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" type="video/mp4">'+
-                                '<source src="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" type="video/webm">'+
-                                '<source src="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" type="video/ogg">'+
-                                'Twoja przeglądarka nie obsługuje wideo.'+
-                                '</video>'
+                                '<div class="div_front">'+
+                                    '<video controls="controls" preload="none"'+
+                                    'poster="img/ico/'+substr[i]['photo_mime']+'.png">'+
+                                    '<source src="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" type="video/mp4">'+
+                                    '<source src="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" type="video/webm">'+
+                                    '<source src="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" type="video/ogg">'+
+                                    'Twoja przeglądarka nie obsługuje wideo.'+
+                                    '</video>'+
+                                    '<p class="p_front_data" >#'+substr[i]['p_id']+' Data: '+substr[i]['show_data']+'</p>'+
+                                    '<p class="p_front_info" >Autor: '+substr[i]['author']+'<br />Album: '+substr[i]['category']+'</p>'+
+                                '</div>'
                             );
                         } else {
                             $("#way").append(
                                 '<div class="div_front">'+
-                                    '<a class="fancybox-button" rel="fancybox-button" href="data/'+substr[i]['p_id']+'.jpg" >'+
-                                        '<img class="galery_img lazy" src="data/'+substr[i]['p_id']+'.jpg" data-original="data/'+substr[i]['p_id']+'.jpg" />'+
+                                    '<a class="fancybox-button" rel="fancybox-button" href="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" title="'+substr[i]['tag']+'">'+
+                                        '<img class="galery_img lazy" data-original="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" src="data/'+substr[i]['p_id']+'.'+substr[i]['photo_mime']+'" alt="'+substr[i]['tag']+'" />'+
                                     '</a>'+
                                     '<p class="p_front_data" >#'+substr[i]['p_id']+' Data: '+substr[i]['show_data']+'</p>'+
                                     '<p class="p_front_info" >Autor: '+substr[i]['author']+'<br />Album: '+substr[i]['category']+'</p>'+
