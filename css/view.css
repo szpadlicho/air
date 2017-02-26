@@ -81,7 +81,7 @@ a:active{
     text-decoration: none;
 }
 a:visited{
-    color: var(--dg);
+    color: var(--wh);
 }
 a:hover{
     color: var(--gg);
@@ -270,7 +270,7 @@ ul{
 .menu.left ul li ul {
     padding-left: 15px;
 }
-/**/
+/*subcategory*/
 .menu.left ul li ul {
     padding-left: 15px;
     max-height: 0;
@@ -325,11 +325,12 @@ ul{
     #vertical-align: top;
 }
 .div_front img {
-    
+    height: 200px; /*musi byc takie takie jak w ustawieniach miniaturek w ImageClass */
 }
 video{
     vertical-align: middle !important;
     height: 200px; /*musi byc takie takie jak w ustawieniach miniaturek w ImageClass */
+    #box-shadow: 2px 1px 3px #000;
 }
 video ~ .p_front_info 
 {

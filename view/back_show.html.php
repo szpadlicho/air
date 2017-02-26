@@ -185,7 +185,7 @@
                     </a>
 				</div>
 			</div>
-            <?php $obj = new ShowImages; echo $obj->leftMenu(); ?>
+            <?php $obj = new ShowImages; echo $obj->leftMenu('back'); ?>
 		</div>
 		<div id="table_content" class="col-md-10">
 			<div class="row center">

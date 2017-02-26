@@ -58,7 +58,7 @@
             <div id="top_menu_placeholder">
                 <nav id="top_menu">
                     <a class="menu top" href="?">Start</a>
-                    <a class="menu top" href="?last">Nowe</a>
+                    <a class="menu top menu-top-new" href="?last">Nowe</a>
                     <a class="menu top" href="?galery">Galeria</a>
                     <?php if ( isset($_GET['back']) || isset($_GET['category']) || isset($_GET['upload']) || isset($_GET['slider']) ) { ?>
                         <a class="menu top" href="?back">Back</a>

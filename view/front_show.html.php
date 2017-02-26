@@ -13,26 +13,7 @@
                     </a>
 				</div>
 			</div>
-            <!-- to delete
-			<ul>
-                <li>
-                    <a class="category menu" href="?galery" >Wszystkie</a>
-                </li>
-                <?php
-                $obj_show_cat = new ShowImages;
-                $obj_show_cat->__setTable('category');
-                $ret = $obj_show_cat->showCategory();
-                $ret = $ret->fetchAll(PDO::FETCH_ASSOC);
-                ?>
-                <?php foreach ($ret as $cat_menu){ ?>
-                    <li class="<?php echo @$_GET['cat_id'] == @$cat_menu['c_id'] ? 'active' : ''; ?>" >
-                        <a class="category menu" href="?galery&cat_id=<?php echo $cat_menu['c_id']; ?>" ><?php echo $cat_menu['category']; ?></a>
-                        <span class="item_nr"><?php echo $obj_show_cat->countItemInCategory(@$cat_menu['c_id']); ?></span>
-                    </li>
-                <?php } ?>
-            </ul>
-            to delete-->
-            <?php $obj = new ShowImages; echo $obj->leftMenu(); ?>
+            <?php $obj = new ShowImages; echo $obj->leftMenu('galery'); ?>
 		</div>
 		<div id="table_content" class="col-md-10">
 			<div class="row center">

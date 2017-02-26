@@ -20,7 +20,7 @@ class UserClass extends DefineConnect
         $user = $this->getUser($user, $pass);
         if ( $user ) {
             if ( $remember == 'on' ) {
-            setcookie('air', 'allowed');
+            setcookie('air', 'allowed', time()+3600 * 24 * 365);
             //var_dump($_COOKIE);
             Header('Location: '.$_SERVER['PHP_SELF'].'?back');
             return true;

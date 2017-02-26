@@ -1,10 +1,18 @@
 <?php
+/**
+** Gify mini zeby sie ruszaly tez to trzeba by ich nie skalowac w php tylko normalnie wrzucic i tu i tu albo dodac do zrobionej miniaturki napis ze to gif
+** Lastby date ???? z menu lewym badz bez. "Nowe" w top menu moze by sie nie pojawialo jesli nie ma nic do wyswietlenia
+** Wyszukiwanie z polskimi znakami + -
+**/
 ini_set('xdebug.var_display_max_depth', -1);
 ini_set('xdebug.var_display_max_children', -1);
 ini_set('xdebug.var_display_max_data', -1);
 ini_set('session.cookie_lifetime', 1 * 24 * 60 * 60); //jeden dzien
 ini_set('default_charset','utf-8');
 ini_set('character_set_server', 'utf8');
+ini_set('character_set_client', 'utf8');
+ini_set('character_set_results', 'utf8');
+ini_set('character_set_connection', 'utf8');
 date_default_timezone_set('Europe/Warsaw');
 header('Content-Type: text/html; charset=utf-8');
 session_set_cookie_params(8*3600); //8 hours

@@ -13,6 +13,7 @@
                     </a>
 				</div>
 			</div>
+            <!--
 			<ul>
                 <li>
                     <a class="category menu" href="?last" >Wszystkie</a>
@@ -29,11 +30,14 @@
                     </li>
                 <?php } ?>
             </ul>
+            -->
+            <?php //$obj = new ShowImages; echo $obj->leftMenu('last'); ?>
 		</div>
 		<div id="table_content" class="col-md-10">
 			<div class="row">
 				<div class="col-md-12 pagination">
                 <?php $last = $obj_ShowImages->showLastByDate(); ?>
+                <?php //var_dump($last[1]); //jesli to rowne zero to "nowe" moga sie nie pojawiac ?>
                 <?php $obj_ShowImages->showPagination($last[1]); ?>
 				</div>
 			</div>
