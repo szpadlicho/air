@@ -324,6 +324,10 @@ ul{
     box-shadow: 2px 1px 3px #000;
     #vertical-align: top;
 }
+/* .div_front:has(> video) { 
+    box-shadow: 0px 0px 0px #000;
+    display: none;
+} */
 .div_front img {
     height: 200px; /*musi byc takie takie jak w ustawieniach miniaturek w ImageClass */
 }

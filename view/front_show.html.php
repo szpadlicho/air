@@ -16,7 +16,7 @@
                         if ( $.inArray( da[i]['photo_mime'], media) !== -1 ) {
                             $("#way").append(
                                 '<div class="div_front">'+
-                                    '<video controls="controls" preload="none"'+
+                                    '<video class="vid" controls="controls" preload="none"'+
                                     'poster="img/ico/'+da[i]['photo_mime']+'.png">'+
                                     '<source src="data/'+da[i]['p_id']+'.'+da[i]['photo_mime']+'" type="video/mp4">'+
                                     '<source src="data/'+da[i]['p_id']+'.'+da[i]['photo_mime']+'" type="video/webm">'+
@@ -66,7 +66,10 @@
            load();
         }
     });
-    //$(document).ready(function(){});
+    $(document).ready(function(){
+        //$( 'video' ).parents( '.div_front' ).css({'box-shadow':'0', 'display':'none'});
+        //$( '.div_front:has(video)' ).css({'box-shadow':'0', 'display':'none'});
+    });
 </script>
 <div class="container-fluid">
 	<div class="row">
