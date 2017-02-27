@@ -41,13 +41,13 @@
                     }
                 
             }, complete: function(data) {
-                if($.cookie('start')){
-                    var st = $.cookie('start');
+                if($.cookie('startD')){
+                    var st = $.cookie('startD');
                     var nw = parseInt(st) + 20;
-                    $.cookie('start', nw);
+                    $.cookie('startD', nw);
                     //console.log(st);
                 } else {
-                    $.cookie('start', 20);
+                    $.cookie('startD', 20);
                 }
                 
             }
@@ -56,7 +56,7 @@
     $(function(){
         //var h1 = $( '#way' ).css('height');
         //console.log('h1-'+h1);
-        $.cookie('start', 0)
+        $.cookie('startD', 0)
         load();
         //var h2 = $( '#way' ).css('height');
         //console.log('h2-'+h2);

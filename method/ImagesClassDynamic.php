@@ -25,8 +25,8 @@ class ShowImagesDynamic extends DefineConnect
     public function showAllDynamic()
     {
 		$con=$this->connectDb();
-        $start = isset( $_COOKIE['start'] ) ? (int)$_COOKIE['start'] : (int)'0';//numer id od ktorego ma zaczac
-        $limit = isset( $_COOKIE['limit'] ) ? (int)$_COOKIE['limit'] : (int)'20';//ilość elementów na stronie
+        $start = isset( $_COOKIE['startD'] ) ? (int)$_COOKIE['startD'] : (int)'0';//numer id od ktorego ma zaczac
+        $limit = isset( $_COOKIE['limitD'] ) ? (int)$_COOKIE['limitD'] : (int)'20';//ilość elementów na stronie
         $order = $this->order;
         //$_GET['cat_id'] = $_POST['cat_id'];
         //$_GET['sub_id'] = $_POST['sub_id'];
