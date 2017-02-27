@@ -167,7 +167,18 @@
             $('.check_box:checked').parent().parent().children().next().next().next().next().next().next().children().next().click();
 
         });
-    }); 
+    });
+    $(function() {
+        /**
+        ** dla zresetowania ciasteczka ustawiange z Gallery front_show
+        **/
+        if ( $('.p_active' ).val() == '1' && $.cookie( 'start' ) != 0 )  {
+            console.log('yes');
+            $.cookie('start', 0);
+            location.reload();
+        }
+    });
+    //form-control pagination_start p_active value="1"
 </script>
 <div class="container-fluid">
 	<div class="row">

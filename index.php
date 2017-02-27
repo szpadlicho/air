@@ -5,6 +5,7 @@
 ** Wyszukiwanie z polskimi znakami + -
 ** Dynamicznie ladowany content podczas scrolowania
 ** bootstrap back office
+** save all zoptymalizowac na php jednak jQuery chodzi zawolno
 **/
 ini_set('xdebug.var_display_max_depth', -1);
 ini_set('xdebug.var_display_max_children', -1);
