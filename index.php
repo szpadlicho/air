@@ -248,6 +248,11 @@ include_once 'method/UserClass.php';
                 console.log('redirect sl');
             }
         });
+        $(function(){ 
+            $( document ).on('contextmenu', '.fancybox-image', function(e){
+                return false;
+            }); 
+        })
     </script>
 </head>
 <body>
