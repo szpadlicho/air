@@ -1,6 +1,19 @@
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-2 menu left">
+			<div class="row">
+				<div class="col-md-12">
+                <!--empty &nbsp-->
+					<!--
+                    <a href="?" >
+                        <img class="img-responsive logo" alt="Logo deoc" title="Logo deoc" src="img/logoB.png"/>
+                    </a>
+					-->
+				</div>
+			</div>
+            <?php //$obj = new ShowImages; echo $obj->leftMenu('back'); ?>
+		</div>
+		<div id="table_content" class="col-md-10">
             <form name="upload" enctype="multipart/form-data" action="" method="POST">
                 <table class="table table-condensed table-hover table_list">
                     <thead>
@@ -172,3 +185,4 @@
         </div>
     </div>
 </div>
+<?php include_once'view/back_show.html.php'; ?>

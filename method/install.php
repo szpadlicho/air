@@ -188,9 +188,9 @@ class DataBaseInstall extends DefineConnect
 $obj_install = new DatabaseInstall;
 if (isset($_POST['crt'])) {
     $obj_install->createDb();
+	$data = date('Y-m-d H:i:s');
     $return = array();// array initiate
-    $obj_install->__setTable('photos');
-    $data = date('Y-m-d H:i:s');
+    $obj_install->__setTable('photos');/*Tworzenie tabeli jest zdublowane ponizej*/
     $arr_row = array(
         'photo_name'                =>'TEXT',
         'photo_mime'                =>'VARCHAR(20)',
@@ -285,6 +285,40 @@ if (isset($_POST['del_slider'])) {
     $obj_install->rrmdir('img/slider/images/');
     $obj_install->rrmdir('img/slider/tooltips/');
 }
+/**
+* Photos install /*zdublowane na osobny submit*/
+**/
+if (isset($_POST['crt_photos'])) {
+    $obj_install->createDb();
+	$return = array();// array initiate
+    $obj_install->__setTable('photos');
+    $arr_row = array(
+        'photo_name'                =>'TEXT',
+        'photo_mime'                =>'VARCHAR(20)',
+        'photo_size'                =>'VARCHAR(40)',
+        'category'                  =>'VARCHAR(200)',
+        'subcategory'               =>'VARCHAR(200)',
+        'add_data'                  =>'DATETIME',
+        'update_data'               =>'DATETIME',
+        'show_data'                 =>'DATE',
+        'show_place'                =>'VARCHAR(500)',
+        'tag'                       =>'TEXT',
+        'author'                    =>'VARCHAR(200)', 
+        'home'                      =>'VARCHAR(20)',
+        'position'                  =>'VARCHAR(20)',
+        'protect'                   =>'VARCHAR(20)', 
+        'password'                  =>'VARCHAR(20)', 
+        'p_visibility'              =>'INTEGER(1) UNSIGNED'
+        );
+    $arr_val = array();
+    $return['photos'] = $obj_install->createTbDynamicRow($arr_row, $arr_val);
+    var_dump($return);
+}
+if (isset($_POST['del_photos'])) {
+	$obj_install->deleteTb('photos');
+    $obj_install->rrmdir('data/');
+    $obj_install->rrmdir('data/mini/');
+}
 /** Update data **/
 if (isset($_POST['updat_row'])) {
 	$obj_install->__setTable('photos');
@@ -346,6 +380,9 @@ if (isset($_POST['del_subcategory'])) {
             <br />
             <input class="input_cls" type="submit" name="del_slider" value="Delete Slider" />
             <input class="input_cls" type="submit" name="crt_slider" value="Create Slider" />
+            <br />
+			<input class="input_cls" type="submit" name="del_photos" value="Delete Photos" />
+            <input class="input_cls" type="submit" name="crt_photos" value="Create Photos" />
             <br />
             <input class="input_cls" type="submit" name="del_subcategory" value="Delete Sub" />
             <input class="input_cls" type="submit" name="crt_subcategory" value="Create Sub" />

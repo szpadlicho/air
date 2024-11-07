@@ -7,14 +7,33 @@ class UploadSlider extends DefineConnect
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
 	}
-    public function __getNextId()
+	public function __getNextId()
     {
         $con = $this->connectDb();
-        $next_id = $con->query("SHOW TABLE STATUS LIKE '".$this->table."'");
-        $next_id = $next_id->fetch(PDO::FETCH_ASSOC);
-        return $next_id['Auto_increment'];
+        // $next_id = $con->query("SHOW TABLE STATUS LIKE '".$this->table."'");
+        // $next_id = $next_id->fetch(PDO::FETCH_ASSOC);
+        // return $next_id['Auto_increment'];
+		
+		//SELECT id FROM tableName ORDER BY id DESC LIMIT 1
+		/*Dziala*/
+		$max_id = $con->query("SELECT MAX(".$this->prefix."id) AS max_id FROM ".$this->table."");
+		$max_id= $max_id -> fetch(PDO::FETCH_ASSOC);
+		$max_id['max_id'] == null ? $max_id['max_id'] = 1 : $max_id['max_id']++; //tylko dla pustej tablicy
+		return $max_id['max_id'];
+		
+		// $max_id = $con->query("SELECT (auto_increment-1) as lastId
+			// FROM information_schema.tables
+			// WHERE table_name = '".$this->table."'
+			// AND table_schema = '".DB_NAME."'");
+		// $max_id = $max_id->fetch(PDO::FETCH_ASSOC);
+		// return $max_id['lastId'];
+		
+		//$stmt = $con->query("SELECT LAST_INSERT_ID()");
+		//$lastId = $stmt->fetchColumn();
+		//return $lastId;
+		//return $con->lastInsertId();
     }
-    public function addRec($file_name, $file_type)
+    public function addRec($file_name, $file_type, $next_id/*next_id tylko do testow*/)
     {
         $con = $this->connectDb();
         $slider_name    = $file_name;
@@ -24,6 +43,7 @@ class UploadSlider extends DefineConnect
         $slider_alt     = $_POST['slider_alt'];
         $slider_title   = $_POST['slider_title'];
         $slider_des     = $_POST['slider_des'];
+        //$slider_des     = $next_id; /*next_id tylko do testow*/
         $visibility     = $_POST['visibility'];
         $none = NULL;
         $feedback = $con->exec("INSERT INTO `".$this->table."`(
@@ -98,7 +118,7 @@ class UploadSlider extends DefineConnect
             //here create image
             $mini_is_up = $this->createMini($file_id, $next_id, $file_type);
             if ( $mini_is_up == true ) {
-                $this->addRec($file_name, $file_type);
+                $this->addRec($file_name, $file_type, $next_id/*next_id tylko do testow*/);
                 return true;
             }
 		} else {
@@ -116,6 +136,11 @@ class UploadSlider extends DefineConnect
 		}
 	}
 }
+/**FOR TEST ONLY**/
+	// $wh = new UploadSlider;
+	// $wh->__setTable('slider');
+	// var_dump($wh->__getNextId());
+/****/	
 class UpdateSlider extends DefineConnect
 {
 	public function __setTable($tab_name)

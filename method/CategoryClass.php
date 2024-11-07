@@ -14,12 +14,17 @@ class AddCategory extends DefineConnect
 		$this->table = $tab_name;
 		$this->prefix = $tab_name[0].'_';
 	}
-    public function __getNextId()
+    public function __getNextId()/*Prawdopodobnie zbedne w tej klasie ale zaktalizowalem*/
     {
         $con = $this->connectDb();
-        $next_id = $con->query("SHOW TABLE STATUS LIKE 'photos'");
-        $next_id = $next_id->fetch(PDO::FETCH_ASSOC);
-        return $next_id['Auto_increment'];
+        // $next_id = $con->query("SHOW TABLE STATUS LIKE 'photos'");
+        // $next_id = $next_id->fetch(PDO::FETCH_ASSOC);
+        // return $next_id['Auto_increment'];
+		
+		$max_id = $con->query("SELECT MAX(".$this->prefix."id) AS max_id FROM ".$this->table."");
+		$max_id= $max_id -> fetch(PDO::FETCH_ASSOC);
+		$max_id['max_id'] == null ? $max_id['max_id'] = 1 : $max_id['max_id']++; //tylko dla pustej tablicy
+		return $max_id['max_id'];
     }
     public function addRec($category, $visibility)
     {

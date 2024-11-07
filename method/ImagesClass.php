@@ -10,9 +10,28 @@ class UploadImage extends DefineConnect
     public function __getNextId()
     {
         $con = $this->connectDb();
-        $next_id = $con->query("SHOW TABLE STATUS LIKE 'photos'");
-        $next_id = $next_id->fetch(PDO::FETCH_ASSOC);
-        return $next_id['Auto_increment'];
+        // $next_id = $con->query("SHOW TABLE STATUS LIKE '".$this->table."'");
+        // $next_id = $next_id->fetch(PDO::FETCH_ASSOC);
+        // return $next_id['Auto_increment'];
+		
+		//SELECT id FROM tableName ORDER BY id DESC LIMIT 1
+		/*Dziala*/
+		$max_id = $con->query("SELECT MAX(".$this->prefix."id) AS max_id FROM ".$this->table."");
+		$max_id= $max_id -> fetch(PDO::FETCH_ASSOC);
+		$max_id['max_id'] == null ? $max_id['max_id'] = 1 : $max_id['max_id']++; //tylko dla pustej tablicy
+		return $max_id['max_id'];
+		
+		// $max_id = $con->query("SELECT (auto_increment-1) as lastId
+			// FROM information_schema.tables
+			// WHERE table_name = '".$this->table."'
+			// AND table_schema = '".DB_NAME."'");
+		// $max_id = $max_id->fetch(PDO::FETCH_ASSOC);
+		// return $max_id['lastId'];
+		
+		//$stmt = $con->query("SELECT LAST_INSERT_ID()");
+		//$lastId = $stmt->fetchColumn();
+		//return $lastId;
+		//return $con->lastInsertId();
     }
     public function addRec($file_name, $file_type, $file_size)
     {
@@ -174,6 +193,11 @@ class UploadImage extends DefineConnect
 		return $q;
 	}
 }
+/**FOR TEST ONLY**/
+	// $wh = new UploadImage;
+	// $wh->__setTable('photos');
+	// var_dump($wh->__getNextId());
+/****/	
 class UpdateImages extends DefineConnect
 {
 	public function __setTable($tab_name)
